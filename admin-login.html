@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login - Karigar</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .login-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #4a7c59 0%, #3a5f45 100%);
+    }
+    
+    .login-card {
+      background: white;
+      padding: 3rem;
+      border-radius: 12px;
+      box-shadow: 0 20px 25px rgba(0, 0, 0, 0.15);
+      width: 100%;
+      max-width: 400px;
+    }
+    
+    .login-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    
+    .login-logo {
+      font-size: 2.5rem;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+    }
+    
+    .login-title {
+      font-size: 1.75rem;
+      color: var(--text-dark);
+      margin-bottom: 0.5rem;
+    }
+    
+    .login-subtitle {
+      color: var(--text-medium);
+      font-size: 0.95rem;
+    }
+    
+    .demo-credentials {
+      background-color: var(--primary-light);
+      padding: 1rem;
+      border-radius: var(--border-radius);
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+      border-left: 4px solid var(--primary);
+    }
+    
+    .demo-credentials strong {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: var(--primary);
+    }
+    
+    .demo-credentials code {
+      background-color: white;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-family: 'Courier New', monospace;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <div class="login-card">
+      <div class="login-header">
+        <div class="login-logo">🛠️</div>
+        <h1 class="login-title">Karigar Admin</h1>
+        <p class="login-subtitle">Secure Dashboard Access</p>
+      </div>
+      
+      <div class="demo-credentials">
+        <strong>🔑 Demo Credentials:</strong>
+        <p style="margin: 0;">
+          Username: <code>admin</code><br>
+          Password: <code>karigar2025</code>
+        </p>
+      </div>
+      
+      <form id="adminLoginForm">
+        <div class="form-group">
+          <label class="form-label" for="username">Username</label>
+          <input 
+            type="text" 
+            id="username" 
+            class="form-input" 
+            placeholder="Enter admin username"
+            required
+          >
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label" for="password">Password</label>
+          <input 
+            type="password" 
+            id="password" 
+            class="form-input" 
+            placeholder="Enter admin password"
+            required
+          >
+        </div>
+        
+        <div id="loginError" class="alert alert-danger hidden">
+          Invalid credentials. Please try again.
+        </div>
+        
+        <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">
+          Login to Dashboard
+        </button>
+      </form>
+      
+      <div style="text-align: center; margin-top: 1.5rem;">
+        <a href="index.html" style="color: var(--primary); text-decoration: none; font-size: 0.9rem;">
+          ← Back to Home
+        </a>
+      </div>
+    </div>
+  </div>
+  
+  <script src="data/users.js"></script>
+  <script src="script.js"></script>
+  <script>
+    // Handle admin login
+    document.getElementById('adminLoginForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value;
+      const errorDiv = document.getElementById('loginError');
+      
+      // Check credentials
+      if (username === adminCredentials.username && password === adminCredentials.password) {
+        // Set admin authentication
+        setAdminAuth();
+        
+        // Show success and redirect
+        showNotification('Login successful! Redirecting...', 'success');
+        
+        setTimeout(() => {
+          window.location.href = 'admin.html';
+        }, 1000);
+      } else {
+        // Show error
+        errorDiv.classList.remove('hidden');
+        
+        // Shake animation
+        const form = document.getElementById('adminLoginForm');
+        form.style.animation = 'shake 0.5s';
+        setTimeout(() => {
+          form.style.animation = '';
+        }, 500);
+      }
+    });
+    
+    // Add shake animation
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-10px); }
+        75% { transform: translateX(10px); }
+      }
+    `;
+    document.head.appendChild(style);
+    
+    // If already authenticated, redirect to admin dashboard
+    if (isAdminAuthenticated()) {
+      window.location.href = 'admin.html';
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - Karigar</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container header-content">
+      <a href="admin.html" class="logo">🛠️ Karigar Admin</a>
+      <div class="user-info">
+        <span class="user-name">🔒 Administrator</span>
+        <button class="btn btn-sm btn-outline" id="logoutBtn">Logout</button>
+      </div>
+    </div>
+  </header>
+  
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="container">
+      <h1>Admin Dashboard</h1>
+      <p style="color: var(--text-medium); margin-bottom: 2rem;">Manage users, approve requests, and moderate content</p>
+      
+      <!-- Stats -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-value" id="statPendingUsers">0</div>
+          <div class="stat-label">Pending Users</div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-value" id="statPendingRequests">0</div>
+          <div class="stat-label">Pending Requests</div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-value" id="statActiveProviders">0</div>
+          <div class="stat-label">Active Providers</div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-value" id="statTotalRequests">0</div>
+          <div class="stat-label">Total Requests</div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-value" id="statFlaggedReviews">0</div>
+          <div class="stat-label">Flagged Reviews</div>
+        </div>
+      </div>
+      
+      <!-- Tabs -->
+      <div class="tabs" data-tabs>
+        <button class="tab active" data-tab="usersTab">👥 User Approvals</button>
+        <button class="tab" data-tab="requestsTab">📋 Request Approvals</button>
+        <button class="tab" data-tab="providersTab">🔧 Manage Providers</button>
+        <button class="tab" data-tab="reviewsTab">⭐ Review Moderation</button>
+        <button class="tab" data-tab="overviewTab">📊 Overview</button>
+      </div>
+      
+      <!-- User Approvals Tab -->
+      <div id="usersTab" class="tab-content active">
+        <h3>Pending User Registrations</h3>
+        
+        <div id="pendingUsersList">
+          <!-- Dynamically populated -->
+        </div>
+        
+        <div id="noPendingUsers" class="empty-state hidden">
+          <div class="empty-state-icon">👥</div>
+          <p class="empty-state-message">No pending user registrations.</p>
+        </div>
+      </div>
+      
+      <!-- Request Approvals Tab -->
+      <div id="requestsTab" class="tab-content">
+        <h3>Pending Service Requests</h3>
+        
+        <div id="pendingRequestsList">
+          <!-- Dynamically populated -->
+        </div>
+        
+        <div id="noPendingRequests" class="empty-state hidden">
+          <div class="empty-state-icon">📋</div>
+          <p class="empty-state-message">No pending service requests.</p>
+        </div>
+      </div>
+      
+      <!-- Manage Providers Tab -->
+      <div id="providersTab" class="tab-content">
+        <h3>All Service Providers</h3>
+        
+        <div class="search-bar" style="margin-bottom: 1.5rem;">
+          <input 
+            type="text" 
+            id="providerSearchInput" 
+            class="search-input" 
+            placeholder="Search providers..."
+          >
+          <select id="providerStatusFilter" class="form-select" style="min-width: 150px;">
+            <option value="">All Status</option>
+            <option value="active">Active</option>
+            <option value="pending">Pending</option>
+            <option value="suspended">Suspended</option>
+          </select>
+        </div>
+        
+        <div id="providersList">
+          <!-- Dynamically populated -->
+        </div>
+        
+        <div id="noProviders" class="empty-state hidden">
+          <div class="empty-state-icon">🔧</div>
+          <p class="empty-state-message">No providers found.</p>
+        </div>
+      </div>
+      
+      <!-- Review Moderation Tab -->
+      <div id="reviewsTab" class="tab-content">
+        <h3>Review Moderation</h3>
+        
+        <div class="alert alert-info" style="margin-bottom: 1.5rem;">
+          <strong>🤖 AI-Powered Moderation:</strong> Reviews are automatically analyzed for sentiment and inappropriate content.
+        </div>
+        
+        <div class="filter-group" style="margin-bottom: 1.5rem;">
+          <button class="btn btn-sm" id="showAllReviews">All Reviews</button>
+          <button class="btn btn-sm btn-warning" id="showFlaggedReviews">Flagged Reviews</button>
+        </div>
+        
+        <div id="reviewsList">
+          <!-- Dynamically populated -->
+        </div>
+        
+        <div id="noReviews" class="empty-state hidden">
+          <div class="empty-state-icon">⭐</div>
+          <p class="empty-state-message">No reviews to display.</p>
+        </div>
+      </div>
+      
+      <!-- Overview Tab -->
+      <div id="overviewTab" class="tab-content">
+        <h3>Platform Overview</h3>
+        
+        <div class="grid grid-2" style="margin-top: 1.5rem;">
+          <!-- User Statistics -->
+          <div class="card">
+            <div class="card-header">
+              <h4 class="card-title">User Statistics</h4>
+            </div>
+            <div class="card-body">
+              <table style="width: 100%;">
+                <tr>
+                  <td>Total Customers</td>
+                  <td style="text-align: right;"><strong id="totalCustomers">0</strong></td>
+                </tr>
+                <tr>
+                  <td>Active Customers</td>
+                  <td style="text-align: right;"><strong id="activeCustomers">0</strong></td>
+                </tr>
+                <tr>
+                  <td>Pending Customers</td>
+                  <td style="text-align: right;"><strong id="pendingCustomers">0</strong></td>
+                </tr>
+                <tr>
+                  <td style="padding-top: 1rem;">Total Providers</td>
+                  <td style="text-align: right; padding-top: 1rem;"><strong id="totalProviders">0</strong></td>
+                </tr>
+                <tr>
+                  <td>Active Providers</td>
+                  <td style="text-align: right;"><strong id="activeProviders">0</strong></td>
+                </tr>
+                <tr>
+                  <td>Pending Providers</td>
+                  <td style="text-align: right;"><strong id="pendingProviders">0</strong></td>
+                </tr>
+              </table>
+            </div>
+          </div>
+          
+          <!-- Request Statistics -->
+          <div class="card">
+            <div class="card-header">
+              <h4 class="card-title">Request Statistics</h4>
+            </div>
+            <div class="card-body">
+              <table style="width: 100%;">
+                <tr>
+                  <td>Total Requests</td>
+                  <td style="text-align: right;"><strong id="totalRequestsDetail">0</strong></td>
+                </tr>
+                <tr>
+                  <td>Pending Admin Approval</td>
+                  <td style="text-align: right;"><strong id="pendingAdminRequests">0</strong></td>
+                </tr>
+                <tr>
+                  <td>Awaiting Provider</td>
+                  <td style="text-align: right;"><strong id="requestedRequests">0</strong></td>
+                </tr>
+                <tr>
+                  <td>Confirmed</td>
+                  <td style="text-align: right;"><strong id="confirmedRequests">0</strong></td>
+                </tr>
+                <tr>
+                  <td>Completed</td>
+                  <td style="text-align: right;"><strong id="completedRequests">0</strong></td>
+                </tr>
+                <tr>
+                  <td>Cancelled</td>
+                  <td style="text-align: right;"><strong id="cancelledRequests">0</strong></td>
+                </tr>
+              </table>
+            </div>
+          </div>
+          
+          <!-- Review Statistics -->
+          <div class="card">
+            <div class="card-header">
+              <h4 class="card-title">Review Statistics</h4>
+            </div>
+            <div class="card-body">
+              <table style="width: 100%;">
+                <tr>
+                  <td>Total Reviews</td>
+                  <td style="text-align: right;"><strong id="totalReviews">0</strong></td>
+                </tr>
+                <tr>
+                  <td>Positive Sentiment</td>
+                  <td style="text-align: right;"><strong id="positiveReviews">0</strong></td>
+                </tr>
+                <tr>
+                  <td>Neutral Sentiment</td>
+                  <td style="text-align: right;"><strong id="neutralReviews">0</strong></td>
+                </tr>
+                <tr>
+                  <td>Negative Sentiment</td>
+                  <td style="text-align: right;"><strong id="negativeReviews">0</strong></td>
+                </tr>
+                <tr>
+                  <td>Flagged for Review</td>
+                  <td style="text-align: right;"><strong id="flaggedReviewsDetail">0</strong></td>
+                </tr>
+              </table>
+            </div>
+          </div>
+          
+          <!-- Recent Activity -->
+          <div class="card">
+            <div class="card-header">
+              <h4 class="card-title">Recent Activity</h4>
+            </div>
+            <div class="card-body" id="recentActivity">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  
+  <script src="data/users.js"></script>
+  <script src="data/requests.js"></script>
+  <script src="data/reviews.js"></script>
+  <script src="ai/aiLogic.js"></script>
+  <script src="script.js"></script>
+  <script>
+    // Protect admin page
+    protectAdminPage();
+    
+    // Load dashboard stats
+    function loadStats() {
+      const users = loadUsers();
+      const requests = loadRequests();
+      const reviews = loadReviews();
+      
+      const pendingUsers = users.filter(u => u.status === 'pending').length;
+      const pendingRequests = requests.filter(r => r.status === 'pending_admin').length;
+      const activeProviders = users.filter(u => u.role === 'provider' && u.status === 'active').length;
+      const flaggedReviews = reviews.filter(r => r.flagged === true).length;
+      
+      document.getElementById('statPendingUsers').textContent = pendingUsers;
+      document.getElementById('statPendingRequests').textContent = pendingRequests;
+      document.getElementById('statActiveProviders').textContent = activeProviders;
+      document.getElementById('statTotalRequests').textContent = requests.length;
+      document.getElementById('statFlaggedReviews').textContent = flaggedReviews;
+    }
+    
+    // Load pending users
+    function loadPendingUsers() {
+      const users = loadUsers().filter(u => u.status === 'pending');
+      const container = document.getElementById('pendingUsersList');
+      const noMessage = document.getElementById('noPendingUsers');
+      
+      if (users.length === 0) {
+        container.innerHTML = '';
+        noMessage.classList.remove('hidden');
+        return;
+      }
+      
+      noMessage.classList.add('hidden');
+      
+      // Sort by most recent first
+      users.sort((a, b) => new Date(b.registeredAt) - new Date(a.registeredAt));
+      
+      container.innerHTML = users.map(user => `
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <h3 class="card-title">${user.name}</h3>
+              <p style="color: var(--text-medium); margin: 0;">
+                ${user.role === 'customer' ? '👤 Customer' : '🔧 Service Provider'}
+              </p>
+            </div>
+            ${getStatusBadge(user.status)}
+          </div>
+          
+          <div class="card-body">
+            <div class="grid grid-2">
+              <div>
+                <p><strong>Email:</strong> ${user.email}</p>
+                <p><strong>Phone:</strong> ${user.phone}</p>
+                <p><strong>Location:</strong> ${user.location}</p>
+              </div>
+              
+              ${user.role === 'provider' ? `
+                <div>
+                  <p><strong>Services:</strong> ${user.services ? user.services.join(', ') : 'N/A'}</p>
+                  <p><strong>Availability:</strong> ${user.availability || 'N/A'}</p>
+                </div>
+              ` : '<div></div>'}
+            </div>
+            
+            ${user.bio ? `
+              <p style="margin-top: 1rem;"><strong>About:</strong><br>${user.bio}</p>
+            ` : ''}
+            
+            <p style="font-size: 0.85rem; color: var(--text-light); margin-top: 1rem;">
+              Registered on ${formatDate(user.registeredAt)}
+            </p>
+          </div>
+          
+          <div class="card-footer">
+            <button class="btn btn-success btn-sm" onclick="approveUser('${user.id}')">
+              ✓ Approve
+            </button>
+            <button class="btn btn-danger btn-sm" onclick="rejectUser('${user.id}')">
+              ✗ Reject
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+    
+    // Approve user
+    window.approveUser = function(userId) {
+      if (!confirm('Approve this user registration?')) return;
+      
+      updateUser(userId, { status: 'active' });
+      showNotification('User approved successfully!', 'success');
+      loadStats();
+      loadPendingUsers();
+    };
+    
+    // Reject user
+    window.rejectUser = function(userId) {
+      if (!confirm('Reject this user registration? This action cannot be undone.')) return;
+      
+      const users = loadUsers();
+      const filteredUsers = users.filter(u => u.id !== userId);
+      saveUsers(filteredUsers);
+      
+      showNotification('User registration rejected.', 'info');
+      loadStats();
+      loadPendingUsers();
+    };
+    
+    // Load pending requests
+    function loadPendingRequests() {
+      const requests = loadRequests().filter(r => r.status === 'pending_admin');
+      const container = document.getElementById('pendingRequestsList');
+      const noMessage = document.getElementById('noPendingRequests');
+      
+      if (requests.length === 0) {
+        container.innerHTML = '';
+        noMessage.classList.remove('hidden');
+        return;
+      }
+      
+      noMessage.classList.add('hidden');
+      
+      // Sort by most recent first
+      requests.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      
+      container.innerHTML = requests.map(request => `
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <h3 class="card-title">${request.service}</h3>
+              <p style="color: var(--text-medium); margin: 0;">
+                ${request.customerName} → ${request.providerName}
+              </p>
+            </div>
+            ${getStatusBadge(request.status)}
+          </div>
+          
+          <div class="card-body">
+            <p><strong>Description:</strong> ${request.description}</p>
+            <p><strong>Scheduled:</strong> ${formatDateOnly(request.preferredDate)} at ${request.preferredTime}</p>
+            <p><strong>Location:</strong> ${request.location}</p>
+            <p style="font-size: 0.85rem; color: var(--text-light);">
+              Requested on ${formatDate(request.createdAt)}
+            </p>
+          </div>
+          
+          <div class="card-footer">
+            <button class="btn btn-success btn-sm" onclick="approveRequest('${request.id}')">
+              ✓ Approve Request
+            </button>
+            <button class="btn btn-danger btn-sm" onclick="rejectRequest('${request.id}')">
+              ✗ Reject Request
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+    
+    // Approve request
+    window.approveRequest = function(requestId) {
+      if (!confirm('Approve this service request?')) return;
+      
+      updateRequestStatus(requestId, 'requested', 'Approved by admin');
+      showNotification('Request approved and sent to provider!', 'success');
+      loadStats();
+      loadPendingRequests();
+    };
+    
+    // Reject request
+    window.rejectRequest = function(requestId) {
+      if (!confirm('Reject this service request?')) return;
+      
+      updateRequestStatus(requestId, 'cancelled', 'Rejected by admin');
+      showNotification('Request rejected.', 'info');
+      loadStats();
+      loadPendingRequests();
+    };
+    
+    // Load all providers
+    function loadProviders() {
+      const searchQuery = document.getElementById('providerSearchInput').value.trim();
+      const statusFilter = document.getElementById('providerStatusFilter').value;
+      
+      let providers = loadUsers().filter(u => u.role === 'provider');
+      
+      // Filter by status
+      if (statusFilter) {
+        providers = providers.filter(p => p.status === statusFilter);
+      }
+      
+      // Filter by search
+      if (searchQuery) {
+        providers = filterItems(providers, searchQuery, ['name', 'email', 'services', 'location']);
+      }
+      
+      const container = document.getElementById('providersList');
+      const noMessage = document.getElementById('noProviders');
+      
+      if (providers.length === 0) {
+        container.innerHTML = '';
+        noMessage.classList.remove('hidden');
+        return;
+      }
+      
+      noMessage.classList.add('hidden');
+      
+      container.innerHTML = providers.map(provider => {
+        const reviews = getReviewsByProvider(provider.id);
+        const avgRating = reviews.length > 0 ? getProviderAverageRating(provider.id) : provider.rating || 0;
+        
+        return `
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h3 class="card-title">${provider.name}</h3>
+                <p style="color: var(--text-medium); margin: 0;">📍 ${provider.location}</p>
+              </div>
+              <div style="text-align: right;">
+                ${getStatusBadge(provider.status)}
+                ${generateStarRating(parseFloat(avgRating))}
+              </div>
+            </div>
+            
+            <div class="card-body">
+              <div class="grid grid-2">
+                <div>
+                  <p><strong>Email:</strong> ${provider.email}</p>
+                  <p><strong>Phone:</strong> ${provider.phone}</p>
+                  <p><strong>Services:</strong> ${provider.services ? provider.services.join(', ') : 'N/A'}</p>
+                </div>
+                <div>
+                  <p><strong>Completed Jobs:</strong> ${provider.completedJobs || 0}</p>
+                  <p><strong>Reviews:</strong> ${reviews.length}</p>
+                  <p><strong>Registered:</strong> ${formatDateOnly(provider.registeredAt)}</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="card-footer">
+              ${provider.status === 'active' ? `
+                <button class="btn btn-warning btn-sm" onclick="suspendProvider('${provider.id}')">
+                  Suspend
+                </button>
+              ` : provider.status === 'suspended' ? `
+                <button class="btn btn-success btn-sm" onclick="reactivateProvider('${provider.id}')">
+                  Reactivate
+                </button>
+              ` : ''}
+              <button class="btn btn-danger btn-sm" onclick="removeProvider('${provider.id}')">
+                Remove
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+    
+    // Suspend provider
+    window.suspendProvider = function(providerId) {
+      if (!confirm('Suspend this provider? They will not appear in search results.')) return;
+      
+      updateUser(providerId, { status: 'suspended' });
+      showNotification('Provider suspended.', 'info');
+      loadStats();
+      loadProviders();
+    };
+    
+    // Reactivate provider
+    window.reactivateProvider = function(providerId) {
+      if (!confirm('Reactivate this provider?')) return;
+      
+      updateUser(providerId, { status: 'active' });
+      showNotification('Provider reactivated!', 'success');
+      loadStats();
+      loadProviders();
+    };
+    
+    // Remove provider
+    window.removeProvider = function(providerId) {
+      if (!confirm('Permanently remove this provider? This action cannot be undone.')) return;
+      
+      const users = loadUsers();
+      const filteredUsers = users.filter(u => u.id !== providerId);
+      saveUsers(filteredUsers);
+      
+      showNotification('Provider removed.', 'info');
+      loadStats();
+      loadProviders();
+    };
+    
+    // Load reviews
+    let reviewFilter = 'all';
+    
+    function loadReviewsList() {
+      let reviews = loadReviews();
+      
+      if (reviewFilter === 'flagged') {
+        reviews = reviews.filter(r => r.flagged === true);
+      }
+      
+      const container = document.getElementById('reviewsList');
+      const noMessage = document.getElementById('noReviews');
+      
+      if (reviews.length === 0) {
+        container.innerHTML = '';
+        noMessage.classList.remove('hidden');
+        return;
+      }
+      
+      noMessage.classList.add('hidden');
+      
+      // Sort by most recent first
+      reviews.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      
+      container.innerHTML = reviews.map(review => `
+        <div class="card ${review.flagged ? 'style="border-left: 4px solid var(--danger);"' : ''}">
+          <div class="card-header">
+            <div>
+              <h3 class="card-title">${review.customerName} → ${review.providerName}</h3>
+              <p style="color: var(--text-medium); margin: 0;">${review.service}</p>
+            </div>
+            ${generateStarRating(review.rating)}
+          </div>
+          
+          <div class="card-body">
+            <p>${review.comment}</p>
+            <p style="font-size: 0.85rem; color: var(--text-light);">
+              Reviewed on ${formatDate(review.createdAt)}
+            </p>
+            
+            <div style="margin-top: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+              ${review.sentiment ? `
+                <span class="badge badge-${review.sentiment === 'positive' ? 'success' : review.sentiment === 'negative' ? 'danger' : 'secondary'}">
+                  ${review.sentiment} sentiment
+                </span>
+              ` : ''}
+              
+              ${review.flagged ? `
+                <span class="badge badge-danger">🚩 Flagged</span>
+              ` : ''}
+            </div>
+          </div>
+          
+          <div class="card-footer">
+            ${review.flagged ? `
+              <button class="btn btn-success btn-sm" onclick="unflagReview('${review.id}')">
+                Unflag Review
+              </button>
+            ` : `
+              <button class="btn btn-warning btn-sm" onclick="flagReview('${review.id}')">
+                Flag Review
+              </button>
+            `}
+            <button class="btn btn-danger btn-sm" onclick="deleteReview('${review.id}')">
+              Delete Review
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+    
+    // Flag review
+    window.flagReview = function(reviewId) {
+      if (!confirm('Flag this review for moderation?')) return;
+      
+      updateReview(reviewId, { flagged: true });
+      showNotification('Review flagged.', 'warning');
+      loadStats();
+      loadReviewsList();
+    };
+    
+    // Unflag review
+    window.unflagReview = function(reviewId) {
+      if (!confirm('Unflag this review?')) return;
+      
+      updateReview(reviewId, { flagged: false });
+      showNotification('Review unflagged.', 'success');
+      loadStats();
+      loadReviewsList();
+    };
+    
+    // Delete review
+    window.deleteReview = function(reviewId) {
+      if (!confirm('Permanently delete this review? This action cannot be undone.')) return;
+      
+      const reviews = loadReviews();
+      const filteredReviews = reviews.filter(r => r.id !== reviewId);
+      saveReviews(filteredReviews);
+      
+      showNotification('Review deleted.', 'info');
+      loadStats();
+      loadReviewsList();
+    };
+    
+    // Review filter buttons
+    document.getElementById('showAllReviews').addEventListener('click', () => {
+      reviewFilter = 'all';
+      document.getElementById('showAllReviews').classList.add('btn-primary');
+      document.getElementById('showAllReviews').classList.remove('btn-outline');
+      document.getElementById('showFlaggedReviews').classList.add('btn-outline');
+      document.getElementById('showFlaggedReviews').classList.remove('btn-warning');
+      loadReviewsList();
+    });
+    
+    document.getElementById('showFlaggedReviews').addEventListener('click', () => {
+      reviewFilter = 'flagged';
+      document.getElementById('showFlaggedReviews').classList.add('btn-warning');
+      document.getElementById('showFlaggedReviews').classList.remove('btn-outline');
+      document.getElementById('showAllReviews').classList.add('btn-outline');
+      document.getElementById('showAllReviews').classList.remove('btn-primary');
+      loadReviewsList();
+    });
+    
+    // Load overview statistics
+    function loadOverview() {
+      const users = loadUsers();
+      const requests = loadRequests();
+      const reviews = loadReviews();
+      
+      // User stats
+      document.getElementById('totalCustomers').textContent = users.filter(u => u.role === 'customer').length;
+      document.getElementById('activeCustomers').textContent = users.filter(u => u.role === 'customer' && u.status === 'active').length;
+      document.getElementById('pendingCustomers').textContent = users.filter(u => u.role === 'customer' && u.status === 'pending').length;
+      
+      document.getElementById('totalProviders').textContent = users.filter(u => u.role === 'provider').length;
+      document.getElementById('activeProviders').textContent = users.filter(u => u.role === 'provider' && u.status === 'active').length;
+      document.getElementById('pendingProviders').textContent = users.filter(u => u.role === 'provider' && u.status === 'pending').length;
+      
+      // Request stats
+      document.getElementById('totalRequestsDetail').textContent = requests.length;
+      document.getElementById('pendingAdminRequests').textContent = requests.filter(r => r.status === 'pending_admin').length;
+      document.getElementById('requestedRequests').textContent = requests.filter(r => r.status === 'requested').length;
+      document.getElementById('confirmedRequests').textContent = requests.filter(r => r.status === 'confirmed').length;
+      document.getElementById('completedRequests').textContent = requests.filter(r => r.status === 'completed').length;
+      document.getElementById('cancelledRequests').textContent = requests.filter(r => r.status === 'cancelled').length;
+      
+      // Review stats
+      document.getElementById('totalReviews').textContent = reviews.length;
+      document.getElementById('positiveReviews').textContent = reviews.filter(r => r.sentiment === 'positive').length;
+      document.getElementById('neutralReviews').textContent = reviews.filter(r => r.sentiment === 'neutral').length;
+      document.getElementById('negativeReviews').textContent = reviews.filter(r => r.sentiment === 'negative').length;
+      document.getElementById('flaggedReviewsDetail').textContent = reviews.filter(r => r.flagged === true).length;
+      
+      // Recent activity
+      const recentItems = [
+        ...requests.slice(-5).map(r => ({ type: 'request', time: r.createdAt, text: `New request: ${r.service}` })),
+        ...reviews.slice(-5).map(r => ({ type: 'review', time: r.createdAt, text: `New review: ${r.rating} stars` })),
+        ...users.filter(u => u.status === 'pending').slice(-5).map(u => ({ type: 'user', time: u.registeredAt, text: `New registration: ${u.name}` }))
+      ]
+      .sort((a, b) => new Date(b.time) - new Date(a.time))
+      .slice(0, 10);
+      
+      document.getElementById('recentActivity').innerHTML = recentItems.length > 0 
+        ? recentItems.map(item => `
+            <p style="font-size: 0.875rem; margin-bottom: 0.75rem; color: var(--text-medium);">
+              <strong style="color: var(--text-dark);">${formatDate(item.time)}:</strong> ${item.text}
+            </p>
+          `).join('')
+        : '<p style="color: var(--text-light);">No recent activity.</p>';
+    }
+    
+    // Search and filter handlers
+    document.getElementById('providerSearchInput').addEventListener('input', loadProviders);
+    document.getElementById('providerStatusFilter').addEventListener('change', loadProviders);
+    
+    // Tab switching
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        const targetTab = tab.getAttribute('data-tab');
+        
+        if (targetTab === 'usersTab') {
+          loadPendingUsers();
+        } else if (targetTab === 'requestsTab') {
+          loadPendingRequests();
+        } else if (targetTab === 'providersTab') {
+          loadProviders();
+        } else if (targetTab === 'reviewsTab') {
+          loadReviewsList();
+        } else if (targetTab === 'overviewTab') {
+          loadOverview();
+        }
+      });
+    });
+    
+    // Initial load
+    loadStats();
+    loadPendingUsers();
+  </script>
+</body>
+</html>
