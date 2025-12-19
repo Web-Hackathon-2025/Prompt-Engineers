@@ -6,36 +6,36 @@ const users = [
     id: 'user_001',
     role: 'customer',
     status: 'active', // pending, active, suspended
-    name: 'Amit Sharma',
-    email: 'amit@example.com',
-    phone: '9876543210',
-    location: 'Koramangala, Bangalore',
+    name: 'Ahmed Khan',
+    email: 'ahmed@example.com',
+    phone: '03001234567',
+    location: 'Gulberg, Lahore',
     registeredAt: '2025-12-10T10:00:00Z'
   },
   {
     id: 'user_002',
     role: 'customer',
     status: 'pending',
-    name: 'Priya Mehta',
-    email: 'priya@example.com',
-    phone: '9876543211',
-    location: 'Indiranagar, Bangalore',
+    name: 'Fatima Ali',
+    email: 'fatima@example.com',
+    phone: '03211234567',
+    location: 'Clifton, Karachi',
     registeredAt: '2025-12-18T14:30:00Z'
   },
   {
     id: 'provider_001',
     role: 'provider',
     status: 'active',
-    name: 'Rajesh Kumar',
-    email: 'rajesh@example.com',
-    phone: '9876543220',
-    location: 'Koramangala, Bangalore',
+    name: 'Muhammad Asif',
+    email: 'asif@example.com',
+    phone: '03001234568',
+    location: 'Gulberg, Lahore',
     registeredAt: '2025-12-08T09:00:00Z',
     // Provider-specific fields
     services: ['Plumbing', 'Electrical'],
     pricing: {
-      'Plumbing': '₹500/hr',
-      'Electrical': '₹600/hr'
+      'Plumbing': 'Rs. 1,500/hr',
+      'Electrical': 'Rs. 1,800/hr'
     },
     availability: 'Mon-Sat, 9 AM - 6 PM',
     rating: 4.5,
@@ -46,34 +46,34 @@ const users = [
     id: 'provider_002',
     role: 'provider',
     status: 'active',
-    name: 'Sunita Devi',
-    email: 'sunita@example.com',
-    phone: '9876543221',
-    location: 'Indiranagar, Bangalore',
+    name: 'Ayesha Malik',
+    email: 'ayesha@example.com',
+    phone: '03331234567',
+    location: 'Clifton, Karachi',
     registeredAt: '2025-12-09T11:00:00Z',
     services: ['House Cleaning', 'Cooking'],
     pricing: {
-      'House Cleaning': '₹400/session',
-      'Cooking': '₹300/meal'
+      'House Cleaning': 'Rs. 1,200/session',
+      'Cooking': 'Rs. 800/meal'
     },
     availability: 'Mon-Sun, 8 AM - 5 PM',
     rating: 4.8,
     completedJobs: 89,
-    bio: 'Professional house cleaning and cooking services. Trusted by 50+ families in Bangalore.'
+    bio: 'Professional house cleaning and cooking services. Trusted by 50+ families in Karachi.'
   },
   {
     id: 'provider_003',
     role: 'provider',
     status: 'pending',
-    name: 'Vikram Singh',
-    email: 'vikram@example.com',
-    phone: '9876543222',
-    location: 'Whitefield, Bangalore',
+    name: 'Hassan Raza',
+    email: 'hassan@example.com',
+    phone: '03451234567',
+    location: 'F-7, Islamabad',
     registeredAt: '2025-12-19T08:00:00Z',
     services: ['Carpentry', 'Furniture Repair'],
     pricing: {
-      'Carpentry': '₹700/hr',
-      'Furniture Repair': '₹500/hr'
+      'Carpentry': 'Rs. 2,000/hr',
+      'Furniture Repair': 'Rs. 1,500/hr'
     },
     availability: 'Mon-Fri, 10 AM - 7 PM',
     rating: 0,
