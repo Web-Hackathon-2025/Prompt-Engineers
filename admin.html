@@ -7,48 +7,59 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Header -->
-  <header class="header">
-    <div class="container header-content">
-      <a href="admin.html" class="logo">🛠️ Karigar Admin</a>
-      <div class="user-info">
-        <span class="user-name">🔒 Administrator</span>
-        <button class="btn btn-sm btn-outline" id="logoutBtn">Logout</button>
+  <!-- Modern Header -->
+  <nav class="navbar">
+    <div class="container navbar-content">
+      <a href="admin.html" class="navbar-brand">
+        <span class="brand-icon">🛠️</span>
+        <span class="brand-name">Karigar Admin</span>
+      </a>
+      <div style="display: flex; align-items: center; gap: 1rem;">
+        <span style="color: var(--text-secondary); font-weight: 500;">🔒 Administrator</span>
+        <button class="btn btn-sm btn-outline-sm" id="logoutBtn">Logout</button>
       </div>
     </div>
-  </header>
+  </nav>
   
   <!-- Main Content -->
-  <main class="main-content">
+  <main style="min-height: 100vh; background: var(--bg-secondary); padding: 2rem 0;">
     <div class="container">
-      <h1>Admin Dashboard</h1>
-      <p style="color: var(--text-medium); margin-bottom: 2rem;">Manage users, approve requests, and moderate content</p>
+      <!-- Page Header -->
+      <div style="margin-bottom: 2rem;">
+        <h1 style="margin-bottom: 0.5rem;">Admin Dashboard</h1>
+        <p style="color: var(--text-secondary); font-size: 1.125rem; margin: 0;">Manage users, approve requests, and moderate content</p>
+      </div>
       
-      <!-- Stats -->
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-value" id="statPendingUsers">0</div>
-          <div class="stat-label">Pending Users</div>
+      <!-- Stats Overview -->
+      <div class="stats-grid" style="margin-bottom: 2rem;">
+        <div class="stat-card" style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border: none;">
+          <div class="stat-icon" style="font-size: 2rem; margin-bottom: 0.5rem;">👥</div>
+          <div class="stat-value" id="statPendingUsers" style="color: #92400e;">0</div>
+          <div class="stat-label" style="color: #92400e;">Pending Users</div>
         </div>
         
-        <div class="stat-card">
-          <div class="stat-value" id="statPendingRequests">0</div>
-          <div class="stat-label">Pending Requests</div>
+        <div class="stat-card" style="background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); border: none;">
+          <div class="stat-icon" style="font-size: 2rem; margin-bottom: 0.5rem;">📋</div>
+          <div class="stat-value" id="statPendingRequests" style="color: #1e40af;">0</div>
+          <div class="stat-label" style="color: #1e40af;">Pending Requests</div>
         </div>
         
-        <div class="stat-card">
-          <div class="stat-value" id="statActiveProviders">0</div>
-          <div class="stat-label">Active Providers</div>
+        <div class="stat-card" style="background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); border: none;">
+          <div class="stat-icon" style="font-size: 2rem; margin-bottom: 0.5rem;">🔧</div>
+          <div class="stat-value" id="statActiveProviders" style="color: #065f46;">0</div>
+          <div class="stat-label" style="color: #065f46;">Active Providers</div>
         </div>
         
-        <div class="stat-card">
-          <div class="stat-value" id="statTotalRequests">0</div>
-          <div class="stat-label">Total Requests</div>
+        <div class="stat-card" style="background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%); border: none;">
+          <div class="stat-icon" style="font-size: 2rem; margin-bottom: 0.5rem;">📈</div>
+          <div class="stat-value" id="statTotalRequests" style="color: #3730a3;">0</div>
+          <div class="stat-label" style="color: #3730a3;">Total Requests</div>
         </div>
         
-        <div class="stat-card">
-          <div class="stat-value" id="statFlaggedReviews">0</div>
-          <div class="stat-label">Flagged Reviews</div>
+        <div class="stat-card" style="background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%); border: none;">
+          <div class="stat-icon" style="font-size: 2rem; margin-bottom: 0.5rem;">⚠️</div>
+          <div class="stat-value" id="statFlaggedReviews" style="color: #9f1239;">0</div>
+          <div class="stat-label" style="color: #9f1239;">Flagged Reviews</div>
         </div>
       </div>
       
@@ -63,7 +74,7 @@
       
       <!-- User Approvals Tab -->
       <div id="usersTab" class="tab-content active">
-        <h3>Pending User Registrations</h3>
+        <h3 style="margin-bottom: 1.5rem; color: var(--text-primary);">Pending User Registrations</h3>
         
         <div id="pendingUsersList">
           <!-- Dynamically populated -->
@@ -77,7 +88,7 @@
       
       <!-- Request Approvals Tab -->
       <div id="requestsTab" class="tab-content">
-        <h3>Pending Service Requests</h3>
+        <h3 style="margin-bottom: 1.5rem; color: var(--text-primary);">Pending Service Requests</h3>
         
         <div id="pendingRequestsList">
           <!-- Dynamically populated -->
@@ -91,14 +102,15 @@
       
       <!-- Manage Providers Tab -->
       <div id="providersTab" class="tab-content">
-        <h3>All Service Providers</h3>
+        <h3 style="margin-bottom: 1.5rem; color: var(--text-primary);">All Service Providers</h3>
         
-        <div class="search-bar" style="margin-bottom: 1.5rem;">
+        <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
           <input 
             type="text" 
             id="providerSearchInput" 
-            class="search-input" 
-            placeholder="Search providers..."
+            class="form-input" 
+            placeholder="🔍 Search providers..."
+            style="flex: 1; min-width: 250px;"
           >
           <select id="providerStatusFilter" class="form-select" style="min-width: 150px;">
             <option value="">All Status</option>
@@ -120,15 +132,15 @@
       
       <!-- Review Moderation Tab -->
       <div id="reviewsTab" class="tab-content">
-        <h3>Review Moderation</h3>
+        <h3 style="margin-bottom: 1.5rem; color: var(--text-primary);">Review Moderation</h3>
         
         <div class="alert alert-info" style="margin-bottom: 1.5rem;">
           <strong>🤖 AI-Powered Moderation:</strong> Reviews are automatically analyzed for sentiment and inappropriate content.
         </div>
         
-        <div class="filter-group" style="margin-bottom: 1.5rem;">
-          <button class="btn btn-sm" id="showAllReviews">All Reviews</button>
-          <button class="btn btn-sm btn-warning" id="showFlaggedReviews">Flagged Reviews</button>
+        <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
+          <button class="btn btn-primary" id="showAllReviews">All Reviews</button>
+          <button class="btn btn-outline-sm" id="showFlaggedReviews">⚠️ Flagged Reviews</button>
         </div>
         
         <div id="reviewsList">
@@ -143,7 +155,7 @@
       
       <!-- Overview Tab -->
       <div id="overviewTab" class="tab-content">
-        <h3>Platform Overview</h3>
+        <h3 style="margin-bottom: 1.5rem; color: var(--text-primary);">📈 Platform Overview</h3>
         
         <div class="grid grid-2" style="margin-top: 1.5rem;">
           <!-- User Statistics -->
@@ -306,11 +318,11 @@
       users.sort((a, b) => new Date(b.registeredAt) - new Date(a.registeredAt));
       
       container.innerHTML = users.map(user => `
-        <div class="card">
-          <div class="card-header">
+        <div class="card" style="margin-bottom: 1rem;">
+          <div class="card-header" style="display: flex; justify-content: space-between; align-items: flex-start;">
             <div>
-              <h3 class="card-title">${user.name}</h3>
-              <p style="color: var(--text-medium); margin: 0;">
+              <h3 class="card-title" style="margin-bottom: 0.25rem;">${user.name}</h3>
+              <p style="color: var(--text-secondary); margin: 0; font-size: 0.9rem;">
                 ${user.role === 'customer' ? '👤 Customer' : '🔧 Service Provider'}
               </p>
             </div>
@@ -318,35 +330,45 @@
           </div>
           
           <div class="card-body">
-            <div class="grid grid-2">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1rem;">
               <div>
-                <p><strong>Email:</strong> ${user.email}</p>
-                <p><strong>Phone:</strong> ${user.phone}</p>
-                <p><strong>Location:</strong> ${user.location}</p>
+                <div style="font-size: 0.75rem; color: var(--text-tertiary); text-transform: uppercase; margin-bottom: 0.25rem;">Contact Info</div>
+                <div style="font-size: 0.9375rem; color: var(--text-primary);">
+                  📧 ${user.email}<br>
+                  📞 ${user.phone}<br>
+                  📍 ${user.location}
+                </div>
               </div>
               
               ${user.role === 'provider' ? `
                 <div>
-                  <p><strong>Services:</strong> ${user.services ? user.services.join(', ') : 'N/A'}</p>
-                  <p><strong>Availability:</strong> ${user.availability || 'N/A'}</p>
+                  <div style="font-size: 0.75rem; color: var(--text-tertiary); text-transform: uppercase; margin-bottom: 0.25rem;">Services</div>
+                  <div style="font-size: 0.9375rem; color: var(--text-primary);">
+                    ${user.services ? user.services.join(', ') : 'N/A'}
+                  </div>
+                  <div style="font-size: 0.75rem; color: var(--text-tertiary); text-transform: uppercase; margin-top: 0.5rem; margin-bottom: 0.25rem;">Availability</div>
+                  <div style="font-size: 0.9375rem; color: var(--text-primary);">${user.availability || 'N/A'}</div>
                 </div>
               ` : '<div></div>'}
             </div>
             
             ${user.bio ? `
-              <p style="margin-top: 1rem;"><strong>About:</strong><br>${user.bio}</p>
+              <div style="padding: 1rem; background: var(--bg-secondary); border-radius: var(--border-radius); margin-top: 1rem;">
+                <strong style="font-size: 0.875rem; color: var(--text-primary);">About:</strong>
+                <p style="font-size: 0.875rem; color: var(--text-secondary); margin: 0.5rem 0 0 0;">${user.bio}</p>
+              </div>
             ` : ''}
             
-            <p style="font-size: 0.85rem; color: var(--text-light); margin-top: 1rem;">
-              Registered on ${formatDate(user.registeredAt)}
+            <p style="font-size: 0.8125rem; color: var(--text-tertiary); margin: 1rem 0 0 0;">
+              📅 Registered on ${formatDate(user.registeredAt)}
             </p>
           </div>
           
           <div class="card-footer">
-            <button class="btn btn-success btn-sm" onclick="approveUser('${user.id}')">
+            <button class="btn btn-success" onclick="approveUser('${user.id}')">
               ✓ Approve
             </button>
-            <button class="btn btn-danger btn-sm" onclick="rejectUser('${user.id}')">
+            <button class="btn btn-danger" onclick="rejectUser('${user.id}')">
               ✗ Reject
             </button>
           </div>
@@ -395,11 +417,11 @@
       requests.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
       
       container.innerHTML = requests.map(request => `
-        <div class="card">
-          <div class="card-header">
+        <div class="card" style="margin-bottom: 1rem;">
+          <div class="card-header" style="display: flex; justify-content: space-between; align-items: flex-start;">
             <div>
-              <h3 class="card-title">${request.service}</h3>
-              <p style="color: var(--text-medium); margin: 0;">
+              <h3 class="card-title" style="margin-bottom: 0.25rem;">🔧 ${request.service}</h3>
+              <p style="color: var(--text-secondary); margin: 0; font-size: 0.9rem;">
                 ${request.customerName} → ${request.providerName}
               </p>
             </div>
@@ -407,19 +429,30 @@
           </div>
           
           <div class="card-body">
-            <p><strong>Description:</strong> ${request.description}</p>
-            <p><strong>Scheduled:</strong> ${formatDateOnly(request.preferredDate)} at ${request.preferredTime}</p>
-            <p><strong>Location:</strong> ${request.location}</p>
-            <p style="font-size: 0.85rem; color: var(--text-light);">
-              Requested on ${formatDate(request.createdAt)}
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+              <div>
+                <div style="font-size: 0.75rem; color: var(--text-tertiary); text-transform: uppercase; margin-bottom: 0.25rem;">Description</div>
+                <div style="font-size: 0.9375rem; color: var(--text-primary);">${request.description}</div>
+              </div>
+              <div>
+                <div style="font-size: 0.75rem; color: var(--text-tertiary); text-transform: uppercase; margin-bottom: 0.25rem;">Scheduled</div>
+                <div style="font-size: 0.9375rem; color: var(--text-primary);">📅 ${formatDateOnly(request.preferredDate)} ⏰ ${request.preferredTime}</div>
+              </div>
+              <div>
+                <div style="font-size: 0.75rem; color: var(--text-tertiary); text-transform: uppercase; margin-bottom: 0.25rem;">Location</div>
+                <div style="font-size: 0.9375rem; color: var(--text-primary);">📍 ${request.location}</div>
+              </div>
+            </div>
+            <p style="font-size: 0.8125rem; color: var(--text-tertiary); margin: 1rem 0 0 0;">
+              📅 Requested on ${formatDate(request.createdAt)}
             </p>
           </div>
           
           <div class="card-footer">
-            <button class="btn btn-success btn-sm" onclick="approveRequest('${request.id}')">
+            <button class="btn btn-success" onclick="approveRequest('${request.id}')">
               ✓ Approve Request
             </button>
-            <button class="btn btn-danger btn-sm" onclick="rejectRequest('${request.id}')">
+            <button class="btn btn-danger" onclick="rejectRequest('${request.id}')">
               ✗ Reject Request
             </button>
           </div>
@@ -666,18 +699,18 @@
     // Review filter buttons
     document.getElementById('showAllReviews').addEventListener('click', () => {
       reviewFilter = 'all';
+      document.getElementById('showAllReviews').classList.remove('btn-outline-sm');
       document.getElementById('showAllReviews').classList.add('btn-primary');
-      document.getElementById('showAllReviews').classList.remove('btn-outline');
-      document.getElementById('showFlaggedReviews').classList.add('btn-outline');
+      document.getElementById('showFlaggedReviews').classList.add('btn-outline-sm');
       document.getElementById('showFlaggedReviews').classList.remove('btn-warning');
       loadReviewsList();
     });
     
     document.getElementById('showFlaggedReviews').addEventListener('click', () => {
       reviewFilter = 'flagged';
+      document.getElementById('showFlaggedReviews').classList.remove('btn-outline-sm');
       document.getElementById('showFlaggedReviews').classList.add('btn-warning');
-      document.getElementById('showFlaggedReviews').classList.remove('btn-outline');
-      document.getElementById('showAllReviews').classList.add('btn-outline');
+      document.getElementById('showAllReviews').classList.add('btn-outline-sm');
       document.getElementById('showAllReviews').classList.remove('btn-primary');
       loadReviewsList();
     });

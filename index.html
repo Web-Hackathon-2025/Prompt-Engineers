@@ -3,148 +3,220 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Karigar - Hyperlocal Services Marketplace</title>
+  <title>Karigar - Find Trusted Local Service Providers in Pakistan</title>
   <link rel="stylesheet" href="style.css">
-  <style>
-    .hero {
-      background: linear-gradient(135deg, #4a7c59 0%, #3a5f45 100%);
-      color: white;
-      padding: 4rem 0;
-      text-align: center;
-    }
-    
-    .hero h1 {
-      font-size: 3rem;
-      color: white;
-      margin-bottom: 1rem;
-    }
-    
-    .hero p {
-      font-size: 1.25rem;
-      color: rgba(255, 255, 255, 0.9);
-      max-width: 600px;
-      margin: 0 auto 2rem;
-    }
-    
-    .role-selector {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 2rem;
-      max-width: 900px;
-      margin: 0 auto;
-    }
-    
-    .role-card {
-      background: white;
-      color: var(--text-dark);
-      padding: 2rem;
-      border-radius: var(--border-radius);
-      text-align: center;
-      cursor: pointer;
-      transition: transform 0.2s;
-      border: 3px solid transparent;
-    }
-    
-    .role-card:hover {
-      transform: translateY(-5px);
-      border-color: var(--secondary);
-    }
-    
-    .role-card.selected {
-      border-color: var(--primary);
-      background-color: var(--primary-light);
-    }
-    
-    .role-icon {
-      font-size: 3rem;
-      margin-bottom: 1rem;
-    }
-    
-    .role-title {
-      font-size: 1.5rem;
-      color: var(--text-dark);
-      margin-bottom: 0.5rem;
-    }
-    
-    .role-description {
-      color: var(--text-medium);
-      font-size: 0.95rem;
-    }
-    
-    .registration-section {
-      display: none;
-      margin-top: 3rem;
-    }
-    
-    .registration-section.active {
-      display: block;
-    }
-    
-    .features {
-      background-color: var(--bg-card);
-      padding: 3rem 0;
-    }
-    
-    .feature-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 2rem;
-    }
-    
-    .feature-item {
-      text-align: center;
-    }
-    
-    .feature-icon {
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
-    }
-    
-    .admin-link {
-      position: absolute;
-      bottom: 20px;
-      right: 20px;
-      font-size: 0.8rem;
-      color: rgba(255, 255, 255, 0.6);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-    
-    .admin-link:hover {
-      color: white;
-    }
-  </style>
 </head>
 <body>
-  <!-- Hero Section -->
-  <section class="hero">
+  
+  <!-- Navigation Bar -->
+  <nav class="navbar">
     <div class="container">
-      <h1>🛠️ Karigar</h1>
-      <p>Connect with trusted local service providers in your neighborhood. Quality services at your doorstep.</p>
-      
-      <div id="roleSelection">
-        <h3 style="color: white; margin-bottom: 2rem;">Choose Your Role</h3>
-        <div class="role-selector">
-          <div class="role-card" onclick="selectRole('customer')">
-            <div class="role-icon">👤</div>
-            <h3 class="role-title">I'm a Customer</h3>
-            <p class="role-description">Find and hire local service providers</p>
-          </div>
-          
-          <div class="role-card" onclick="selectRole('provider')">
-            <div class="role-icon">🔧</div>
-            <h3 class="role-title">I'm a Provider</h3>
-            <p class="role-description">Offer your services and grow your business</p>
-          </div>
+      <div class="navbar-content">
+        <a href="index.html" class="navbar-brand">
+          <span class="brand-icon">🛠️</span>
+          <span class="brand-name">Karigar</span>
+        </a>
+        
+        <div class="navbar-links">
+          <a href="#services" class="nav-link">Services</a>
+          <a href="#how-it-works" class="nav-link">How It Works</a>
+          <a href="#providers" class="nav-link">Find Providers</a>
+          <a href="#" onclick="showLogin(); return false;" class="btn btn-outline-sm">Login</a>
         </div>
       </div>
+    </div>
+  </nav>
+  
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-overlay"></div>
+    <div class="container hero-content">
+      <h1 class="hero-title">Find Trusted Local Service Providers</h1>
+      <p class="hero-subtitle">Connect with verified professionals in your neighborhood. From plumbing to cleaning - we've got you covered.</p>
       
-      <a href="admin-login.html" class="admin-link">🔒 Admin Portal</a>
+      <div class="hero-actions">
+        <button class="btn btn-primary btn-lg" onclick="scrollToRoles()">
+          <span>Find a Service Provider</span>
+          <span class="btn-icon">→</span>
+        </button>
+        <button class="btn btn-outline-white btn-lg" onclick="scrollToRoles()">
+          <span>Become a Provider</span>
+        </button>
+      </div>
+      
+      <div class="hero-stats">
+        <div class="stat-item">
+          <div class="stat-number">500+</div>
+          <div class="stat-label">Verified Providers</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">5,000+</div>
+          <div class="stat-label">Happy Customers</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">4.8⭐</div>
+          <div class="stat-label">Average Rating</div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Service Categories -->
+  <section class="categories-section" id="services">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Popular Services</h2>
+        <p class="section-subtitle">Browse by category to find the right professional for your needs</p>
+      </div>
+      
+      <div class="category-grid">
+        <div class="category-card">
+          <div class="category-icon">🔧</div>
+          <h3 class="category-name">Plumbing</h3>
+          <p class="category-desc">Leaks, installations, repairs</p>
+          <a href="#" class="category-link" onclick="selectServiceAndScroll('Plumbing'); return false;">Browse →</a>
+        </div>
+        
+        <div class="category-card">
+          <div class="category-icon">⚡</div>
+          <h3 class="category-name">Electrical</h3>
+          <p class="category-desc">Wiring, fixtures, repairs</p>
+          <a href="#" class="category-link" onclick="selectServiceAndScroll('Electrical'); return false;">Browse →</a>
+        </div>
+        
+        <div class="category-card">
+          <div class="category-icon">🪚</div>
+          <h3 class="category-name">Carpentry</h3>
+          <p class="category-desc">Furniture, doors, woodwork</p>
+          <a href="#" class="category-link" onclick="selectServiceAndScroll('Carpentry'); return false;">Browse →</a>
+        </div>
+        
+        <div class="category-card">
+          <div class="category-icon">🧹</div>
+          <h3 class="category-name">House Cleaning</h3>
+          <p class="category-desc">Deep clean, maintenance</p>
+          <a href="#" class="category-link" onclick="selectServiceAndScroll('House Cleaning'); return false;">Browse →</a>
+        </div>
+        
+        <div class="category-card">
+          <div class="category-icon">🎨</div>
+          <h3 class="category-name">Painting</h3>
+          <p class="category-desc">Interior, exterior, touch-ups</p>
+          <a href="#" class="category-link" onclick="selectServiceAndScroll('Painting'); return false;">Browse →</a>
+        </div>
+        
+        <div class="category-card">
+          <div class="category-icon">👨‍🍳</div>
+          <h3 class="category-name">Cooking</h3>
+          <p class="category-desc">Home chef, meal prep</p>
+          <a href="#" class="category-link" onclick="selectServiceAndScroll('Cooking'); return false;">Browse →</a>
+        </div>
+        
+        <div class="category-card">
+          <div class="category-icon">❄️</div>
+          <h3 class="category-name">AC Repair</h3>
+          <p class="category-desc">Installation, maintenance</p>
+          <a href="#" class="category-link" onclick="selectServiceAndScroll('AC Repair'); return false;">Browse →</a>
+        </div>
+        
+        <div class="category-card">
+          <div class="category-icon">🔌</div>
+          <h3 class="category-name">Appliance Repair</h3>
+          <p class="category-desc">All home appliances</p>
+          <a href="#" class="category-link" onclick="selectServiceAndScroll('Appliance Repair'); return false;">Browse →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- How It Works -->
+  <section class="how-it-works-section" id="how-it-works">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">How Karigar Works</h2>
+        <p class="section-subtitle">Get connected with trusted professionals in three simple steps</p>
+      </div>
+      
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-number">1</div>
+          <div class="step-icon">🔍</div>
+          <h3 class="step-title">Search & Browse</h3>
+          <p class="step-desc">Find service providers by category and location. View profiles, ratings, and reviews.</p>
+        </div>
+        
+        <div class="step-card">
+          <div class="step-number">2</div>
+          <div class="step-icon">📋</div>
+          <h3 class="step-title">Request Service</h3>
+          <p class="step-desc">Submit your service request with details and preferred time. Admin verifies before sending to provider.</p>
+        </div>
+        
+        <div class="step-card">
+          <div class="step-number">3</div>
+          <div class="step-icon">✅</div>
+          <h3 class="step-title">Get It Done</h3>
+          <p class="step-desc">Provider accepts, completes the work, and you leave a review. Safe and secure process.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Role Selection & Registration -->
+  <section class="role-selection-section" id="get-started">
+    <div class="container">
+      <div id="roleSelection">
+        <div class="section-header">
+          <h2 class="section-title">Get Started with Karigar</h2>
+          <p class="section-subtitle">Choose how you want to use our platform</p>
+        </div>
+        
+        <div class="role-cards-container">
+          <div class="role-card-modern" onclick="selectRole('customer')">
+            <div class="role-badge">For Customers</div>
+            <div class="role-icon-large">👤</div>
+            <h3 class="role-title-modern">Find Service Providers</h3>
+            <p class="role-description-modern">Browse verified professionals, request services, and track your bookings</p>
+            <ul class="role-features">
+              <li>✓ Search by location & service</li>
+              <li>✓ View ratings & reviews</li>
+              <li>✓ Book & track services</li>
+              <li>✓ Leave feedback</li>
+            </ul>
+            <div class="role-cta">
+              <span>Register as Customer</span>
+              <span class="arrow">→</span>
+            </div>
+          </div>
+          
+          <div class="role-card-modern" onclick="selectRole('provider')">
+            <div class="role-badge role-badge-provider">For Professionals</div>
+            <div class="role-icon-large">🔧</div>
+            <h3 class="role-title-modern">Offer Your Services</h3>
+            <p class="role-description-modern">Create your profile, receive booking requests, and grow your business</p>
+            <ul class="role-features">
+              <li>✓ Create professional profile</li>
+              <li>✓ Set your pricing & availability</li>
+              <li>✓ Manage booking requests</li>
+              <li>✓ Build your reputation</li>
+            </ul>
+            <div class="role-cta">
+              <span>Register as Provider</span>
+              <span class="arrow">→</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="already-member">
+          <p>Already have an account? <a href="#" onclick="showLogin(); return false;" class="text-link">Login here</a></p>
+        </div>
+      </div>
     </div>
   </section>
   
   <!-- Registration Forms -->
-  <section class="container" style="padding: 3rem 0;">
+  <section class="registration-forms">
+    <div class="container">
     <!-- Customer Registration -->
     <div id="customerRegistration" class="registration-section">
       <div style="max-width: 600px; margin: 0 auto;">
@@ -166,12 +238,12 @@
               
               <div class="form-group">
                 <label class="form-label" for="customerPhone">Phone Number *</label>
-                <input type="tel" id="customerPhone" class="form-input" placeholder="10-digit mobile number" required>
+                <input type="tel" id="customerPhone" class="form-input" placeholder="e.g., 03001234567" required>
               </div>
               
               <div class="form-group">
                 <label class="form-label" for="customerLocation">Location *</label>
-                <input type="text" id="customerLocation" class="form-input" placeholder="e.g., Koramangala, Bangalore" required>
+                <input type="text" id="customerLocation" class="form-input" placeholder="e.g., Gulberg, Lahore" required>
               </div>
               
               <div class="alert alert-info">
@@ -209,12 +281,12 @@
               
               <div class="form-group">
                 <label class="form-label" for="providerPhone">Phone Number *</label>
-                <input type="tel" id="providerPhone" class="form-input" placeholder="10-digit mobile number" required>
+                <input type="tel" id="providerPhone" class="form-input" placeholder="e.g., 03001234567" required>
               </div>
               
               <div class="form-group">
                 <label class="form-label" for="providerLocation">Service Location *</label>
-                <input type="text" id="providerLocation" class="form-input" placeholder="e.g., Indiranagar, Bangalore" required>
+                <input type="text" id="providerLocation" class="form-input" placeholder="e.g., DHA, Karachi" required>
               </div>
               
               <div class="form-group">
@@ -272,7 +344,7 @@
               
               <div class="form-group">
                 <label class="form-label" for="loginPhone">Phone Number</label>
-                <input type="tel" id="loginPhone" class="form-input" placeholder="10-digit mobile number" required>
+                <input type="tel" id="loginPhone" class="form-input" placeholder="e.g., 03001234567" required>
               </div>
               
               <div id="loginError" class="alert alert-danger hidden">
@@ -294,42 +366,76 @@
     </div>
   </section>
   
-  <!-- Features Section -->
-  <section class="features">
+  <!-- Footer -->
+  <footer class="footer">
     <div class="container">
-      <h2 style="text-align: center; margin-bottom: 3rem;">Why Choose Karigar?</h2>
-      <div class="feature-grid">
-        <div class="feature-item">
-          <div class="feature-icon">🔍</div>
-          <h4>Find Local Experts</h4>
-          <p>Discover verified service providers in your neighborhood</p>
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3 class="footer-title">
+            <span class="brand-icon">🛠️</span> Karigar
+          </h3>
+          <p class="footer-desc">Connecting communities with trusted local service providers across Pakistan.</p>
+          <div class="footer-social">
+            <a href="#" class="social-link">📘</a>
+            <a href="#" class="social-link">📷</a>
+            <a href="#" class="social-link">🐦</a>
+          </div>
         </div>
         
-        <div class="feature-item">
-          <div class="feature-icon">✅</div>
-          <h4>Admin Verified</h4>
-          <p>All providers are approved and monitored by our team</p>
+        <div class="footer-section">
+          <h4 class="footer-heading">For Customers</h4>
+          <ul class="footer-links">
+            <li><a href="#services">Browse Services</a></li>
+            <li><a href="#how-it-works">How It Works</a></li>
+            <li><a href="#get-started">Sign Up</a></li>
+            <li><a href="#">Customer Support</a></li>
+          </ul>
         </div>
         
-        <div class="feature-item">
-          <div class="feature-icon">⭐</div>
-          <h4>Rated & Reviewed</h4>
-          <p>Read genuine reviews from real customers</p>
+        <div class="footer-section">
+          <h4 class="footer-heading">For Providers</h4>
+          <ul class="footer-links">
+            <li><a href="#get-started">Register</a></li>
+            <li><a href="#">Provider Guidelines</a></li>
+            <li><a href="#">Pricing</a></li>
+            <li><a href="#">Success Stories</a></li>
+          </ul>
         </div>
         
-        <div class="feature-item">
-          <div class="feature-icon">🤖</div>
-          <h4>AI-Powered</h4>
-          <p>Smart recommendations based on your needs</p>
+        <div class="footer-section">
+          <h4 class="footer-heading">Company</h4>
+          <ul class="footer-links">
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Contact</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="admin-login.html" style="opacity: 0.5;">Admin</a></li>
+          </ul>
         </div>
       </div>
+      
+      <div class="footer-bottom">
+        <p>&copy; 2025 Karigar. All rights reserved. | Built for Web + AI Hackathon 2025</p>
+      </div>
     </div>
-  </section>
+  </footer>
   
   <script src="data/users.js"></script>
   <script src="script.js"></script>
   <script>
     let selectedRole = null;
+    
+    // Smooth scroll to roles section
+    function scrollToRoles() {
+      document.getElementById('get-started').scrollIntoView({ behavior: 'smooth' });
+    }
+    
+    // Select service and scroll
+    function selectServiceAndScroll(service) {
+      scrollToRoles();
+      setTimeout(() => {
+        selectRole('customer');
+      }, 500);
+    }
     
     // Role selection
     function selectRole(role) {
@@ -343,7 +449,9 @@
       }
       
       // Scroll to registration form
-      window.scrollTo({ top: 400, behavior: 'smooth' });
+      setTimeout(() => {
+        document.querySelector('.registration-section.active').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 100);
     }
     
     // Reset role selection
@@ -354,8 +462,8 @@
       document.getElementById('providerRegistration').classList.remove('active');
       document.getElementById('loginSection').classList.remove('active');
       
-      // Scroll to top
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      // Scroll to role selection
+      document.getElementById('get-started').scrollIntoView({ behavior: 'smooth' });
     }
     
     // Show login form

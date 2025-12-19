@@ -7,22 +7,28 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Header -->
-  <header class="header">
-    <div class="container header-content">
-      <a href="index.html" class="logo">🛠️ Karigar</a>
-      <div class="user-info">
-        <span class="user-name" id="userName">Customer</span>
-        <button class="btn btn-sm btn-outline" id="logoutBtn">Logout</button>
+  <!-- Modern Header -->
+  <nav class="navbar">
+    <div class="container navbar-content">
+      <a href="index.html" class="navbar-brand">
+        <span class="brand-icon">🛠️</span>
+        <span class="brand-name">Karigar</span>
+      </a>
+      <div style="display: flex; align-items: center; gap: 1rem;">
+        <span style="color: var(--text-secondary); font-weight: 500;">👤 <span id="userName">Customer</span></span>
+        <button class="btn btn-sm btn-outline-sm" id="logoutBtn">Logout</button>
       </div>
     </div>
-  </header>
+  </nav>
   
   <!-- Main Content -->
-  <main class="main-content">
+  <main style="min-height: 100vh; background: var(--bg-secondary); padding: 2rem 0;">
     <div class="container">
-      <h1>Customer Dashboard</h1>
-      <p style="color: var(--text-medium); margin-bottom: 2rem;">Find and book trusted local service providers</p>
+      <!-- Page Header -->
+      <div style="margin-bottom: 2rem;">
+        <h1 style="margin-bottom: 0.5rem;">Customer Dashboard</h1>
+        <p style="color: var(--text-secondary); font-size: 1.125rem; margin: 0;">Find and book trusted local service providers</p>
+      </div>
       
       <!-- Tabs -->
       <div class="tabs" data-tabs>
@@ -34,14 +40,15 @@
       <!-- Browse Services Tab -->
       <div id="browseTab" class="tab-content active">
         <!-- Search & Filters -->
-        <div class="card">
+        <div class="card" style="margin-bottom: 1.5rem;">
           <div class="card-body">
-            <div class="search-bar">
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
               <input 
                 type="text" 
                 id="searchInput" 
-                class="search-input" 
-                placeholder="Search by service, name, or location..."
+                class="form-input" 
+                placeholder="🔍 Search by service, name, or location..."
+                style="flex: 1; min-width: 250px;"
               >
               <select id="serviceFilter" class="form-select" style="min-width: 200px;">
                 <option value="">All Services</option>
@@ -56,11 +63,11 @@
               </select>
             </div>
             
-            <div class="flex-between" style="margin-top: 1rem;">
-              <span id="providerCount" style="color: var(--text-medium);"></span>
-              <label style="color: var(--text-medium); display: flex; align-items: center; gap: 0.5rem;">
-                <input type="checkbox" id="nearMeFilter">
-                Show only providers near me
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; flex-wrap: wrap; gap: 1rem;">
+              <span id="providerCount" style="color: var(--text-secondary); font-weight: 500;"></span>
+              <label style="color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                <input type="checkbox" id="nearMeFilter" style="cursor: pointer;">
+                📍 Show only providers near me
               </label>
             </div>
           </div>
@@ -282,53 +289,76 @@
         }
         
         return `
-          <div class="card">
-            <div class="card-header">
-              <div>
-                <h3 class="card-title">${provider.name}</h3>
-                <p style="color: var(--text-medium); font-size: 0.9rem; margin: 0;">
-                  📍 ${provider.location}
-                </p>
+          <div class="card" style="height: 100%; display: flex; flex-direction: column;">
+            <div class="card-header" style="flex-direction: column; align-items: flex-start; gap: 0.5rem;">
+              <div style="display: flex; justify-content: space-between; width: 100%; align-items: flex-start;">
+                <div>
+                  <h3 class="card-title" style="margin-bottom: 0.25rem;">${provider.name}</h3>
+                  <p style="color: var(--text-secondary); font-size: 0.9rem; margin: 0;">
+                    📍 ${provider.location}
+                  </p>
+                </div>
+                <div style="text-align: right;">
+                  ${generateStarRating(parseFloat(avgRating))}
+                  <div style="font-size: 0.75rem; color: var(--text-tertiary); margin-top: 0.25rem;">
+                    ${reviews.length} review${reviews.length !== 1 ? 's' : ''}
+                  </div>
+                </div>
               </div>
-              ${generateStarRating(parseFloat(avgRating))}
             </div>
             
-            <div class="card-body">
+            <div class="card-body" style="flex: 1;">
               ${aiSummary ? `
-                <div class="alert alert-info" style="margin-bottom: 1rem; font-size: 0.85rem;">
-                  <strong>🤖 AI Summary:</strong> ${aiSummary}
+                <div class="alert alert-info" style="margin-bottom: 1rem; font-size: 0.875rem; padding: 0.75rem;">
+                  <strong>🤖 AI Insight:</strong> ${aiSummary}
                 </div>
               ` : ''}
               
-              <p><strong>Services:</strong> ${provider.services.join(', ')}</p>
+              <div style="margin-bottom: 1rem;">
+                <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.5rem;">Services Offered:</div>
+                <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                  ${provider.services.map(service => 
+                    `<span class="badge badge-secondary" style="font-size: 0.75rem;">${service}</span>`
+                  ).join('')}
+                </div>
+              </div>
               
               ${provider.pricing && Object.keys(provider.pricing).length > 0 ? `
-                <p><strong>Pricing:</strong><br>
-                  ${Object.entries(provider.pricing).map(([service, price]) => 
-                    `${service}: ${price}`
-                  ).join('<br>')}
-                </p>
+                <div style="margin-bottom: 1rem;">
+                  <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.5rem;">💰 Pricing:</div>
+                  <div style="font-size: 0.875rem; color: var(--text-secondary);">
+                    ${Object.entries(provider.pricing).map(([service, price]) => 
+                      `<div style="display: flex; justify-content: space-between; padding: 0.25rem 0;">
+                        <span>${service}:</span>
+                        <strong>${price}</strong>
+                      </div>`
+                    ).join('')}
+                  </div>
+                </div>
               ` : ''}
               
-              <p><strong>Availability:</strong> ${provider.availability}</p>
+              <div style="margin-bottom: 1rem;">
+                <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.5rem;">⏰ Availability:</div>
+                <div style="font-size: 0.875rem; color: var(--text-secondary);">${provider.availability}</div>
+              </div>
               
-              <p style="font-size: 0.9rem; color: var(--text-medium);">${provider.bio}</p>
+              <p style="font-size: 0.875rem; color: var(--text-secondary); line-height: 1.6;">${provider.bio}</p>
               
-              <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+              <div style="display: flex; gap: 2rem; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
                 <div>
-                  <strong>${provider.completedJobs || 0}</strong>
-                  <div style="font-size: 0.8rem; color: var(--text-light);">Jobs Done</div>
+                  <div style="font-size: 1.5rem; font-weight: 700; color: var(--primary); line-height: 1;">${provider.completedJobs || 0}</div>
+                  <div style="font-size: 0.75rem; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.5px;">Jobs Done</div>
                 </div>
                 <div>
-                  <strong>${reviews.length}</strong>
-                  <div style="font-size: 0.8rem; color: var(--text-light);">Reviews</div>
+                  <div style="font-size: 1.5rem; font-weight: 700; color: var(--primary); line-height: 1;">${reviews.length}</div>
+                  <div style="font-size: 0.75rem; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.5px;">Reviews</div>
                 </div>
               </div>
             </div>
             
             <div class="card-footer">
-              <button class="btn btn-primary" onclick="openBookModal('${provider.id}', '${provider.name}', ${JSON.stringify(provider.services).replace(/"/g, '&quot;')})">
-                Book Service
+              <button class="btn btn-primary" style="width: 100%;" onclick="openBookModal('${provider.id}', '${provider.name}', ${JSON.stringify(provider.services).replace(/"/g, '&quot;')})">
+                📅 Book Service
               </button>
             </div>
           </div>
@@ -403,25 +433,37 @@
       bookings.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
       
       container.innerHTML = bookings.map(booking => `
-        <div class="card">
-          <div class="card-header">
+        <div class="card" style="margin-bottom: 1rem;">
+          <div class="card-header" style="display: flex; justify-content: space-between; align-items: flex-start;">
             <div>
-              <h3 class="card-title">${booking.service}</h3>
-              <p style="color: var(--text-medium); margin: 0;">Provider: ${booking.providerName}</p>
+              <h3 class="card-title" style="margin-bottom: 0.25rem;">🔧 ${booking.service}</h3>
+              <p style="color: var(--text-secondary); margin: 0; font-size: 0.9rem;">Provider: <strong>${booking.providerName}</strong></p>
             </div>
             ${getStatusBadge(booking.status)}
           </div>
           
           <div class="card-body">
-            <p><strong>Description:</strong> ${booking.description}</p>
-            <p><strong>Scheduled:</strong> ${formatDateOnly(booking.preferredDate)} at ${booking.preferredTime}</p>
-            <p><strong>Location:</strong> ${booking.location}</p>
-            <p style="font-size: 0.85rem; color: var(--text-light);">Requested on ${formatDate(booking.createdAt)}</p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1rem;">
+              <div>
+                <div style="font-size: 0.75rem; color: var(--text-tertiary); text-transform: uppercase; margin-bottom: 0.25rem;">Description</div>
+                <div style="font-size: 0.9375rem; color: var(--text-primary);">${booking.description}</div>
+              </div>
+              <div>
+                <div style="font-size: 0.75rem; color: var(--text-tertiary); text-transform: uppercase; margin-bottom: 0.25rem;">Scheduled</div>
+                <div style="font-size: 0.9375rem; color: var(--text-primary);">📅 ${formatDateOnly(booking.preferredDate)} ⏰ ${booking.preferredTime}</div>
+              </div>
+              <div>
+                <div style="font-size: 0.75rem; color: var(--text-tertiary); text-transform: uppercase; margin-bottom: 0.25rem;">Location</div>
+                <div style="font-size: 0.9375rem; color: var(--text-primary);">📍 ${booking.location}</div>
+              </div>
+            </div>
+            
+            <p style="font-size: 0.8125rem; color: var(--text-tertiary); margin: 0;">Requested on ${formatDate(booking.createdAt)}</p>
             
             ${booking.timeline && booking.timeline.length > 1 ? `
-              <div style="margin-top: 1rem;">
-                <strong>Timeline:</strong>
-                <div class="timeline" style="margin-top: 0.5rem;">
+              <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color);">
+                <strong style="color: var(--text-primary); display: block; margin-bottom: 1rem;">📊 Timeline</strong>
+                <div class="timeline">
                   ${booking.timeline.map(event => `
                     <div class="timeline-item">
                       <div class="timeline-time">${formatDate(event.timestamp)}</div>
@@ -435,8 +477,8 @@
           
           ${booking.status === 'completed' ? `
             <div class="card-footer">
-              <button class="btn btn-secondary btn-sm" onclick="openReviewModal('${booking.id}', '${booking.providerId}', '${booking.providerName}', '${booking.service}')">
-                Write Review
+              <button class="btn btn-secondary" onclick="openReviewModal('${booking.id}', '${booking.providerId}', '${booking.providerName}', '${booking.service}')">
+                ⭐ Write Review
               </button>
             </div>
           ` : ''}
@@ -547,30 +589,33 @@
       reviews.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
       
       container.innerHTML = reviews.map(review => `
-        <div class="card">
-          <div class="card-header">
+        <div class="card" style="margin-bottom: 1rem;">
+          <div class="card-header" style="display: flex; justify-content: space-between; align-items: flex-start;">
             <div>
-              <h3 class="card-title">${review.providerName}</h3>
-              <p style="color: var(--text-medium); margin: 0;">${review.service}</p>
+              <h3 class="card-title" style="margin-bottom: 0.25rem;">${review.providerName}</h3>
+              <p style="color: var(--text-secondary); margin: 0; font-size: 0.9rem;">${review.service}</p>
             </div>
             ${generateStarRating(review.rating)}
           </div>
           
           <div class="card-body">
-            <p>${review.comment}</p>
-            <p style="font-size: 0.85rem; color: var(--text-light);">
-              Reviewed on ${formatDate(review.createdAt)}
-            </p>
+            <p style="font-size: 1rem; line-height: 1.7; color: var(--text-primary);">${review.comment}</p>
             
-            ${review.sentiment ? `
-              <span class="badge badge-${review.sentiment === 'positive' ? 'success' : review.sentiment === 'negative' ? 'danger' : 'secondary'}">
-                ${review.sentiment} sentiment
-              </span>
-            ` : ''}
-            
-            ${review.flagged ? `
-              <span class="badge badge-warning">Flagged for review</span>
-            ` : ''}
+            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 1rem; align-items: center;">
+              <p style="font-size: 0.8125rem; color: var(--text-tertiary); margin: 0;">
+                Reviewed on ${formatDate(review.createdAt)}
+              </p>
+              
+              ${review.sentiment ? `
+                <span class="badge badge-${review.sentiment === 'positive' ? 'success' : review.sentiment === 'negative' ? 'danger' : 'secondary'}">
+                  ${review.sentiment === 'positive' ? '😊' : review.sentiment === 'negative' ? '😞' : '😐'} ${review.sentiment}
+                </span>
+              ` : ''}
+              
+              ${review.flagged ? `
+                <span class="badge badge-warning">⚠️ Flagged for review</span>
+              ` : ''}
+            </div>
           </div>
         </div>
       `).join('');
