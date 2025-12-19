@@ -426,7 +426,10 @@
     
     // Smooth scroll to roles section
     function scrollToRoles() {
-      document.getElementById('get-started').scrollIntoView({ behavior: 'smooth' });
+      const getStarted = document.getElementById('get-started');
+      if (getStarted) {
+        getStarted.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     }
     
     // Select service and scroll
@@ -434,7 +437,7 @@
       scrollToRoles();
       setTimeout(() => {
         selectRole('customer');
-      }, 500);
+      }, 800);
     }
     
     // Role selection
@@ -450,7 +453,10 @@
       
       // Scroll to registration form
       setTimeout(() => {
-        document.querySelector('.registration-section.active').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        const activeSection = document.querySelector('.registration-section.active');
+        if (activeSection) {
+          activeSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
       }, 100);
     }
     
@@ -463,14 +469,20 @@
       document.getElementById('loginSection').classList.remove('active');
       
       // Scroll to role selection
-      document.getElementById('get-started').scrollIntoView({ behavior: 'smooth' });
+      const getStarted = document.getElementById('get-started');
+      if (getStarted) {
+        getStarted.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     }
     
     // Show login form
     function showLogin() {
-      document.getElementById('roleSelection').style.display = 'none';
+      if (loginSection) {
+        loginSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
       document.getElementById('loginSection').classList.add('active');
-      window.scrollTo({ top: 400, behavior: 'smooth' });
+      const loginSection = document.getElementById('loginSection');
+      loginSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
     
     // Customer registration
