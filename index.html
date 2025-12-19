@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Karigar - Hyperlocal Services Marketplace</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .hero {
+      background: linear-gradient(135deg, #4a7c59 0%, #3a5f45 100%);
+      color: white;
+      padding: 4rem 0;
+      text-align: center;
+    }
+    
+    .hero h1 {
+      font-size: 3rem;
+      color: white;
+      margin-bottom: 1rem;
+    }
+    
+    .hero p {
+      font-size: 1.25rem;
+      color: rgba(255, 255, 255, 0.9);
+      max-width: 600px;
+      margin: 0 auto 2rem;
+    }
+    
+    .role-selector {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    
+    .role-card {
+      background: white;
+      color: var(--text-dark);
+      padding: 2rem;
+      border-radius: var(--border-radius);
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.2s;
+      border: 3px solid transparent;
+    }
+    
+    .role-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--secondary);
+    }
+    
+    .role-card.selected {
+      border-color: var(--primary);
+      background-color: var(--primary-light);
+    }
+    
+    .role-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+    
+    .role-title {
+      font-size: 1.5rem;
+      color: var(--text-dark);
+      margin-bottom: 0.5rem;
+    }
+    
+    .role-description {
+      color: var(--text-medium);
+      font-size: 0.95rem;
+    }
+    
+    .registration-section {
+      display: none;
+      margin-top: 3rem;
+    }
+    
+    .registration-section.active {
+      display: block;
+    }
+    
+    .features {
+      background-color: var(--bg-card);
+      padding: 3rem 0;
+    }
+    
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+    }
+    
+    .feature-item {
+      text-align: center;
+    }
+    
+    .feature-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+    
+    .admin-link {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.6);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    
+    .admin-link:hover {
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <h1>🛠️ Karigar</h1>
+      <p>Connect with trusted local service providers in your neighborhood. Quality services at your doorstep.</p>
+      
+      <div id="roleSelection">
+        <h3 style="color: white; margin-bottom: 2rem;">Choose Your Role</h3>
+        <div class="role-selector">
+          <div class="role-card" onclick="selectRole('customer')">
+            <div class="role-icon">👤</div>
+            <h3 class="role-title">I'm a Customer</h3>
+            <p class="role-description">Find and hire local service providers</p>
+          </div>
+          
+          <div class="role-card" onclick="selectRole('provider')">
+            <div class="role-icon">🔧</div>
+            <h3 class="role-title">I'm a Provider</h3>
+            <p class="role-description">Offer your services and grow your business</p>
+          </div>
+        </div>
+      </div>
+      
+      <a href="admin-login.html" class="admin-link">🔒 Admin Portal</a>
+    </div>
+  </section>
+  
+  <!-- Registration Forms -->
+  <section class="container" style="padding: 3rem 0;">
+    <!-- Customer Registration -->
+    <div id="customerRegistration" class="registration-section">
+      <div style="max-width: 600px; margin: 0 auto;">
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">Customer Registration</h2>
+          </div>
+          <div class="card-body">
+            <form id="customerForm">
+              <div class="form-group">
+                <label class="form-label" for="customerName">Full Name *</label>
+                <input type="text" id="customerName" class="form-input" required>
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label" for="customerEmail">Email *</label>
+                <input type="email" id="customerEmail" class="form-input" required>
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label" for="customerPhone">Phone Number *</label>
+                <input type="tel" id="customerPhone" class="form-input" placeholder="10-digit mobile number" required>
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label" for="customerLocation">Location *</label>
+                <input type="text" id="customerLocation" class="form-input" placeholder="e.g., Koramangala, Bangalore" required>
+              </div>
+              
+              <div class="alert alert-info">
+                <strong>📋 Note:</strong> Your registration will be reviewed by our admin team. You'll be able to access the platform once approved.
+              </div>
+              
+              <div class="flex gap-2">
+                <button type="button" class="btn btn-outline" onclick="resetRoleSelection()">← Back</button>
+                <button type="submit" class="btn btn-primary" style="flex: 1;">Register</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Provider Registration -->
+    <div id="providerRegistration" class="registration-section">
+      <div style="max-width: 700px; margin: 0 auto;">
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">Service Provider Registration</h2>
+          </div>
+          <div class="card-body">
+            <form id="providerForm">
+              <div class="form-group">
+                <label class="form-label" for="providerName">Full Name *</label>
+                <input type="text" id="providerName" class="form-input" required>
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label" for="providerEmail">Email *</label>
+                <input type="email" id="providerEmail" class="form-input" required>
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label" for="providerPhone">Phone Number *</label>
+                <input type="tel" id="providerPhone" class="form-input" placeholder="10-digit mobile number" required>
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label" for="providerLocation">Service Location *</label>
+                <input type="text" id="providerLocation" class="form-input" placeholder="e.g., Indiranagar, Bangalore" required>
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label" for="providerServices">Services Offered *</label>
+                <select id="providerServices" class="form-select" multiple size="5" required>
+                  <option value="Plumbing">Plumbing</option>
+                  <option value="Electrical">Electrical Work</option>
+                  <option value="Carpentry">Carpentry</option>
+                  <option value="House Cleaning">House Cleaning</option>
+                  <option value="Painting">Painting</option>
+                  <option value="Cooking">Cooking</option>
+                  <option value="AC Repair">AC Repair</option>
+                  <option value="Appliance Repair">Appliance Repair</option>
+                </select>
+                <small style="color: var(--text-light);">Hold Ctrl (Cmd on Mac) to select multiple</small>
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label" for="providerAvailability">Availability *</label>
+                <input type="text" id="providerAvailability" class="form-input" placeholder="e.g., Mon-Fri, 9 AM - 6 PM" required>
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label" for="providerBio">About Your Services *</label>
+                <textarea id="providerBio" class="form-textarea" placeholder="Describe your experience and services..." required></textarea>
+              </div>
+              
+              <div class="alert alert-info">
+                <strong>📋 Note:</strong> Your profile will be reviewed by our admin team. Once approved, customers can find and book your services.
+              </div>
+              
+              <div class="flex gap-2">
+                <button type="button" class="btn btn-outline" onclick="resetRoleSelection()">← Back</button>
+                <button type="submit" class="btn btn-primary" style="flex: 1;">Register</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Login Section -->
+    <div id="loginSection" class="registration-section">
+      <div style="max-width: 500px; margin: 0 auto;">
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">Login to Your Account</h2>
+          </div>
+          <div class="card-body">
+            <form id="loginForm">
+              <div class="form-group">
+                <label class="form-label" for="loginEmail">Email</label>
+                <input type="email" id="loginEmail" class="form-input" required>
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label" for="loginPhone">Phone Number</label>
+                <input type="tel" id="loginPhone" class="form-input" placeholder="10-digit mobile number" required>
+              </div>
+              
+              <div id="loginError" class="alert alert-danger hidden">
+                Account not found or not yet approved by admin.
+              </div>
+              
+              <div class="flex gap-2">
+                <button type="button" class="btn btn-outline" onclick="resetRoleSelection()">← Back</button>
+                <button type="submit" class="btn btn-primary" style="flex: 1;">Login</button>
+              </div>
+            </form>
+            
+            <div style="text-align: center; margin-top: 1.5rem;">
+              <p style="color: var(--text-medium);">Don't have an account? Select your role above to register.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Features Section -->
+  <section class="features">
+    <div class="container">
+      <h2 style="text-align: center; margin-bottom: 3rem;">Why Choose Karigar?</h2>
+      <div class="feature-grid">
+        <div class="feature-item">
+          <div class="feature-icon">🔍</div>
+          <h4>Find Local Experts</h4>
+          <p>Discover verified service providers in your neighborhood</p>
+        </div>
+        
+        <div class="feature-item">
+          <div class="feature-icon">✅</div>
+          <h4>Admin Verified</h4>
+          <p>All providers are approved and monitored by our team</p>
+        </div>
+        
+        <div class="feature-item">
+          <div class="feature-icon">⭐</div>
+          <h4>Rated & Reviewed</h4>
+          <p>Read genuine reviews from real customers</p>
+        </div>
+        
+        <div class="feature-item">
+          <div class="feature-icon">🤖</div>
+          <h4>AI-Powered</h4>
+          <p>Smart recommendations based on your needs</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <script src="data/users.js"></script>
+  <script src="script.js"></script>
+  <script>
+    let selectedRole = null;
+    
+    // Role selection
+    function selectRole(role) {
+      selectedRole = role;
+      document.getElementById('roleSelection').style.display = 'none';
+      
+      if (role === 'customer') {
+        document.getElementById('customerRegistration').classList.add('active');
+      } else if (role === 'provider') {
+        document.getElementById('providerRegistration').classList.add('active');
+      }
+      
+      // Scroll to registration form
+      window.scrollTo({ top: 400, behavior: 'smooth' });
+    }
+    
+    // Reset role selection
+    function resetRoleSelection() {
+      selectedRole = null;
+      document.getElementById('roleSelection').style.display = 'block';
+      document.getElementById('customerRegistration').classList.remove('active');
+      document.getElementById('providerRegistration').classList.remove('active');
+      document.getElementById('loginSection').classList.remove('active');
+      
+      // Scroll to top
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    
+    // Show login form
+    function showLogin() {
+      document.getElementById('roleSelection').style.display = 'none';
+      document.getElementById('loginSection').classList.add('active');
+      window.scrollTo({ top: 400, behavior: 'smooth' });
+    }
+    
+    // Customer registration
+    document.getElementById('customerForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const formData = {
+        role: 'customer',
+        name: document.getElementById('customerName').value.trim(),
+        email: document.getElementById('customerEmail').value.trim(),
+        phone: document.getElementById('customerPhone').value.trim(),
+        location: document.getElementById('customerLocation').value.trim()
+      };
+      
+      // Validation
+      if (!isValidEmail(formData.email)) {
+        showNotification('Please enter a valid email address', 'danger');
+        return;
+      }
+      
+      if (!isValidPhone(formData.phone)) {
+        showNotification('Please enter a valid 10-digit phone number', 'danger');
+        return;
+      }
+      
+      // Add user
+      const newUser = addUser(formData);
+      
+      showNotification('Registration successful! Your account is pending admin approval.', 'success');
+      
+      // Reset form
+      document.getElementById('customerForm').reset();
+      
+      // Show confirmation
+      setTimeout(() => {
+        alert('Thank you for registering!\n\nYour account is now pending approval from our admin team. You will be able to login once your account is approved.\n\nPlease check back soon!');
+        resetRoleSelection();
+      }, 1500);
+    });
+    
+    // Provider registration
+    document.getElementById('providerForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const servicesSelect = document.getElementById('providerServices');
+      const selectedServices = Array.from(servicesSelect.selectedOptions).map(opt => opt.value);
+      
+      if (selectedServices.length === 0) {
+        showNotification('Please select at least one service', 'danger');
+        return;
+      }
+      
+      const formData = {
+        role: 'provider',
+        name: document.getElementById('providerName').value.trim(),
+        email: document.getElementById('providerEmail').value.trim(),
+        phone: document.getElementById('providerPhone').value.trim(),
+        location: document.getElementById('providerLocation').value.trim(),
+        services: selectedServices,
+        availability: document.getElementById('providerAvailability').value.trim(),
+        bio: document.getElementById('providerBio').value.trim(),
+        rating: 0,
+        completedJobs: 0,
+        pricing: {}
+      };
+      
+      // Validation
+      if (!isValidEmail(formData.email)) {
+        showNotification('Please enter a valid email address', 'danger');
+        return;
+      }
+      
+      if (!isValidPhone(formData.phone)) {
+        showNotification('Please enter a valid 10-digit phone number', 'danger');
+        return;
+      }
+      
+      // Add user
+      const newUser = addUser(formData);
+      
+      showNotification('Registration successful! Your profile is pending admin approval.', 'success');
+      
+      // Reset form
+      document.getElementById('providerForm').reset();
+      
+      // Show confirmation
+      setTimeout(() => {
+        alert('Thank you for registering as a service provider!\n\nYour profile is now pending approval from our admin team. Once approved, customers will be able to find and book your services.\n\nPlease check back soon!');
+        resetRoleSelection();
+      }, 1500);
+    });
+    
+    // Login
+    document.getElementById('loginForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const email = document.getElementById('loginEmail').value.trim();
+      const phone = document.getElementById('loginPhone').value.trim();
+      const errorDiv = document.getElementById('loginError');
+      
+      // Find user
+      const users = loadUsers();
+      const user = users.find(u => u.email === email && u.phone === phone);
+      
+      if (!user) {
+        errorDiv.textContent = 'Account not found. Please check your credentials.';
+        errorDiv.classList.remove('hidden');
+        return;
+      }
+      
+      if (user.status === 'pending') {
+        errorDiv.textContent = 'Your account is pending admin approval. Please check back later.';
+        errorDiv.classList.remove('hidden');
+        return;
+      }
+      
+      if (user.status === 'suspended') {
+        errorDiv.textContent = 'Your account has been suspended. Please contact admin.';
+        errorDiv.classList.remove('hidden');
+        return;
+      }
+      
+      // Login successful
+      setCurrentUser(user);
+      showNotification('Login successful!', 'success');
+      
+      // Redirect based on role
+      setTimeout(() => {
+        if (user.role === 'customer') {
+          window.location.href = 'customer.html';
+        } else if (user.role === 'provider') {
+          window.location.href = 'provider.html';
+        }
+      }, 1000);
+    });
+    
+    // Check if already logged in
+    if (isLoggedIn()) {
+      const user = getCurrentUser();
+      if (user.role === 'customer') {
+        window.location.href = 'customer.html';
+      } else if (user.role === 'provider') {
+        window.location.href = 'provider.html';
+      }
+    }
+    
+    // Add "Already have an account?" link
+    document.addEventListener('DOMContentLoaded', () => {
+      const hero = document.querySelector('.hero .container');
+      const loginLink = document.createElement('p');
+      loginLink.style.marginTop = '2rem';
+      loginLink.style.color = 'rgba(255, 255, 255, 0.9)';
+      loginLink.innerHTML = 'Already have an account? <a href="#" onclick="showLogin(); return false;" style="color: white; text-decoration: underline;">Login here</a>';
+      hero.appendChild(loginLink);
+    });
+  </script>
+</body>
+</html>
