@@ -419,8 +419,27 @@
     </div>
   </footer>
   
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  
+  <!-- Firebase Configuration -->
+  <script src="firebase-config.js"></script>
+  <script src="db-utils.js"></script>
+  <script src="firebase-auth.js"></script>
+  
+  <!-- Load Data Files (for seeding) -->
+  <script src="data/providers.js"></script>
+  <script src="data/requests.js"></script>
+  <script src="data/reviews.js"></script>
   <script src="data/users.js"></script>
-  <script src="script.js"></script>
+  
+  <!-- Database Utilities -->
+  <script src="db-utils.js"></script>
+  
+  <!-- Core Logic (Firestore Version) -->
+  <script src="script-firestore.js"></script>
   <script>
     let selectedRole = null;
     
@@ -477,12 +496,14 @@
     
     // Show login form
     function showLogin() {
-      if (loginSection) {
-        loginSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-      document.getElementById('loginSection').classList.add('active');
       const loginSection = document.getElementById('loginSection');
-      loginSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      if (loginSection) {
+        // Reset all forms first
+        resetRoleSelection();
+        // Show and scroll to login section
+        loginSection.classList.add('active');
+        loginSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
     }
     
     // Customer registration
