@@ -1,0 +1,1514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Karigar | Premium Service Marketplace</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style-3d.css">
+    
+    <style>
+        /* ===== CUSTOMER DASHBOARD STYLES ===== */
+        
+        /* Dashboard Layout */
+        .dashboard {
+            min-height: 100vh;
+            background: var(--surface-ground);
+        }
+        
+        /* Dashboard Navigation */
+        .dash-nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--space-4) var(--space-8);
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--slate-100);
+        }
+        
+        body.dark-mode .dash-nav {
+            background: rgba(15, 23, 42, 0.9);
+            border-bottom-color: var(--slate-800);
+        }
+        
+        @media (max-width: 768px) {
+            .dash-nav {
+                padding: var(--space-3) var(--space-4);
+            }
+        }
+        
+        .dash-nav-left {
+            display: flex;
+            align-items: center;
+            gap: var(--space-6);
+        }
+        
+        .dash-brand {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            font-size: var(--text-xl);
+            font-weight: 800;
+            color: var(--slate-900);
+        }
+        
+        body.dark-mode .dash-brand {
+            color: var(--slate-50);
+        }
+        
+        .dash-brand-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-primary);
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--text-xl);
+        }
+        
+        /* Search Bar */
+        .search-bar {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            padding: var(--space-3) var(--space-4);
+            background: var(--slate-100);
+            border-radius: var(--radius-xl);
+            min-width: 300px;
+            transition: all var(--transition-fast);
+        }
+        
+        body.dark-mode .search-bar {
+            background: var(--slate-800);
+        }
+        
+        .search-bar:focus-within {
+            background: var(--surface-card);
+            box-shadow: var(--shadow-md), 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+        
+        @media (max-width: 768px) {
+            .search-bar {
+                display: none;
+            }
+        }
+        
+        .search-icon {
+            font-size: var(--text-lg);
+            color: var(--slate-400);
+        }
+        
+        .search-input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            font-size: var(--text-sm);
+            color: var(--slate-900);
+            outline: none;
+        }
+        
+        body.dark-mode .search-input {
+            color: var(--slate-100);
+        }
+        
+        .search-input::placeholder {
+            color: var(--slate-400);
+        }
+        
+        /* Nav Right */
+        .dash-nav-right {
+            display: flex;
+            align-items: center;
+            gap: var(--space-4);
+        }
+        
+        .nav-icon-btn {
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--slate-100);
+            border: none;
+            border-radius: var(--radius-lg);
+            font-size: var(--text-xl);
+            color: var(--slate-600);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            position: relative;
+        }
+        
+        .nav-icon-btn:hover {
+            background: var(--slate-200);
+            color: var(--slate-900);
+        }
+        
+        body.dark-mode .nav-icon-btn {
+            background: var(--slate-800);
+            color: var(--slate-400);
+        }
+        
+        body.dark-mode .nav-icon-btn:hover {
+            background: var(--slate-700);
+            color: var(--slate-100);
+        }
+        
+        .nav-badge {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            min-width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--accent-500);
+            color: white;
+            font-size: 10px;
+            font-weight: 700;
+            border-radius: var(--radius-full);
+            padding: 0 4px;
+        }
+        
+        .user-avatar {
+            width: 44px;
+            height: 44px;
+            background: var(--gradient-primary);
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--text-lg);
+            font-weight: 700;
+            color: white;
+            cursor: pointer;
+        }
+        
+        /* Dashboard Content */
+        .dash-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: var(--space-8);
+        }
+        
+        @media (max-width: 768px) {
+            .dash-content {
+                padding: var(--space-4);
+            }
+        }
+        
+        /* Welcome Section */
+        .welcome-section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--space-8);
+        }
+        
+        @media (max-width: 768px) {
+            .welcome-section {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: var(--space-4);
+            }
+        }
+        
+        .welcome-text h1 {
+            font-size: var(--text-2xl);
+            font-weight: 700;
+            color: var(--slate-900);
+            margin-bottom: var(--space-1);
+        }
+        
+        body.dark-mode .welcome-text h1 {
+            color: var(--slate-50);
+        }
+        
+        .welcome-text p {
+            font-size: var(--text-base);
+            color: var(--slate-500);
+        }
+        
+        /* Quick Actions */
+        .quick-actions {
+            display: flex;
+            gap: var(--space-3);
+        }
+        
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--space-5);
+            margin-bottom: var(--space-8);
+        }
+        
+        @media (max-width: 1024px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 640px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .stat-card {
+            background: var(--surface-card);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-6);
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--slate-100);
+            display: flex;
+            align-items: flex-start;
+            gap: var(--space-4);
+            transition: all var(--transition-base);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        body.dark-mode .stat-card {
+            background: var(--surface-card);
+            border-color: var(--slate-700);
+        }
+        
+        .stat-icon {
+            width: 56px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius-xl);
+            font-size: 1.5rem;
+        }
+        
+        .stat-icon.primary {
+            background: var(--primary-50);
+            color: var(--primary-600);
+        }
+        
+        .stat-icon.accent {
+            background: var(--accent-100);
+            color: var(--accent-600);
+        }
+        
+        .stat-icon.success {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+        }
+        
+        .stat-icon.info {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+        }
+        
+        body.dark-mode .stat-icon.primary {
+            background: rgba(99, 102, 241, 0.15);
+        }
+        
+        body.dark-mode .stat-icon.accent {
+            background: rgba(245, 158, 11, 0.15);
+        }
+        
+        .stat-info {
+            flex: 1;
+        }
+        
+        .stat-value {
+            font-size: var(--text-2xl);
+            font-weight: 800;
+            color: var(--slate-900);
+            margin-bottom: var(--space-1);
+        }
+        
+        body.dark-mode .stat-value {
+            color: var(--slate-50);
+        }
+        
+        .stat-label {
+            font-size: var(--text-sm);
+            color: var(--slate-500);
+        }
+        
+        /* Content Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: var(--space-6);
+        }
+        
+        @media (max-width: 1200px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Section Title */
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--space-5);
+        }
+        
+        .section-title {
+            font-size: var(--text-xl);
+            font-weight: 700;
+            color: var(--slate-900);
+        }
+        
+        body.dark-mode .section-title {
+            color: var(--slate-50);
+        }
+        
+        .section-link {
+            font-size: var(--text-sm);
+            font-weight: 600;
+            color: var(--primary-600);
+        }
+        
+        /* Service Categories */
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--space-4);
+            margin-bottom: var(--space-8);
+        }
+        
+        @media (max-width: 1024px) {
+            .categories-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        @media (max-width: 640px) {
+            .categories-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        .category-card {
+            background: var(--surface-card);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-5);
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--slate-100);
+            cursor: pointer;
+            transition: all var(--transition-base);
+        }
+        
+        .category-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-200);
+        }
+        
+        body.dark-mode .category-card {
+            background: var(--surface-card);
+            border-color: var(--slate-700);
+        }
+        
+        body.dark-mode .category-card:hover {
+            border-color: var(--primary-500);
+        }
+        
+        .category-icon {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            background: var(--slate-100);
+            border-radius: var(--radius-xl);
+            margin: 0 auto var(--space-3);
+            transition: all var(--transition-base);
+        }
+        
+        .category-card:hover .category-icon {
+            background: var(--primary-50);
+            transform: scale(1.1);
+        }
+        
+        body.dark-mode .category-icon {
+            background: var(--slate-800);
+        }
+        
+        body.dark-mode .category-card:hover .category-icon {
+            background: rgba(99, 102, 241, 0.2);
+        }
+        
+        .category-name {
+            font-size: var(--text-sm);
+            font-weight: 600;
+            color: var(--slate-900);
+            margin-bottom: var(--space-1);
+        }
+        
+        body.dark-mode .category-name {
+            color: var(--slate-100);
+        }
+        
+        .category-count {
+            font-size: var(--text-xs);
+            color: var(--slate-500);
+        }
+        
+        /* Provider Cards */
+        .providers-list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-4);
+        }
+        
+        .provider-card {
+            display: flex;
+            align-items: center;
+            gap: var(--space-4);
+            padding: var(--space-4);
+            background: var(--surface-card);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--slate-100);
+            transition: all var(--transition-base);
+            cursor: pointer;
+        }
+        
+        .provider-card:hover {
+            transform: translateX(4px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--primary-200);
+        }
+        
+        body.dark-mode .provider-card {
+            background: var(--surface-card);
+            border-color: var(--slate-700);
+        }
+        
+        .provider-avatar {
+            width: 56px;
+            height: 56px;
+            background: var(--gradient-primary);
+            border-radius: var(--radius-xl);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--text-xl);
+            font-weight: 700;
+            color: white;
+            flex-shrink: 0;
+        }
+        
+        .provider-info {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .provider-name {
+            font-size: var(--text-base);
+            font-weight: 600;
+            color: var(--slate-900);
+            margin-bottom: var(--space-1);
+        }
+        
+        body.dark-mode .provider-name {
+            color: var(--slate-100);
+        }
+        
+        .provider-service {
+            font-size: var(--text-sm);
+            color: var(--slate-500);
+            margin-bottom: var(--space-2);
+        }
+        
+        .provider-meta {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+        }
+        
+        .provider-rating {
+            display: flex;
+            align-items: center;
+            gap: var(--space-1);
+            font-size: var(--text-sm);
+            font-weight: 600;
+            color: var(--accent-600);
+        }
+        
+        .provider-rate {
+            font-size: var(--text-sm);
+            color: var(--slate-500);
+        }
+        
+        .provider-action {
+            padding: var(--space-2) var(--space-4);
+            background: var(--primary-50);
+            color: var(--primary-600);
+            border: none;
+            border-radius: var(--radius-lg);
+            font-size: var(--text-sm);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+        
+        .provider-action:hover {
+            background: var(--primary-100);
+        }
+        
+        body.dark-mode .provider-action {
+            background: rgba(99, 102, 241, 0.15);
+            color: var(--primary-400);
+        }
+        
+        /* Sidebar Sections */
+        .sidebar-section {
+            background: var(--surface-card);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-6);
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--slate-100);
+            margin-bottom: var(--space-6);
+        }
+        
+        body.dark-mode .sidebar-section {
+            background: var(--surface-card);
+            border-color: var(--slate-700);
+        }
+        
+        .sidebar-title {
+            font-size: var(--text-lg);
+            font-weight: 700;
+            color: var(--slate-900);
+            margin-bottom: var(--space-4);
+        }
+        
+        body.dark-mode .sidebar-title {
+            color: var(--slate-50);
+        }
+        
+        /* Active Requests */
+        .request-card {
+            padding: var(--space-4);
+            background: var(--slate-50);
+            border-radius: var(--radius-xl);
+            margin-bottom: var(--space-3);
+        }
+        
+        body.dark-mode .request-card {
+            background: var(--slate-800);
+        }
+        
+        .request-card:last-child {
+            margin-bottom: 0;
+        }
+        
+        .request-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--space-2);
+        }
+        
+        .request-service {
+            font-size: var(--text-base);
+            font-weight: 600;
+            color: var(--slate-900);
+        }
+        
+        body.dark-mode .request-service {
+            color: var(--slate-100);
+        }
+        
+        .request-status {
+            padding: var(--space-1) var(--space-3);
+            border-radius: var(--radius-full);
+            font-size: var(--text-xs);
+            font-weight: 600;
+        }
+        
+        .request-status.pending {
+            background: var(--accent-100);
+            color: var(--accent-700);
+        }
+        
+        .request-status.accepted {
+            background: rgba(16, 185, 129, 0.1);
+            color: #059669;
+        }
+        
+        .request-status.in-progress {
+            background: rgba(59, 130, 246, 0.1);
+            color: #2563eb;
+        }
+        
+        .request-provider {
+            font-size: var(--text-sm);
+            color: var(--slate-500);
+            margin-bottom: var(--space-2);
+        }
+        
+        .request-time {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            font-size: var(--text-xs);
+            color: var(--slate-400);
+        }
+        
+        /* Request Form Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all var(--transition-base);
+        }
+        
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal {
+            width: 100%;
+            max-width: 500px;
+            background: var(--surface-card);
+            border-radius: var(--radius-2xl);
+            box-shadow: var(--shadow-2xl);
+            overflow: hidden;
+            transform: scale(0.9) translateY(20px);
+            transition: all var(--transition-base);
+        }
+        
+        .modal-overlay.active .modal {
+            transform: scale(1) translateY(0);
+        }
+        
+        body.dark-mode .modal {
+            background: var(--slate-900);
+        }
+        
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--space-5) var(--space-6);
+            border-bottom: 1px solid var(--slate-100);
+        }
+        
+        body.dark-mode .modal-header {
+            border-bottom-color: var(--slate-700);
+        }
+        
+        .modal-title {
+            font-size: var(--text-lg);
+            font-weight: 700;
+            color: var(--slate-900);
+        }
+        
+        body.dark-mode .modal-title {
+            color: var(--slate-100);
+        }
+        
+        .modal-close {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--slate-100);
+            border: none;
+            border-radius: var(--radius-lg);
+            font-size: var(--text-xl);
+            color: var(--slate-500);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+        
+        .modal-close:hover {
+            background: var(--slate-200);
+            color: var(--slate-900);
+        }
+        
+        body.dark-mode .modal-close {
+            background: var(--slate-800);
+            color: var(--slate-400);
+        }
+        
+        .modal-body {
+            padding: var(--space-6);
+        }
+        
+        .modal-footer {
+            display: flex;
+            gap: var(--space-3);
+            padding: var(--space-5) var(--space-6);
+            border-top: 1px solid var(--slate-100);
+        }
+        
+        body.dark-mode .modal-footer {
+            border-top-color: var(--slate-700);
+        }
+        
+        .modal-footer .btn {
+            flex: 1;
+        }
+        
+        /* Form elements */
+        .form-group {
+            margin-bottom: var(--space-4);
+        }
+        
+        .form-label {
+            display: block;
+            font-size: var(--text-sm);
+            font-weight: 600;
+            color: var(--slate-700);
+            margin-bottom: var(--space-2);
+        }
+        
+        body.dark-mode .form-label {
+            color: var(--slate-300);
+        }
+        
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: var(--space-3) var(--space-4);
+            font-size: var(--text-base);
+            font-family: var(--font-body);
+            color: var(--slate-900);
+            background: var(--slate-50);
+            border: 2px solid var(--slate-200);
+            border-radius: var(--radius-lg);
+            transition: all var(--transition-fast);
+        }
+        
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary-500);
+            background: var(--surface-card);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        }
+        
+        body.dark-mode .form-input,
+        body.dark-mode .form-select,
+        body.dark-mode .form-textarea {
+            background: var(--slate-800);
+            border-color: var(--slate-600);
+            color: var(--slate-100);
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-4);
+        }
+        
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: var(--space-6);
+            right: var(--space-6);
+            padding: var(--space-4) var(--space-6);
+            background: var(--slate-900);
+            color: white;
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-xl);
+            font-size: var(--text-sm);
+            font-weight: 500;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all var(--transition-base);
+            z-index: 2000;
+        }
+        
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .toast.success {
+            background: #059669;
+        }
+        
+        .toast.error {
+            background: #dc2626;
+        }
+        
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: var(--space-8);
+        }
+        
+        .empty-icon {
+            font-size: 3rem;
+            margin-bottom: var(--space-4);
+        }
+        
+        .empty-title {
+            font-size: var(--text-lg);
+            font-weight: 600;
+            color: var(--slate-700);
+            margin-bottom: var(--space-2);
+        }
+        
+        body.dark-mode .empty-title {
+            color: var(--slate-300);
+        }
+        
+        .empty-text {
+            font-size: var(--text-sm);
+            color: var(--slate-500);
+        }
+        
+        /* Hidden utility */
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <!-- ========== TOP NAVIGATION ========== -->
+        <nav class="dash-nav">
+            <div class="dash-nav-left">
+                <a href="index-3d.html" class="dash-brand">
+                    <span class="dash-brand-icon">🛠️</span>
+                    <span>Karigar</span>
+                </a>
+                
+                <div class="search-bar">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" class="search-input" id="searchInput" placeholder="Search services or providers...">
+                </div>
+            </div>
+            
+            <div class="dash-nav-right">
+                <button class="nav-icon-btn" id="darkModeToggle" title="Toggle Dark Mode">
+                    <span id="darkModeIcon">🌙</span>
+                </button>
+                <button class="nav-icon-btn" title="Notifications">
+                    <span>🔔</span>
+                    <span class="nav-badge" id="notifCount">3</span>
+                </button>
+                <div class="user-avatar" id="userAvatar" title="Profile">U</div>
+            </div>
+        </nav>
+        
+        <!-- ========== MAIN CONTENT ========== -->
+        <main class="dash-content">
+            <!-- Welcome Section -->
+            <div class="welcome-section">
+                <div class="welcome-text">
+                    <h1 id="welcomeMessage">Welcome back!</h1>
+                    <p>Find the perfect service provider for your needs</p>
+                </div>
+                <div class="quick-actions">
+                    <button class="btn btn-primary" onclick="openRequestModal()">
+                        ➕ New Request
+                    </button>
+                    <button class="btn btn-secondary" onclick="logout()">
+                        Sign Out
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon primary">📋</div>
+                    <div class="stat-info">
+                        <div class="stat-value" id="totalRequests">0</div>
+                        <div class="stat-label">Total Requests</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon accent">⏳</div>
+                    <div class="stat-info">
+                        <div class="stat-value" id="pendingRequests">0</div>
+                        <div class="stat-label">Pending</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon success">✅</div>
+                    <div class="stat-info">
+                        <div class="stat-value" id="completedRequests">0</div>
+                        <div class="stat-label">Completed</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon info">💰</div>
+                    <div class="stat-info">
+                        <div class="stat-value" id="totalSpent">₨0</div>
+                        <div class="stat-label">Total Spent</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Service Categories -->
+            <section>
+                <div class="section-header">
+                    <h2 class="section-title">Service Categories</h2>
+                </div>
+                <div class="categories-grid">
+                    <div class="category-card" onclick="openRequestModal('plumbing')">
+                        <div class="category-icon">🔧</div>
+                        <div class="category-name">Plumbing</div>
+                        <div class="category-count">120+ providers</div>
+                    </div>
+                    <div class="category-card" onclick="openRequestModal('electrical')">
+                        <div class="category-icon">⚡</div>
+                        <div class="category-name">Electrical</div>
+                        <div class="category-count">95+ providers</div>
+                    </div>
+                    <div class="category-card" onclick="openRequestModal('ac')">
+                        <div class="category-icon">❄️</div>
+                        <div class="category-name">AC & Cooling</div>
+                        <div class="category-count">80+ providers</div>
+                    </div>
+                    <div class="category-card" onclick="openRequestModal('carpentry')">
+                        <div class="category-icon">🪚</div>
+                        <div class="category-name">Carpentry</div>
+                        <div class="category-count">65+ providers</div>
+                    </div>
+                    <div class="category-card" onclick="openRequestModal('painting')">
+                        <div class="category-icon">🎨</div>
+                        <div class="category-name">Painting</div>
+                        <div class="category-count">55+ providers</div>
+                    </div>
+                    <div class="category-card" onclick="openRequestModal('cleaning')">
+                        <div class="category-icon">🧹</div>
+                        <div class="category-name">Cleaning</div>
+                        <div class="category-count">150+ providers</div>
+                    </div>
+                    <div class="category-card" onclick="openRequestModal('appliance')">
+                        <div class="category-icon">📺</div>
+                        <div class="category-name">Appliance Repair</div>
+                        <div class="category-count">70+ providers</div>
+                    </div>
+                    <div class="category-card" onclick="openRequestModal('tutoring')">
+                        <div class="category-icon">📚</div>
+                        <div class="category-name">Home Tutoring</div>
+                        <div class="category-count">200+ providers</div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Content Grid -->
+            <div class="content-grid">
+                <!-- Main Content - Provider Recommendations -->
+                <section>
+                    <div class="section-header">
+                        <h2 class="section-title">Recommended Providers</h2>
+                        <a href="#" class="section-link">View All →</a>
+                    </div>
+                    <div class="providers-list" id="providersList">
+                        <!-- Provider cards loaded dynamically -->
+                    </div>
+                </section>
+                
+                <!-- Sidebar -->
+                <aside>
+                    <!-- Active Requests -->
+                    <div class="sidebar-section">
+                        <h3 class="sidebar-title">Active Requests</h3>
+                        <div id="activeRequests">
+                            <div class="empty-state">
+                                <div class="empty-icon">📋</div>
+                                <div class="empty-title">No active requests</div>
+                                <div class="empty-text">Create a new service request to get started</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Recent Activity -->
+                    <div class="sidebar-section">
+                        <h3 class="sidebar-title">Quick Help</h3>
+                        <div style="padding: var(--space-4); background: var(--primary-50); border-radius: var(--radius-lg);">
+                            <p style="font-size: var(--text-sm); color: var(--primary-700); margin-bottom: var(--space-2); font-weight: 600;">
+                                Need assistance?
+                            </p>
+                            <p style="font-size: var(--text-xs); color: var(--primary-600);">
+                                Our support team is available 24/7 to help you find the right provider.
+                            </p>
+                            <button class="btn btn-primary" style="width: 100%; margin-top: var(--space-3); --btn-size: var(--text-sm); padding: var(--space-2) var(--space-4);">
+                                Contact Support
+                            </button>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </main>
+    </div>
+    
+    <!-- ========== REQUEST MODAL ========== -->
+    <div class="modal-overlay" id="requestModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Create Service Request</h3>
+                <button class="modal-close" onclick="closeRequestModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <form id="requestForm" onsubmit="submitRequest(event)">
+                    <div class="form-group">
+                        <label class="form-label">Service Category</label>
+                        <select class="form-select" id="requestService" required>
+                            <option value="">Select a service</option>
+                            <option value="plumbing">Plumbing</option>
+                            <option value="electrical">Electrical</option>
+                            <option value="ac">AC & Cooling</option>
+                            <option value="carpentry">Carpentry</option>
+                            <option value="painting">Painting</option>
+                            <option value="cleaning">Cleaning</option>
+                            <option value="appliance">Appliance Repair</option>
+                            <option value="tutoring">Home Tutoring</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Description</label>
+                        <textarea class="form-textarea" id="requestDescription" placeholder="Describe the work you need done..." required></textarea>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Preferred Date</label>
+                            <input type="date" class="form-input" id="requestDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Preferred Time</label>
+                            <select class="form-select" id="requestTime" required>
+                                <option value="">Select time</option>
+                                <option value="morning">Morning (8AM - 12PM)</option>
+                                <option value="afternoon">Afternoon (12PM - 5PM)</option>
+                                <option value="evening">Evening (5PM - 9PM)</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Budget (PKR)</label>
+                        <input type="number" class="form-input" id="requestBudget" placeholder="Your estimated budget">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Address</label>
+                        <input type="text" class="form-input" id="requestAddress" placeholder="Service location address" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeRequestModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="submitRequest(event)">Submit Request</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <!-- ========== FIREBASE ========== -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
+        import { 
+            getAuth, 
+            signOut,
+            onAuthStateChanged 
+        } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js';
+        import { 
+            getFirestore, 
+            collection,
+            doc, 
+            addDoc,
+            getDoc,
+            getDocs,
+            query,
+            where,
+            orderBy,
+            onSnapshot
+        } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
+
+        // Firebase config
+        const firebaseConfig = {
+            apiKey: "AIzaSyDxQpMjFN-_MxZpQCYKdCQzGOMxqdAQbcc",
+            authDomain: "karigar-21ced.firebaseapp.com",
+            projectId: "karigar-21ced",
+            storageBucket: "karigar-21ced.firebasestorage.app",
+            messagingSenderId: "1039416628498",
+            appId: "1:1039416628498:web:5fc2c4e69c1eb87db34690"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        
+        let currentUser = null;
+
+        // Check auth state
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                const userDoc = await getDoc(doc(db, 'users', user.uid));
+                if (userDoc.exists()) {
+                    currentUser = { uid: user.uid, ...userDoc.data() };
+                    
+                    // Check if customer
+                    if (currentUser.role !== 'customer') {
+                        if (currentUser.role === 'provider') {
+                            window.location.href = 'provider-3d.html';
+                        } else if (currentUser.role === 'admin') {
+                            window.location.href = 'admin-3d.html';
+                        }
+                        return;
+                    }
+                    
+                    initDashboard();
+                }
+            } else {
+                window.location.href = 'login-3d.html';
+            }
+        });
+        
+        // Initialize dashboard
+        async function initDashboard() {
+            // Set welcome message
+            document.getElementById('welcomeMessage').textContent = 
+                `Welcome back, ${currentUser.name ? currentUser.name.split(' ')[0] : 'User'}!`;
+            
+            // Set user avatar
+            const avatar = document.getElementById('userAvatar');
+            if (currentUser.name) {
+                avatar.textContent = currentUser.name.charAt(0).toUpperCase();
+            }
+            
+            // Load data
+            await Promise.all([
+                loadUserStats(),
+                loadProviders(),
+                loadActiveRequests()
+            ]);
+        }
+        
+        // Load user statistics
+        async function loadUserStats() {
+            try {
+                const requestsQuery = query(
+                    collection(db, 'serviceRequests'),
+                    where('customerId', '==', currentUser.uid)
+                );
+                
+                const snapshot = await getDocs(requestsQuery);
+                let total = 0, pending = 0, completed = 0, spent = 0;
+                
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    total++;
+                    if (data.status === 'pending') pending++;
+                    if (data.status === 'completed') {
+                        completed++;
+                        spent += parseInt(data.finalAmount) || parseInt(data.budget) || 0;
+                    }
+                });
+                
+                document.getElementById('totalRequests').textContent = total;
+                document.getElementById('pendingRequests').textContent = pending;
+                document.getElementById('completedRequests').textContent = completed;
+                document.getElementById('totalSpent').textContent = '₨' + spent.toLocaleString();
+            } catch (error) {
+                console.error('Error loading stats:', error);
+            }
+        }
+        
+        // Load providers
+        async function loadProviders() {
+            try {
+                const providersQuery = query(
+                    collection(db, 'providers'),
+                    where('status', '==', 'active')
+                );
+                
+                const snapshot = await getDocs(providersQuery);
+                const container = document.getElementById('providersList');
+                container.innerHTML = '';
+                
+                if (snapshot.empty) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-icon">👷</div>
+                            <div class="empty-title">No providers available</div>
+                            <div class="empty-text">Check back soon for service providers</div>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                let count = 0;
+                snapshot.forEach(doc => {
+                    if (count >= 5) return; // Limit to 5
+                    const provider = doc.data();
+                    
+                    const card = document.createElement('div');
+                    card.className = 'provider-card';
+                    card.innerHTML = `
+                        <div class="provider-avatar">${provider.name ? provider.name.charAt(0).toUpperCase() : 'P'}</div>
+                        <div class="provider-info">
+                            <div class="provider-name">${provider.name || 'Service Provider'}</div>
+                            <div class="provider-service">${formatService(provider.service)}</div>
+                            <div class="provider-meta">
+                                <span class="provider-rating">⭐ ${provider.rating || '4.5'}</span>
+                                <span class="provider-rate">₨${provider.rate || '500'}/hr</span>
+                            </div>
+                        </div>
+                        <button class="provider-action" onclick="openRequestModal('${provider.service}')">Book</button>
+                    `;
+                    container.appendChild(card);
+                    count++;
+                });
+            } catch (error) {
+                console.error('Error loading providers:', error);
+            }
+        }
+        
+        // Load active requests
+        async function loadActiveRequests() {
+            try {
+                const requestsQuery = query(
+                    collection(db, 'serviceRequests'),
+                    where('customerId', '==', currentUser.uid),
+                    where('status', 'in', ['pending', 'accepted', 'in-progress'])
+                );
+                
+                const snapshot = await getDocs(requestsQuery);
+                const container = document.getElementById('activeRequests');
+                
+                if (snapshot.empty) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-icon">📋</div>
+                            <div class="empty-title">No active requests</div>
+                            <div class="empty-text">Create a new service request to get started</div>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                container.innerHTML = '';
+                snapshot.forEach(doc => {
+                    const request = doc.data();
+                    const card = document.createElement('div');
+                    card.className = 'request-card';
+                    card.innerHTML = `
+                        <div class="request-header">
+                            <span class="request-service">${formatService(request.service)}</span>
+                            <span class="request-status ${request.status}">${formatStatus(request.status)}</span>
+                        </div>
+                        <div class="request-provider">📍 ${request.address || 'No address'}</div>
+                        <div class="request-time">
+                            <span>📅</span>
+                            <span>${formatDate(request.preferredDate)}</span>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+                
+                // Update notification count
+                document.getElementById('notifCount').textContent = snapshot.size;
+            } catch (error) {
+                console.error('Error loading requests:', error);
+            }
+        }
+        
+        // Format helpers
+        function formatService(service) {
+            const services = {
+                plumbing: 'Plumbing',
+                electrical: 'Electrical',
+                ac: 'AC & Cooling',
+                carpentry: 'Carpentry',
+                painting: 'Painting',
+                cleaning: 'Cleaning',
+                appliance: 'Appliance Repair',
+                tutoring: 'Home Tutoring',
+                other: 'Other Service'
+            };
+            return services[service] || service || 'Service';
+        }
+        
+        function formatStatus(status) {
+            const statuses = {
+                pending: 'Pending',
+                accepted: 'Accepted',
+                'in-progress': 'In Progress',
+                completed: 'Completed',
+                cancelled: 'Cancelled'
+            };
+            return statuses[status] || status;
+        }
+        
+        function formatDate(date) {
+            if (!date) return 'Not set';
+            return new Date(date).toLocaleDateString('en-PK', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+        
+        // Modal functions
+        window.openRequestModal = function(service = '') {
+            const modal = document.getElementById('requestModal');
+            modal.classList.add('active');
+            
+            if (service) {
+                document.getElementById('requestService').value = service;
+            }
+            
+            // Set minimum date to today
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('requestDate').min = today;
+        };
+        
+        window.closeRequestModal = function() {
+            document.getElementById('requestModal').classList.remove('active');
+            document.getElementById('requestForm').reset();
+        };
+        
+        // Submit request
+        window.submitRequest = async function(event) {
+            event.preventDefault();
+            
+            const service = document.getElementById('requestService').value;
+            const description = document.getElementById('requestDescription').value;
+            const date = document.getElementById('requestDate').value;
+            const time = document.getElementById('requestTime').value;
+            const budget = document.getElementById('requestBudget').value;
+            const address = document.getElementById('requestAddress').value;
+            
+            if (!service || !description || !date || !time || !address) {
+                showToast('Please fill in all required fields', 'error');
+                return;
+            }
+            
+            try {
+                const requestData = {
+                    customerId: currentUser.uid,
+                    customerName: currentUser.name,
+                    customerPhone: currentUser.phone || '',
+                    service: service,
+                    description: description,
+                    preferredDate: date,
+                    preferredTime: time,
+                    budget: budget || 0,
+                    address: address,
+                    status: 'pending',
+                    createdAt: new Date().toISOString()
+                };
+                
+                await addDoc(collection(db, 'serviceRequests'), requestData);
+                
+                showToast('Request submitted successfully!', 'success');
+                closeRequestModal();
+                
+                // Reload data
+                await Promise.all([
+                    loadUserStats(),
+                    loadActiveRequests()
+                ]);
+            } catch (error) {
+                console.error('Error submitting request:', error);
+                showToast('Failed to submit request', 'error');
+            }
+        };
+        
+        // Logout
+        window.logout = async function() {
+            try {
+                await signOut(auth);
+                localStorage.removeItem('currentUser');
+                window.location.href = 'login-3d.html';
+            } catch (error) {
+                console.error('Logout error:', error);
+            }
+        };
+        
+        // Toast notification
+        window.showToast = function(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = `toast ${type} show`;
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        };
+        
+        // Dark mode toggle
+        document.getElementById('darkModeToggle').addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
+            document.getElementById('darkModeIcon').textContent = isDark ? '☀️' : '🌙';
+        });
+        
+        // Check saved dark mode preference
+        if (localStorage.getItem('darkMode') === 'enabled') {
+            document.body.classList.add('dark-mode');
+            document.getElementById('darkModeIcon').textContent = '☀️';
+        }
+        
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            // Implement search logic here if needed
+        });
+        
+        // Close modal on outside click
+        document.getElementById('requestModal').addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal-overlay')) {
+                closeRequestModal();
+            }
+        });
+    </script>
+    
+    <!-- Page Transitions -->
+    <script src="page-transitions.js"></script>
+</body>
+</html>

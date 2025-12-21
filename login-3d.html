@@ -1,0 +1,1321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In - Karigar | Premium Service Marketplace</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style-3d.css">
+    
+    <style>
+        /* ===== AUTH PAGE SPECIFIC STYLES ===== */
+        .auth-page {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            background: var(--surface-ground);
+        }
+        
+        @media (max-width: 1024px) {
+            .auth-page {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Left Panel - Visual */
+        .auth-visual {
+            background: var(--gradient-primary);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-12);
+            overflow: hidden;
+        }
+        
+        @media (max-width: 1024px) {
+            .auth-visual {
+                display: none;
+            }
+        }
+        
+        .auth-visual::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse 80% 60% at 20% 80%, rgba(245, 158, 11, 0.2), transparent),
+                radial-gradient(ellipse 60% 40% at 80% 20%, rgba(255, 255, 255, 0.1), transparent);
+        }
+        
+        /* Decorative shapes */
+        .auth-shape {
+            position: absolute;
+            border-radius: var(--radius-3xl);
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+        }
+        
+        .auth-shape-1 {
+            width: 300px;
+            height: 300px;
+            top: 10%;
+            right: -50px;
+            transform: rotate(15deg);
+        }
+        
+        .auth-shape-2 {
+            width: 200px;
+            height: 200px;
+            bottom: 15%;
+            left: -30px;
+            transform: rotate(-10deg);
+        }
+        
+        .auth-visual-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            color: white;
+            max-width: 400px;
+        }
+        
+        .auth-visual-icon {
+            width: 100px;
+            height: 100px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: var(--radius-2xl);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            margin: 0 auto var(--space-8);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+        
+        .auth-visual-title {
+            font-size: var(--text-3xl);
+            font-weight: 800;
+            margin-bottom: var(--space-4);
+        }
+        
+        .auth-visual-description {
+            font-size: var(--text-lg);
+            opacity: 0.9;
+            line-height: 1.7;
+        }
+        
+        .auth-visual-stats {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-8);
+            margin-top: var(--space-10);
+            padding-top: var(--space-8);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .auth-stat {
+            text-align: center;
+        }
+        
+        .auth-stat-value {
+            font-size: var(--text-2xl);
+            font-weight: 800;
+        }
+        
+        .auth-stat-label {
+            font-size: var(--text-sm);
+            opacity: 0.8;
+        }
+        
+        /* Right Panel - Form */
+        .auth-form-panel {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-8);
+        }
+        
+        .auth-container {
+            width: 100%;
+            max-width: 440px;
+        }
+        
+        /* Back Link */
+        .auth-back {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            font-size: var(--text-sm);
+            font-weight: 500;
+            color: var(--slate-500);
+            margin-bottom: var(--space-8);
+            transition: color var(--transition-fast);
+        }
+        
+        .auth-back:hover {
+            color: var(--primary-600);
+        }
+        
+        /* Header */
+        .auth-header {
+            margin-bottom: var(--space-8);
+        }
+        
+        .auth-title {
+            font-size: var(--text-3xl);
+            font-weight: 800;
+            color: var(--slate-900);
+            margin-bottom: var(--space-2);
+        }
+        
+        body.dark-mode .auth-title {
+            color: var(--slate-50);
+        }
+        
+        .auth-subtitle {
+            font-size: var(--text-base);
+            color: var(--slate-500);
+        }
+        
+        /* Tab Switcher */
+        .auth-tabs {
+            display: flex;
+            background: var(--slate-100);
+            border-radius: var(--radius-xl);
+            padding: var(--space-1);
+            margin-bottom: var(--space-6);
+            box-shadow: var(--shadow-xs);
+        }
+        
+        body.dark-mode .auth-tabs {
+            background: var(--slate-800);
+        }
+        
+        .auth-tab {
+            flex: 1;
+            padding: var(--space-3) var(--space-4);
+            font-size: var(--text-sm);
+            font-weight: 600;
+            color: var(--slate-500);
+            background: transparent;
+            border: none;
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+        
+        .auth-tab.active {
+            background: var(--surface-card);
+            color: var(--primary-600);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .auth-tab:hover:not(.active) {
+            color: var(--slate-700);
+        }
+        
+        body.dark-mode .auth-tab.active {
+            background: var(--slate-700);
+            color: var(--primary-400);
+        }
+        
+        /* Auth Card (3D) */
+        .auth-card {
+            background: var(--surface-card);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-8);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--slate-100);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .auth-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+        }
+        
+        body.dark-mode .auth-card {
+            background: var(--surface-card);
+            border-color: var(--slate-700);
+        }
+        
+        /* Role Selector */
+        .role-selector {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-4);
+            margin-bottom: var(--space-6);
+        }
+        
+        .role-option {
+            position: relative;
+            padding: var(--space-6);
+            background: var(--slate-50);
+            border: 2px solid var(--slate-200);
+            border-radius: var(--radius-xl);
+            text-align: center;
+            cursor: pointer;
+            transition: all var(--transition-base);
+        }
+        
+        .role-option:hover {
+            border-color: var(--primary-300);
+            background: var(--primary-50);
+            transform: translateY(-2px);
+        }
+        
+        .role-option.selected {
+            border-color: var(--primary-500);
+            background: var(--primary-50);
+            box-shadow: var(--shadow-primary);
+        }
+        
+        .role-option.selected::after {
+            content: '✓';
+            position: absolute;
+            top: var(--space-2);
+            right: var(--space-2);
+            width: 24px;
+            height: 24px;
+            background: var(--primary-500);
+            color: white;
+            border-radius: var(--radius-full);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--text-xs);
+            font-weight: 700;
+        }
+        
+        body.dark-mode .role-option {
+            background: var(--slate-800);
+            border-color: var(--slate-600);
+        }
+        
+        body.dark-mode .role-option:hover,
+        body.dark-mode .role-option.selected {
+            background: var(--slate-700);
+            border-color: var(--primary-400);
+        }
+        
+        .role-icon {
+            font-size: 2.5rem;
+            margin-bottom: var(--space-3);
+        }
+        
+        .role-name {
+            font-size: var(--text-base);
+            font-weight: 700;
+            color: var(--slate-900);
+            margin-bottom: var(--space-1);
+        }
+        
+        body.dark-mode .role-name {
+            color: var(--slate-100);
+        }
+        
+        .role-description {
+            font-size: var(--text-xs);
+            color: var(--slate-500);
+        }
+        
+        /* Form Styles */
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-4);
+        }
+        
+        @media (max-width: 480px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .form-group {
+            margin-bottom: var(--space-5);
+        }
+        
+        .form-label {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: var(--text-sm);
+            font-weight: 600;
+            color: var(--slate-700);
+            margin-bottom: var(--space-2);
+        }
+        
+        body.dark-mode .form-label {
+            color: var(--slate-300);
+        }
+        
+        .form-label-link {
+            font-size: var(--text-xs);
+            font-weight: 500;
+            color: var(--primary-600);
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: var(--space-4);
+            font-size: var(--text-base);
+            font-family: var(--font-body);
+            color: var(--slate-900);
+            background: var(--slate-50);
+            border: 2px solid var(--slate-200);
+            border-radius: var(--radius-lg);
+            transition: all var(--transition-fast);
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-500);
+            background: var(--surface-card);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        }
+        
+        .form-input::placeholder {
+            color: var(--slate-400);
+        }
+        
+        body.dark-mode .form-input {
+            background: var(--slate-800);
+            border-color: var(--slate-600);
+            color: var(--slate-100);
+        }
+        
+        body.dark-mode .form-input:focus {
+            background: var(--slate-700);
+            border-color: var(--primary-400);
+        }
+        
+        .form-select {
+            width: 100%;
+            padding: var(--space-4);
+            font-size: var(--text-base);
+            font-family: var(--font-body);
+            color: var(--slate-900);
+            background: var(--slate-50);
+            border: 2px solid var(--slate-200);
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 20px;
+        }
+        
+        body.dark-mode .form-select {
+            background-color: var(--slate-800);
+            border-color: var(--slate-600);
+            color: var(--slate-100);
+        }
+        
+        /* Divider */
+        .auth-divider {
+            display: flex;
+            align-items: center;
+            gap: var(--space-4);
+            margin: var(--space-6) 0;
+            color: var(--slate-400);
+            font-size: var(--text-sm);
+        }
+        
+        .auth-divider::before,
+        .auth-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--slate-200);
+        }
+        
+        body.dark-mode .auth-divider::before,
+        body.dark-mode .auth-divider::after {
+            background: var(--slate-700);
+        }
+        
+        /* Social Buttons */
+        .social-buttons {
+            display: flex;
+            gap: var(--space-3);
+        }
+        
+        .btn-social {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-2);
+            padding: var(--space-3) var(--space-4);
+            background: var(--surface-card);
+            border: 2px solid var(--slate-200);
+            border-radius: var(--radius-lg);
+            font-size: var(--text-sm);
+            font-weight: 600;
+            color: var(--slate-700);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+        
+        .btn-social:hover {
+            background: var(--slate-50);
+            border-color: var(--slate-300);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        body.dark-mode .btn-social {
+            background: var(--slate-800);
+            border-color: var(--slate-600);
+            color: var(--slate-200);
+        }
+        
+        body.dark-mode .btn-social:hover {
+            background: var(--slate-700);
+        }
+        
+        .btn-social-icon {
+            font-size: var(--text-xl);
+        }
+        
+        /* Footer */
+        .auth-footer {
+            text-align: center;
+            margin-top: var(--space-6);
+            font-size: var(--text-sm);
+            color: var(--slate-500);
+        }
+        
+        .auth-footer a {
+            color: var(--primary-600);
+            font-weight: 600;
+        }
+        
+        /* Admin Info Box */
+        .admin-info {
+            margin-top: var(--space-6);
+            padding: var(--space-4);
+            background: var(--primary-50);
+            border: 1px solid var(--primary-200);
+            border-radius: var(--radius-lg);
+        }
+        
+        body.dark-mode .admin-info {
+            background: rgba(99, 102, 241, 0.1);
+            border-color: var(--primary-800);
+        }
+        
+        .admin-info-title {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            font-size: var(--text-sm);
+            font-weight: 600;
+            color: var(--primary-700);
+            margin-bottom: var(--space-2);
+        }
+        
+        body.dark-mode .admin-info-title {
+            color: var(--primary-300);
+        }
+        
+        .admin-info-text {
+            font-size: var(--text-xs);
+            color: var(--primary-600);
+        }
+        
+        .admin-info code {
+            background: var(--primary-100);
+            padding: var(--space-1) var(--space-2);
+            border-radius: var(--radius-sm);
+            font-family: var(--font-body);
+        }
+        
+        body.dark-mode .admin-info code {
+            background: var(--primary-900);
+        }
+        
+        /* Provider Fields */
+        .provider-fields {
+            margin-top: var(--space-4);
+            padding-top: var(--space-4);
+            border-top: 1px dashed var(--slate-200);
+        }
+        
+        body.dark-mode .provider-fields {
+            border-top-color: var(--slate-700);
+        }
+        
+        /* Hidden utility */
+        .hidden {
+            display: none !important;
+        }
+        
+        /* Loading state */
+        .btn-loading {
+            position: relative;
+            color: transparent !important;
+            pointer-events: none;
+        }
+        
+        .btn-loading::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 2px solid transparent;
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+            left: 50%;
+            top: 50%;
+            margin-left: -10px;
+            margin-top: -10px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* ========== PAGE LOAD ANIMATIONS ========== */
+        
+        /* Left Panel - Slide in from left */
+        .auth-visual {
+            animation: panelSlideLeft 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        
+        @keyframes panelSlideLeft {
+            0% {
+                opacity: 0;
+                transform: translateX(-100px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        /* Floating shapes - continuous float */
+        .auth-shape {
+            animation: shapeFloat 8s ease-in-out infinite;
+        }
+        
+        .auth-shape-1 {
+            animation-delay: 0s;
+        }
+        
+        .auth-shape-2 {
+            animation-delay: -4s;
+        }
+        
+        @keyframes shapeFloat {
+            0%, 100% {
+                transform: rotate(15deg) translateY(0px) scale(1);
+            }
+            50% {
+                transform: rotate(20deg) translateY(-30px) scale(1.05);
+            }
+        }
+        
+        /* Visual content - fade up */
+        .auth-visual-content {
+            animation: contentFadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
+        }
+        
+        @keyframes contentFadeUp {
+            0% {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Icon bounce */
+        .auth-visual-icon {
+            animation: iconBounce 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.5s both;
+        }
+        
+        @keyframes iconBounce {
+            0% {
+                opacity: 0;
+                transform: scale(0) rotate(-20deg);
+            }
+            60% {
+                transform: scale(1.2) rotate(5deg);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) rotate(0deg);
+            }
+        }
+        
+        /* Title slide in */
+        .auth-visual-title {
+            animation: titleSlide 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.6s both;
+        }
+        
+        @keyframes titleSlide {
+            0% {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        /* Description fade */
+        .auth-visual-description {
+            animation: descFade 0.7s ease 0.8s both;
+        }
+        
+        @keyframes descFade {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 0.9;
+            }
+        }
+        
+        /* Stats staggered animation */
+        .auth-visual-stats {
+            animation: statsFade 0.6s ease 0.9s both;
+        }
+        
+        @keyframes statsFade {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .auth-stat {
+            animation: statPop 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) both;
+        }
+        
+        .auth-stat:nth-child(1) { animation-delay: 1s; }
+        .auth-stat:nth-child(2) { animation-delay: 1.15s; }
+        .auth-stat:nth-child(3) { animation-delay: 1.3s; }
+        
+        @keyframes statPop {
+            0% {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        /* Right Panel - Slide in from right */
+        .auth-form-panel {
+            animation: panelSlideRight 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        
+        @keyframes panelSlideRight {
+            0% {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        /* Auth container fade up */
+        .auth-container {
+            animation: formFadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.4s both;
+        }
+        
+        @keyframes formFadeUp {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Tab content animation */
+        .tab-content:not(.hidden) {
+            animation: tabSwitch 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        
+        @keyframes tabSwitch {
+            0% {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Role option transitions */
+        .role-option {
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+        
+        .role-option:hover {
+            transform: translateY(-2px);
+        }
+        
+        .role-option.selected {
+            transform: translateY(-3px);
+        }
+        
+        /* Smooth show/hide for provider fields and admin info */
+        .provider-fields, .admin-info {
+            animation: slideReveal 0.3s ease forwards;
+        }
+        
+        @keyframes slideReveal {
+            0% {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-page">
+        <!-- ========== LEFT PANEL - VISUAL ========== -->
+        <div class="auth-visual">
+            <!-- Decorative Shapes -->
+            <div class="auth-shape auth-shape-1"></div>
+            <div class="auth-shape auth-shape-2"></div>
+            
+            <div class="auth-visual-content">
+                <div class="auth-visual-icon">🛠️</div>
+                <h2 class="auth-visual-title">Welcome to Karigar</h2>
+                <p class="auth-visual-description">
+                    Pakistan's most trusted platform for connecting customers with skilled 
+                    local professionals. Quality service guaranteed.
+                </p>
+                <div class="auth-visual-stats">
+                    <div class="auth-stat">
+                        <div class="auth-stat-value">5K+</div>
+                        <div class="auth-stat-label">Providers</div>
+                    </div>
+                    <div class="auth-stat">
+                        <div class="auth-stat-value">50K+</div>
+                        <div class="auth-stat-label">Jobs Done</div>
+                    </div>
+                    <div class="auth-stat">
+                        <div class="auth-stat-value">4.9★</div>
+                        <div class="auth-stat-label">Rating</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ========== RIGHT PANEL - FORM ========== -->
+        <div class="auth-form-panel">
+            <div class="auth-container">
+                <!-- Back Link -->
+                <a href="index-3d.html" class="auth-back">
+                    <span>←</span>
+                    <span>Back to Home</span>
+                </a>
+                
+                <!-- Header -->
+                <div class="auth-header">
+                    <h1 class="auth-title" id="authTitle">Welcome Back</h1>
+                    <p class="auth-subtitle" id="authSubtitle">Sign in to access your account</p>
+                </div>
+                
+                <!-- Tab Switcher -->
+                <div class="auth-tabs">
+                    <button class="auth-tab active" id="loginTab" onclick="switchTab('login')">Sign In</button>
+                    <button class="auth-tab" id="signupTab" onclick="switchTab('signup')">Create Account</button>
+                </div>
+                
+                <!-- Auth Card -->
+                <div class="auth-card">
+                    <!-- ===== LOGIN FORM ===== -->
+                    <div id="loginForm" class="tab-content">
+                        <form onsubmit="handleLogin(event)">
+                            <div class="form-group">
+                                <label class="form-label">Email Address</label>
+                                <input type="email" class="form-input" id="loginEmail" placeholder="you@example.com" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <span>Password</span>
+                                    <a href="#" class="form-label-link">Forgot?</a>
+                                </label>
+                                <input type="password" class="form-input" id="loginPassword" placeholder="Enter your password" required>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary btn-lg" style="width: 100%; margin-top: var(--space-2);">
+                                Sign In
+                            </button>
+                        </form>
+                        
+                        <div class="auth-divider">or continue with</div>
+                        
+                        <div class="social-buttons">
+                            <button class="btn-social" onclick="handleGoogleSignIn()">
+                                <span class="btn-social-icon">🔵</span>
+                                <span>Google</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- ===== SIGNUP FORM ===== -->
+                    <div id="signupForm" class="tab-content hidden">
+                        <!-- Role Selector -->
+                        <div class="role-selector">
+                            <div class="role-option selected" id="customerRole" onclick="selectRole('customer')">
+                                <div class="role-icon">👤</div>
+                                <div class="role-name">Customer</div>
+                                <div class="role-description">Find services</div>
+                            </div>
+                            <div class="role-option" id="providerRole" onclick="selectRole('provider')">
+                                <div class="role-icon">👷</div>
+                                <div class="role-name">Provider</div>
+                                <div class="role-description">Offer services</div>
+                            </div>
+                            <div class="role-option" id="adminRole" onclick="selectRole('admin')">
+                                <div class="role-icon">🔐</div>
+                                <div class="role-name">Admin</div>
+                                <div class="role-description">Manage platform</div>
+                            </div>
+                        </div>
+                        
+                        <form onsubmit="handleSignup(event)">
+                            <div class="form-group">
+                                <label class="form-label">Full Name</label>
+                                <input type="text" class="form-input" id="signupName" placeholder="Your full name" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Email Address</label>
+                                <input type="email" class="form-input" id="signupEmail" placeholder="you@example.com" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Password</label>
+                                <input type="password" class="form-input" id="signupPassword" placeholder="Create a strong password" required minlength="6">
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">Phone</label>
+                                    <input type="tel" class="form-input" id="signupPhone" placeholder="+92 300 1234567" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">City</label>
+                                    <input type="text" class="form-input" id="signupLocation" placeholder="Karachi" required>
+                                </div>
+                            </div>
+                            
+                            <!-- Provider-specific fields -->
+                            <div id="providerFields" class="provider-fields hidden">
+                                <div class="form-group">
+                                    <label class="form-label">Service Category</label>
+                                    <select class="form-select" id="signupService">
+                                        <option value="">Select your service</option>
+                                        <option value="plumbing">Plumbing</option>
+                                        <option value="electrical">Electrical</option>
+                                        <option value="ac">AC & Cooling</option>
+                                        <option value="carpentry">Carpentry</option>
+                                        <option value="painting">Painting</option>
+                                        <option value="cleaning">Cleaning</option>
+                                        <option value="appliance">Appliance Repair</option>
+                                        <option value="tutoring">Home Tutoring</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Hourly Rate (PKR)</label>
+                                    <input type="number" class="form-input" id="signupRate" placeholder="e.g., 500">
+                                </div>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary btn-lg" style="width: 100%; margin-top: var(--space-2);">
+                                Create Account
+                            </button>
+                        </form>
+                        
+                        <!-- Admin Info -->
+                        <div class="admin-info" id="adminInfo" style="display: none;">
+                            <div class="admin-info-title">
+                                <span>🔐</span>
+                                <span>Admin Access</span>
+                            </div>
+                            <p class="admin-info-text">
+                                Enter the admin code: <code>KARIGAR_ADMIN_2025</code> in the field below to verify.
+                            </p>
+                            <div class="form-group" style="margin-top: 0.75rem;">
+                                <input type="text" class="form-input" id="adminCode" placeholder="Enter admin code">
+                            </div>
+                        </div>
+                        
+                        <div class="auth-divider">or continue with</div>
+                        
+                        <div class="social-buttons">
+                            <button class="btn-social" onclick="handleGoogleSignIn()">
+                                <span class="btn-social-icon">🔵</span>
+                                <span>Google</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Footer -->
+                <div class="auth-footer" id="authFooter">
+                    Don't have an account? <a href="#" onclick="switchTab('signup'); return false;">Sign up</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== FIREBASE ========== -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
+        import { 
+            getAuth, 
+            signInWithEmailAndPassword, 
+            createUserWithEmailAndPassword,
+            signInWithPopup,
+            GoogleAuthProvider 
+        } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js';
+        import { 
+            getFirestore, 
+            doc, 
+            setDoc, 
+            getDoc 
+        } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
+
+        // Firebase config
+        const firebaseConfig = {
+            apiKey: "AIzaSyDxQpMjFN-_MxZpQCYKdCQzGOMxqdAQbcc",
+            authDomain: "karigar-21ced.firebaseapp.com",
+            projectId: "karigar-21ced",
+            storageBucket: "karigar-21ced.firebasestorage.app",
+            messagingSenderId: "1039416628498",
+            appId: "1:1039416628498:web:5fc2c4e69c1eb87db34690"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const googleProvider = new GoogleAuthProvider();
+
+        let selectedRole = 'customer';
+
+        // Tab switching
+        window.switchTab = function(tab) {
+            const loginTab = document.getElementById('loginTab');
+            const signupTab = document.getElementById('signupTab');
+            const loginForm = document.getElementById('loginForm');
+            const signupForm = document.getElementById('signupForm');
+            const authTitle = document.getElementById('authTitle');
+            const authSubtitle = document.getElementById('authSubtitle');
+            const authFooter = document.getElementById('authFooter');
+
+            // Animate title change
+            authTitle.style.opacity = '0';
+            authSubtitle.style.opacity = '0';
+            
+            setTimeout(() => {
+                if (tab === 'login') {
+                    loginTab.classList.add('active');
+                    signupTab.classList.remove('active');
+                    loginForm.classList.remove('hidden');
+                    signupForm.classList.add('hidden');
+                    authTitle.textContent = 'Welcome Back';
+                    authSubtitle.textContent = 'Sign in to access your account';
+                    authFooter.innerHTML = 'Don\'t have an account? <a href="#" onclick="switchTab(\'signup\'); return false;">Sign up</a>';
+                } else {
+                    signupTab.classList.add('active');
+                    loginTab.classList.remove('active');
+                    signupForm.classList.remove('hidden');
+                    loginForm.classList.add('hidden');
+                    authTitle.textContent = 'Create Account';
+                    authSubtitle.textContent = 'Join thousands of users on Karigar';
+                    authFooter.innerHTML = 'Already have an account? <a href="#" onclick="switchTab(\'login\'); return false;">Sign in</a>';
+                }
+                authTitle.style.opacity = '1';
+                authSubtitle.style.opacity = '1';
+            }, 150);
+        };
+
+        // Role selection - simple and clean
+        window.selectRole = function(role) {
+            selectedRole = role;
+            const customerRole = document.getElementById('customerRole');
+            const providerRole = document.getElementById('providerRole');
+            const adminRole = document.getElementById('adminRole');
+            const providerFields = document.getElementById('providerFields');
+            const adminInfo = document.getElementById('adminInfo');
+
+            // Reset all
+            customerRole.classList.remove('selected');
+            providerRole.classList.remove('selected');
+            adminRole.classList.remove('selected');
+            providerFields.classList.add('hidden');
+            adminInfo.style.display = 'none';
+
+            // Select the chosen role
+            if (role === 'customer') {
+                customerRole.classList.add('selected');
+            } else if (role === 'provider') {
+                providerRole.classList.add('selected');
+                providerFields.classList.remove('hidden');
+            } else if (role === 'admin') {
+                adminRole.classList.add('selected');
+                adminInfo.style.display = 'block';
+            }
+        };
+
+        // Login handler
+        window.handleLogin = async function(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const btn = event.target.querySelector('button[type="submit"]');
+            
+            btn.classList.add('btn-loading');
+
+            try {
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+                
+                const userDoc = await getDoc(doc(db, 'users', user.uid));
+                if (userDoc.exists()) {
+                    const userData = userDoc.data();
+                    const role = userData.role;
+
+                    localStorage.setItem('currentUser', JSON.stringify({
+                        uid: user.uid,
+                        email: user.email,
+                        role: role,
+                        name: userData.name
+                    }));
+
+                    // Redirect based on role
+                    if (role === 'admin') {
+                        window.location.href = 'admin-3d.html';
+                    } else if (role === 'provider') {
+                        window.location.href = 'provider-3d.html';
+                    } else {
+                        window.location.href = 'customer-3d.html';
+                    }
+                } else {
+                    alert('User profile not found. Please contact support.');
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                alert('Login failed: ' + error.message);
+            } finally {
+                btn.classList.remove('btn-loading');
+            }
+        };
+
+        // Signup handler
+        window.handleSignup = async function(event) {
+            event.preventDefault();
+
+            const name = document.getElementById('signupName').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            const phone = document.getElementById('signupPhone').value;
+            const location = document.getElementById('signupLocation').value;
+            const btn = event.target.querySelector('button[type="submit"]');
+
+            let role = selectedRole;
+            
+            // Verify admin code if admin role is selected
+            if (role === 'admin') {
+                const adminCode = document.getElementById('adminCode').value;
+                if (adminCode !== 'KARIGAR_ADMIN_2025') {
+                    alert('Invalid admin code. Please enter the correct code or select a different role.');
+                    return;
+                }
+            }
+
+            btn.classList.add('btn-loading');
+
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+
+                // Create user profile
+                const userProfile = {
+                    uid: user.uid,
+                    name: name,
+                    email: email,
+                    phone: phone,
+                    location: location,
+                    role: role,
+                    createdAt: new Date().toISOString(),
+                    status: role === 'provider' ? 'pending' : 'active'
+                };
+
+                // Add provider-specific fields
+                if (role === 'provider') {
+                    userProfile.service = document.getElementById('signupService').value;
+                    userProfile.rate = document.getElementById('signupRate').value;
+                    userProfile.availability = 'available';
+                    userProfile.rating = 0;
+                    userProfile.reviewCount = 0;
+                }
+
+                // Save to Firestore
+                await setDoc(doc(db, 'users', user.uid), userProfile);
+
+                // Save to role-specific collection
+                if (role === 'customer') {
+                    await setDoc(doc(db, 'customers', user.uid), userProfile);
+                } else if (role === 'provider') {
+                    await setDoc(doc(db, 'providers', user.uid), userProfile);
+                } else if (role === 'admin') {
+                    await setDoc(doc(db, 'admins', user.uid), userProfile);
+                }
+
+                // Save to localStorage
+                localStorage.setItem('currentUser', JSON.stringify({
+                    uid: user.uid,
+                    email: user.email,
+                    role: role,
+                    name: name
+                }));
+
+                // Redirect
+                if (role === 'admin') {
+                    window.location.href = 'admin-3d.html';
+                } else if (role === 'provider') {
+                    alert('Account created! Your profile is pending approval.');
+                    window.location.href = 'provider-3d.html';
+                } else {
+                    window.location.href = 'customer-3d.html';
+                }
+            } catch (error) {
+                console.error('Signup error:', error);
+                alert('Signup failed: ' + error.message);
+            } finally {
+                btn.classList.remove('btn-loading');
+            }
+        };
+
+        // Google Sign-In
+        window.handleGoogleSignIn = async function() {
+            try {
+                const result = await signInWithPopup(auth, googleProvider);
+                const user = result.user;
+                
+                const userDoc = await getDoc(doc(db, 'users', user.uid));
+                
+                if (userDoc.exists()) {
+                    const userData = userDoc.data();
+                    localStorage.setItem('currentUser', JSON.stringify({
+                        uid: user.uid,
+                        email: user.email,
+                        role: userData.role,
+                        name: userData.name
+                    }));
+
+                    if (userData.role === 'admin') {
+                        window.location.href = 'admin-3d.html';
+                    } else if (userData.role === 'provider') {
+                        window.location.href = 'provider-3d.html';
+                    } else {
+                        window.location.href = 'customer-3d.html';
+                    }
+                } else {
+                    // New user - create as customer
+                    const userProfile = {
+                        uid: user.uid,
+                        name: user.displayName || 'User',
+                        email: user.email,
+                        phone: '',
+                        location: '',
+                        role: 'customer',
+                        createdAt: new Date().toISOString(),
+                        status: 'active'
+                    };
+
+                    await setDoc(doc(db, 'users', user.uid), userProfile);
+                    await setDoc(doc(db, 'customers', user.uid), userProfile);
+
+                    localStorage.setItem('currentUser', JSON.stringify({
+                        uid: user.uid,
+                        email: user.email,
+                        role: 'customer',
+                        name: user.displayName
+                    }));
+
+                    window.location.href = 'customer-3d.html';
+                }
+            } catch (error) {
+                console.error('Google Sign-In error:', error);
+                alert('Google Sign-In failed: ' + error.message);
+            }
+        };
+
+        // Check URL params
+        window.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            if (urlParams.get('signup') === 'true') {
+                switchTab('signup');
+            }
+            
+            if (urlParams.get('role') === 'provider') {
+                switchTab('signup');
+                selectRole('provider');
+            }
+
+            // Dark mode
+            const darkMode = localStorage.getItem('darkMode');
+            if (darkMode === 'enabled') {
+                document.body.classList.add('dark-mode');
+            }
+        });
+    </script>
+    
+    <!-- Page Transitions -->
+    <script src="page-transitions.js"></script>
+</body>
+</html>

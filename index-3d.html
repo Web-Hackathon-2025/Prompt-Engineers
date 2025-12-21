@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Karigar - Premium Service Marketplace | Find Trusted Local Professionals</title>
+    <meta name="description" content="Connect with verified local service providers - plumbers, electricians, technicians, and more. Karigar brings trusted professionals to your doorstep.">
+    
+    <!-- Preload Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style-3d.css">
+    
+    <style>
+        /* Page-specific enhancements */
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-12);
+            align-items: center;
+            min-height: calc(100vh - 80px);
+        }
+        
+        @media (max-width: 1024px) {
+            .hero-grid {
+                grid-template-columns: 1fr;
+                text-align: center;
+                padding: var(--space-16) 0;
+            }
+        }
+        
+        /* Service Provider Preview Card */
+        .preview-card {
+            background: var(--surface-card);
+            border-radius: var(--radius-2xl);
+            overflow: hidden;
+            box-shadow: var(--shadow-xl);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+        
+        .preview-card-header {
+            background: var(--gradient-primary);
+            padding: var(--space-6);
+            position: relative;
+        }
+        
+        .preview-card-avatar {
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: var(--radius-xl);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            box-shadow: var(--shadow-lg);
+            margin: 0 auto;
+            position: relative;
+            top: 40px;
+        }
+        
+        .preview-card-body {
+            padding: var(--space-10) var(--space-6) var(--space-6);
+            text-align: center;
+        }
+        
+        .preview-card-name {
+            font-size: var(--text-xl);
+            font-weight: 700;
+            color: var(--slate-900);
+            margin-bottom: var(--space-1);
+        }
+        
+        .preview-card-service {
+            font-size: var(--text-sm);
+            color: var(--slate-500);
+            margin-bottom: var(--space-4);
+        }
+        
+        .preview-card-rating {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-2);
+            margin-bottom: var(--space-4);
+        }
+        
+        .preview-card-stars {
+            color: var(--accent-500);
+            font-size: var(--text-lg);
+        }
+        
+        .preview-card-stats {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-6);
+            padding-top: var(--space-4);
+            border-top: 1px solid var(--slate-100);
+        }
+        
+        .preview-stat {
+            text-align: center;
+        }
+        
+        .preview-stat-value {
+            font-size: var(--text-lg);
+            font-weight: 700;
+            color: var(--slate-900);
+        }
+        
+        .preview-stat-label {
+            font-size: var(--text-xs);
+            color: var(--slate-400);
+        }
+        
+        /* Testimonials */
+        .testimonials-section {
+            padding: var(--space-24) 0;
+            background: var(--surface-ground);
+        }
+        
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: var(--space-6);
+        }
+        
+        .testimonial-card {
+            background: var(--surface-card);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-8);
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--slate-100);
+            position: relative;
+        }
+        
+        .testimonial-quote {
+            font-size: 3rem;
+            color: var(--primary-200);
+            line-height: 1;
+            margin-bottom: var(--space-4);
+        }
+        
+        .testimonial-text {
+            font-size: var(--text-base);
+            color: var(--slate-600);
+            line-height: 1.8;
+            margin-bottom: var(--space-6);
+        }
+        
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+        }
+        
+        .testimonial-avatar {
+            width: 48px;
+            height: 48px;
+            background: var(--gradient-primary);
+            border-radius: var(--radius-full);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+        }
+        
+        .testimonial-name {
+            font-weight: 600;
+            color: var(--slate-900);
+        }
+        
+        .testimonial-role {
+            font-size: var(--text-sm);
+            color: var(--slate-500);
+        }
+        
+        /* Trust Badges */
+        .trust-section {
+            padding: var(--space-12) 0;
+            background: var(--slate-50);
+            border-top: 1px solid var(--slate-100);
+            border-bottom: 1px solid var(--slate-100);
+        }
+        
+        .trust-badges {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-12);
+            flex-wrap: wrap;
+        }
+        
+        .trust-badge {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            color: var(--slate-600);
+            font-size: var(--text-sm);
+            font-weight: 500;
+        }
+        
+        .trust-badge-icon {
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--text-xl);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        /* Featured Providers Carousel */
+        .featured-section {
+            padding: var(--space-24) 0;
+            background: linear-gradient(180deg, var(--surface-ground) 0%, var(--slate-50) 100%);
+        }
+        
+        .providers-scroll {
+            display: flex;
+            gap: var(--space-6);
+            overflow-x: auto;
+            padding: var(--space-4) 0;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+        
+        .providers-scroll::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .provider-card {
+            flex: 0 0 300px;
+            scroll-snap-align: start;
+            background: var(--surface-card);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-6);
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--slate-100);
+            transition: all var(--transition-base);
+        }
+        
+        .provider-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-xl);
+        }
+        
+        .provider-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-4);
+            margin-bottom: var(--space-4);
+        }
+        
+        .provider-avatar {
+            width: 56px;
+            height: 56px;
+            background: var(--primary-100);
+            border-radius: var(--radius-xl);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        
+        .provider-info h4 {
+            font-size: var(--text-base);
+            font-weight: 700;
+            color: var(--slate-900);
+            margin-bottom: var(--space-1);
+        }
+        
+        .provider-info p {
+            font-size: var(--text-sm);
+            color: var(--slate-500);
+        }
+        
+        .provider-rating {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            margin-bottom: var(--space-4);
+        }
+        
+        .provider-stars {
+            color: var(--accent-500);
+        }
+        
+        .provider-reviews {
+            font-size: var(--text-sm);
+            color: var(--slate-500);
+        }
+        
+        .provider-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-2);
+        }
+        
+        .provider-tag {
+            padding: var(--space-1) var(--space-3);
+            background: var(--slate-100);
+            border-radius: var(--radius-full);
+            font-size: var(--text-xs);
+            color: var(--slate-600);
+        }
+    </style>
+</head>
+<body>
+    <!-- ========== NAVIGATION (3D Glass Effect) ========== -->
+    <nav class="nav-3d" id="mainNav">
+        <div class="container nav-container">
+            <!-- Brand -->
+            <a href="index-3d.html" class="nav-brand">
+                <div class="nav-brand-icon">🛠️</div>
+                <span>Karigar</span>
+            </a>
+            
+            <!-- Menu -->
+            <ul class="nav-menu">
+                <li><a href="#services" class="nav-link">Services</a></li>
+                <li><a href="#how-it-works" class="nav-link">How It Works</a></li>
+                <li><a href="#providers" class="nav-link">Providers</a></li>
+                <li><a href="#testimonials" class="nav-link">Reviews</a></li>
+            </ul>
+            
+            <!-- Actions -->
+            <div class="nav-actions">
+                <button class="dark-mode-toggle" onclick="toggleDarkMode()" aria-label="Toggle dark mode">
+                    <span id="darkModeIcon">🌙</span>
+                </button>
+                <a href="login-3d.html" class="btn btn-ghost">Sign In</a>
+                <a href="login-3d.html?signup=true" class="btn btn-primary">Get Started</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ========== HERO SECTION (3D Layered) ========== -->
+    <section class="hero-3d">
+        <!-- Decorative Shapes -->
+        <div class="hero-shapes">
+            <div class="hero-shape hero-shape-1"></div>
+            <div class="hero-shape hero-shape-2"></div>
+            <div class="hero-shape hero-shape-3"></div>
+        </div>
+        
+        <div class="container">
+            <div class="hero-grid">
+                <!-- Content -->
+                <div class="hero-content animate-slide-up">
+                    <div class="hero-badge">
+                        <span class="hero-badge-dot"></span>
+                        <span>Trusted by 10,000+ customers in Pakistan</span>
+                    </div>
+                    
+                    <h1 class="hero-title">
+                        Find Skilled<br>
+                        <span class="hero-title-highlight">Local Professionals</span><br>
+                        You Can Trust
+                    </h1>
+                    
+                    <p class="hero-description">
+                        Connect with verified plumbers, electricians, technicians, and skilled workers in your area. 
+                        Quality service, fair prices, instant booking.
+                    </p>
+                    
+                    <div class="hero-actions">
+                        <a href="login-3d.html?role=customer" class="btn btn-primary btn-xl">
+                            Find a Professional
+                            <span>→</span>
+                        </a>
+                        <a href="login-3d.html?role=provider" class="btn btn-secondary btn-xl">
+                            Join as Provider
+                        </a>
+                    </div>
+                    
+                    <div class="hero-stats">
+                        <div class="hero-stat">
+                            <div class="hero-stat-value">5,000+</div>
+                            <div class="hero-stat-label">Verified Providers</div>
+                        </div>
+                        <div class="hero-stat">
+                            <div class="hero-stat-value">50,000+</div>
+                            <div class="hero-stat-label">Jobs Completed</div>
+                        </div>
+                        <div class="hero-stat">
+                            <div class="hero-stat-value">4.9★</div>
+                            <div class="hero-stat-label">Average Rating</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Visual (3D Card Preview) -->
+                <div class="hero-visual">
+                    <div class="hero-card-stack">
+                        <!-- Main Preview Card -->
+                        <div class="preview-card hero-card-item animate-scale-in">
+                            <div class="preview-card-header">
+                                <div class="preview-card-avatar">👨‍🔧</div>
+                            </div>
+                            <div class="preview-card-body">
+                                <h3 class="preview-card-name">Ahmed Khan</h3>
+                                <p class="preview-card-service">Master Electrician</p>
+                                <div class="preview-card-rating">
+                                    <span class="preview-card-stars">★★★★★</span>
+                                    <span style="color: var(--slate-600); font-weight: 600;">4.9</span>
+                                    <span style="color: var(--slate-400);">(127 reviews)</span>
+                                </div>
+                                <div class="preview-card-stats">
+                                    <div class="preview-stat">
+                                        <div class="preview-stat-value">8+ yrs</div>
+                                        <div class="preview-stat-label">Experience</div>
+                                    </div>
+                                    <div class="preview-stat">
+                                        <div class="preview-stat-value">500+</div>
+                                        <div class="preview-stat-label">Jobs Done</div>
+                                    </div>
+                                    <div class="preview-stat">
+                                        <div class="preview-stat-value">98%</div>
+                                        <div class="preview-stat-label">On-time</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Background cards for depth -->
+                        <div class="preview-card hero-card-item" style="background: var(--slate-100);"></div>
+                        <div class="preview-card hero-card-item" style="background: var(--slate-200);"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== TRUST BADGES ========== -->
+    <section class="trust-section">
+        <div class="container">
+            <div class="trust-badges">
+                <div class="trust-badge">
+                    <div class="trust-badge-icon">✓</div>
+                    <span>Verified Professionals</span>
+                </div>
+                <div class="trust-badge">
+                    <div class="trust-badge-icon">🔒</div>
+                    <span>Secure Payments</span>
+                </div>
+                <div class="trust-badge">
+                    <div class="trust-badge-icon">📱</div>
+                    <span>24/7 Support</span>
+                </div>
+                <div class="trust-badge">
+                    <div class="trust-badge-icon">⭐</div>
+                    <span>Satisfaction Guaranteed</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== SERVICES SECTION (3D Cards) ========== -->
+    <section class="services-section" id="services">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">Our Services</span>
+                <h2 class="section-title">What Do You Need Help With?</h2>
+                <p class="section-description">
+                    From home repairs to professional services, find the right expert for any job
+                </p>
+            </div>
+            
+            <div class="services-grid stagger-children">
+                <!-- Service Card: Plumbing -->
+                <div class="service-card" onclick="location.href='login-3d.html?service=plumbing'">
+                    <div class="service-icon">🔧</div>
+                    <h3 class="service-name">Plumbing</h3>
+                    <p class="service-description">Pipe repairs, leak fixes, bathroom installations, water heater services and more.</p>
+                    <div class="service-providers">
+                        <span class="service-providers-count">150+</span>
+                        <span>providers available</span>
+                    </div>
+                </div>
+                
+                <!-- Service Card: Electrical -->
+                <div class="service-card" onclick="location.href='login-3d.html?service=electrical'">
+                    <div class="service-icon">⚡</div>
+                    <h3 class="service-name">Electrical</h3>
+                    <p class="service-description">Wiring, installations, repairs, switchboard work, and electrical emergencies.</p>
+                    <div class="service-providers">
+                        <span class="service-providers-count">200+</span>
+                        <span>providers available</span>
+                    </div>
+                </div>
+                
+                <!-- Service Card: AC & Cooling -->
+                <div class="service-card" onclick="location.href='login-3d.html?service=ac'">
+                    <div class="service-icon">❄️</div>
+                    <h3 class="service-name">AC & Cooling</h3>
+                    <p class="service-description">AC installation, repair, servicing, gas refilling, and maintenance.</p>
+                    <div class="service-providers">
+                        <span class="service-providers-count">120+</span>
+                        <span>providers available</span>
+                    </div>
+                </div>
+                
+                <!-- Service Card: Carpentry -->
+                <div class="service-card" onclick="location.href='login-3d.html?service=carpentry'">
+                    <div class="service-icon">🪚</div>
+                    <h3 class="service-name">Carpentry</h3>
+                    <p class="service-description">Furniture repair, custom woodwork, door/window fitting, and cabinet installation.</p>
+                    <div class="service-providers">
+                        <span class="service-providers-count">80+</span>
+                        <span>providers available</span>
+                    </div>
+                </div>
+                
+                <!-- Service Card: Painting -->
+                <div class="service-card" onclick="location.href='login-3d.html?service=painting'">
+                    <div class="service-icon">🎨</div>
+                    <h3 class="service-name">Painting</h3>
+                    <p class="service-description">Interior/exterior painting, wall textures, waterproofing, and renovations.</p>
+                    <div class="service-providers">
+                        <span class="service-providers-count">95+</span>
+                        <span>providers available</span>
+                    </div>
+                </div>
+                
+                <!-- Service Card: Cleaning -->
+                <div class="service-card" onclick="location.href='login-3d.html?service=cleaning'">
+                    <div class="service-icon">🧹</div>
+                    <h3 class="service-name">Cleaning</h3>
+                    <p class="service-description">Deep cleaning, home sanitization, office cleaning, and move-in/out cleaning.</p>
+                    <div class="service-providers">
+                        <span class="service-providers-count">180+</span>
+                        <span>providers available</span>
+                    </div>
+                </div>
+                
+                <!-- Service Card: Appliance Repair -->
+                <div class="service-card" onclick="location.href='login-3d.html?service=appliance'">
+                    <div class="service-icon">📺</div>
+                    <h3 class="service-name">Appliance Repair</h3>
+                    <p class="service-description">TV, refrigerator, washing machine, microwave, and other appliance repairs.</p>
+                    <div class="service-providers">
+                        <span class="service-providers-count">110+</span>
+                        <span>providers available</span>
+                    </div>
+                </div>
+                
+                <!-- Service Card: Tutoring -->
+                <div class="service-card" onclick="location.href='login-3d.html?service=tutoring'">
+                    <div class="service-icon">📚</div>
+                    <h3 class="service-name">Home Tutoring</h3>
+                    <p class="service-description">Academic tutoring, test prep, language classes, and skill development.</p>
+                    <div class="service-providers">
+                        <span class="service-providers-count">250+</span>
+                        <span>providers available</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== HOW IT WORKS (Dark 3D Section) ========== -->
+    <section class="how-it-works" id="how-it-works">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label" style="background: rgba(255,255,255,0.1); color: white;">How It Works</span>
+                <h2 class="section-title">Get Help in 3 Simple Steps</h2>
+                <p class="section-description">Finding a trusted professional has never been easier</p>
+            </div>
+            
+            <div class="steps-container stagger-children">
+                <!-- Step 1 -->
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h3 class="step-title">Describe Your Need</h3>
+                    <p class="step-description">
+                        Tell us what service you need. Browse categories or search for specific jobs. 
+                        Our smart matching finds the right professionals for you.
+                    </p>
+                </div>
+                
+                <!-- Step 2 -->
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h3 class="step-title">Compare & Choose</h3>
+                    <p class="step-description">
+                        Review provider profiles, ratings, and prices. Read real customer reviews. 
+                        Choose the professional that fits your needs and budget.
+                    </p>
+                </div>
+                
+                <!-- Step 3 -->
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h3 class="step-title">Book & Relax</h3>
+                    <p class="step-description">
+                        Schedule your service at a convenient time. Track your booking status. 
+                        Pay securely after the job is done to your satisfaction.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== STATS SECTION ========== -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="stats-grid stagger-children">
+                <div class="stat-card">
+                    <div class="stat-value">5,000+</div>
+                    <div class="stat-label">Verified Providers</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">50,000+</div>
+                    <div class="stat-label">Jobs Completed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">25+</div>
+                    <div class="stat-label">Service Categories</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">4.9/5</div>
+                    <div class="stat-label">Customer Rating</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== FEATURED PROVIDERS ========== -->
+    <section class="featured-section" id="providers">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">Top Rated</span>
+                <h2 class="section-title">Featured Service Providers</h2>
+                <p class="section-description">Meet some of our highest-rated professionals</p>
+            </div>
+            
+            <div class="providers-scroll">
+                <!-- Provider 1 -->
+                <div class="provider-card">
+                    <div class="provider-header">
+                        <div class="provider-avatar">👨‍🔧</div>
+                        <div class="provider-info">
+                            <h4>Muhammad Ali</h4>
+                            <p>Master Plumber</p>
+                        </div>
+                    </div>
+                    <div class="provider-rating">
+                        <span class="provider-stars">★★★★★</span>
+                        <span class="provider-reviews">4.9 (156 reviews)</span>
+                    </div>
+                    <div class="provider-tags">
+                        <span class="provider-tag">Pipe Repair</span>
+                        <span class="provider-tag">Installation</span>
+                        <span class="provider-tag">Emergency</span>
+                    </div>
+                </div>
+                
+                <!-- Provider 2 -->
+                <div class="provider-card">
+                    <div class="provider-header">
+                        <div class="provider-avatar">👷</div>
+                        <div class="provider-info">
+                            <h4>Ahmed Hassan</h4>
+                            <p>Electrician</p>
+                        </div>
+                    </div>
+                    <div class="provider-rating">
+                        <span class="provider-stars">★★★★★</span>
+                        <span class="provider-reviews">4.8 (203 reviews)</span>
+                    </div>
+                    <div class="provider-tags">
+                        <span class="provider-tag">Wiring</span>
+                        <span class="provider-tag">Repair</span>
+                        <span class="provider-tag">Installation</span>
+                    </div>
+                </div>
+                
+                <!-- Provider 3 -->
+                <div class="provider-card">
+                    <div class="provider-header">
+                        <div class="provider-avatar">🧑‍🔧</div>
+                        <div class="provider-info">
+                            <h4>Usman Shah</h4>
+                            <p>AC Technician</p>
+                        </div>
+                    </div>
+                    <div class="provider-rating">
+                        <span class="provider-stars">★★★★★</span>
+                        <span class="provider-reviews">4.9 (89 reviews)</span>
+                    </div>
+                    <div class="provider-tags">
+                        <span class="provider-tag">AC Repair</span>
+                        <span class="provider-tag">Installation</span>
+                        <span class="provider-tag">Servicing</span>
+                    </div>
+                </div>
+                
+                <!-- Provider 4 -->
+                <div class="provider-card">
+                    <div class="provider-header">
+                        <div class="provider-avatar">👩‍🏫</div>
+                        <div class="provider-info">
+                            <h4>Fatima Ahmed</h4>
+                            <p>Home Tutor</p>
+                        </div>
+                    </div>
+                    <div class="provider-rating">
+                        <span class="provider-stars">★★★★★</span>
+                        <span class="provider-reviews">5.0 (78 reviews)</span>
+                    </div>
+                    <div class="provider-tags">
+                        <span class="provider-tag">Mathematics</span>
+                        <span class="provider-tag">Science</span>
+                        <span class="provider-tag">English</span>
+                    </div>
+                </div>
+                
+                <!-- Provider 5 -->
+                <div class="provider-card">
+                    <div class="provider-header">
+                        <div class="provider-avatar">🧑‍🎨</div>
+                        <div class="provider-info">
+                            <h4>Bilal Khan</h4>
+                            <p>Painter</p>
+                        </div>
+                    </div>
+                    <div class="provider-rating">
+                        <span class="provider-stars">★★★★★</span>
+                        <span class="provider-reviews">4.7 (112 reviews)</span>
+                    </div>
+                    <div class="provider-tags">
+                        <span class="provider-tag">Interior</span>
+                        <span class="provider-tag">Exterior</span>
+                        <span class="provider-tag">Texture</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== TESTIMONIALS ========== -->
+    <section class="testimonials-section" id="testimonials">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">Testimonials</span>
+                <h2 class="section-title">What Our Customers Say</h2>
+                <p class="section-description">Real reviews from real customers</p>
+            </div>
+            
+            <div class="testimonials-grid stagger-children">
+                <!-- Testimonial 1 -->
+                <div class="testimonial-card">
+                    <div class="testimonial-quote">"</div>
+                    <p class="testimonial-text">
+                        Found an excellent electrician within minutes. He arrived on time, fixed 
+                        our wiring issue quickly, and charged fairly. Will definitely use Karigar again!
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">SK</div>
+                        <div>
+                            <div class="testimonial-name">Sara Khan</div>
+                            <div class="testimonial-role">Homeowner, Karachi</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 2 -->
+                <div class="testimonial-card">
+                    <div class="testimonial-quote">"</div>
+                    <p class="testimonial-text">
+                        As a provider, Karigar has transformed my business. I get regular clients, 
+                        manage bookings easily, and the payment system is reliable. Highly recommend!
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">AR</div>
+                        <div>
+                            <div class="testimonial-name">Ahmed Raza</div>
+                            <div class="testimonial-role">Plumber, Lahore</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 3 -->
+                <div class="testimonial-card">
+                    <div class="testimonial-quote">"</div>
+                    <p class="testimonial-text">
+                        The verification process gives me confidence. I know the providers are 
+                        legitimate and skilled. Great platform for finding reliable help!
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">MH</div>
+                        <div>
+                            <div class="testimonial-name">Maria Hassan</div>
+                            <div class="testimonial-role">Business Owner, Islamabad</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== CTA SECTION ========== -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2 class="cta-title">Ready to Get Started?</h2>
+                <p class="cta-description">
+                    Join thousands of satisfied customers and trusted providers. 
+                    Find the help you need or grow your business with Karigar.
+                </p>
+                <div class="cta-actions">
+                    <a href="login.html?role=customer" class="btn btn-white btn-xl">
+                        Find a Professional
+                    </a>
+                    <a href="login.html?role=provider" class="btn btn-outline-white btn-xl">
+                        Become a Provider
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== FOOTER ========== -->
+    <footer class="footer-3d">
+        <div class="container">
+            <div class="footer-grid">
+                <!-- Brand Column -->
+                <div>
+                    <div class="footer-brand">
+                        <div class="nav-brand-icon">🛠️</div>
+                        <span>Karigar</span>
+                    </div>
+                    <p class="footer-description">
+                        Pakistan's trusted platform connecting customers with skilled local 
+                        professionals. Quality service, verified providers, fair prices.
+                    </p>
+                </div>
+                
+                <!-- Services Column -->
+                <div>
+                    <h4 class="footer-title">Services</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Plumbing</a></li>
+                        <li><a href="#">Electrical</a></li>
+                        <li><a href="#">AC & Cooling</a></li>
+                        <li><a href="#">Carpentry</a></li>
+                        <li><a href="#">Painting</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Company Column -->
+                <div>
+                    <h4 class="footer-title">Company</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">How It Works</a></li>
+                        <li><a href="#">Become a Provider</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Support Column -->
+                <div>
+                    <h4 class="footer-title">Support</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Safety</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="admin-3d.html">Admin Portal</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p class="footer-copyright">
+                    © 2025 Karigar. All rights reserved. Made with ❤️ in Pakistan.
+                </p>
+                <p class="footer-copyright" style="margin-top: 0.5rem; font-size: 0.85rem;">
+                    Designed & Developed by <strong>Prompt Engineers</strong> | WebHackathon 2025
+                </p>
+                <div class="footer-social">
+                    <a href="#" class="social-link">📘</a>
+                    <a href="#" class="social-link">📸</a>
+                    <a href="#" class="social-link">🐦</a>
+                    <a href="#" class="social-link">💼</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ========== SCRIPTS ========== -->
+    <script>
+        // Dark Mode Toggle
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const icon = document.getElementById('darkModeIcon');
+            
+            if (document.body.classList.contains('dark-mode')) {
+                icon.textContent = '☀️';
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                icon.textContent = '🌙';
+                localStorage.setItem('darkMode', 'disabled');
+            }
+        }
+        
+        // Check for saved dark mode preference
+        document.addEventListener('DOMContentLoaded', () => {
+            const darkMode = localStorage.getItem('darkMode');
+            if (darkMode === 'enabled') {
+                document.body.classList.add('dark-mode');
+                document.getElementById('darkModeIcon').textContent = '☀️';
+            }
+            
+            // Navbar scroll effect
+            const nav = document.getElementById('mainNav');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    nav.classList.add('scrolled');
+                } else {
+                    nav.classList.remove('scrolled');
+                }
+            });
+            
+            // Intersection Observer for animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+            
+            // Observe all animated elements
+            document.querySelectorAll('.service-card, .step-card, .stat-card, .testimonial-card, .provider-card').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(el);
+            });
+        });
+        
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+    
+    <!-- Page Transitions -->
+    <script src="page-transitions.js"></script>
+</body>
+</html>

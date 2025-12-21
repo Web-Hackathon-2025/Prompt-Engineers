@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Start Here - Karigar | Premium Service Marketplace</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Page Transitions CSS -->
+    <link rel="stylesheet" href="style-3d.css">
+    
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary-600: #4f46e5;
+            --primary-700: #4338ca;
+            --accent-500: #f59e0b;
+            --slate-50: #f8fafc;
+            --slate-100: #f1f5f9;
+            --slate-500: #64748b;
+            --slate-700: #334155;
+            --slate-900: #0f172a;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #4f46e5 0%, #6366f1 50%, #4338ca 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Background decorations */
+        body::before {
+            content: '';
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+            top: -200px;
+            right: -200px;
+        }
+        
+        body::after {
+            content: '';
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 50%;
+            bottom: -100px;
+            left: -100px;
+        }
+        
+        .container {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            max-width: 700px;
+        }
+        
+        .logo {
+            width: 100px;
+            height: 100px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            border-radius: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            margin: 0 auto 2rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 1rem;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        @media (max-width: 640px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+        }
+        
+        .tagline {
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 3rem;
+            line-height: 1.7;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            margin-bottom: 2rem;
+        }
+        
+        .card h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--slate-900);
+            margin-bottom: 1.5rem;
+        }
+        
+        .links-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+        
+        @media (max-width: 500px) {
+            .links-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .link-card {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.25rem;
+            background: var(--slate-50);
+            border: 2px solid var(--slate-100);
+            border-radius: 16px;
+            text-decoration: none;
+            color: var(--slate-700);
+            transition: all 0.2s ease;
+        }
+        
+        .link-card:hover {
+            border-color: var(--primary-600);
+            background: white;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.2);
+        }
+        
+        .link-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary-600), var(--primary-700));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        
+        .link-info {
+            text-align: left;
+        }
+        
+        .link-info h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--slate-900);
+            margin-bottom: 0.25rem;
+        }
+        
+        .link-info p {
+            font-size: 0.875rem;
+            color: var(--slate-500);
+        }
+        
+        /* Guide Sections */
+        .guide-section {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--slate-100);
+        }
+        
+        .guide-section:first-of-type {
+            margin-top: 1.5rem;
+            padding-top: 0;
+            border-top: none;
+        }
+        
+        .guide-section h3 {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--slate-900);
+            margin-bottom: 1rem;
+        }
+        
+        .guide-section ol, .guide-section ul {
+            margin-left: 1.5rem;
+            color: var(--slate-700);
+            line-height: 1.8;
+        }
+        
+        .guide-section li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .guide-section code {
+            background: var(--slate-100);
+            padding: 0.2rem 0.5rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            color: var(--primary-700);
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+        
+        .guide-section a {
+            color: var(--primary-600);
+            font-weight: 600;
+        }
+        
+        .info-box {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 12px;
+            font-size: 0.875rem;
+            color: #1e40af;
+        }
+        
+        .info-box.warning {
+            background: #fef3c7;
+            border-color: #fcd34d;
+            color: #92400e;
+        }
+        
+        /* Test Accounts */
+        .test-accounts {
+            display: grid;
+            gap: 0.75rem;
+        }
+        
+        .account-box {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--slate-50);
+            border: 1px solid var(--slate-100);
+            border-radius: 12px;
+        }
+        
+        .account-icon {
+            font-size: 1.5rem;
+        }
+        
+        .account-box strong {
+            display: block;
+            color: var(--slate-900);
+            margin-bottom: 0.25rem;
+        }
+        
+        .account-box p {
+            font-size: 0.875rem;
+            color: var(--slate-500);
+            margin-bottom: 0.25rem;
+        }
+        
+        .account-box code {
+            background: var(--slate-100);
+            padding: 0.2rem 0.5rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            color: var(--primary-700);
+        }
+        
+        /* Test Flow */
+        .test-flow {
+            display: grid;
+            gap: 0.5rem;
+        }
+        
+        .flow-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 0.75rem 0;
+        }
+        
+        .step-number {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--primary-600), var(--primary-700));
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.875rem;
+            flex-shrink: 0;
+        }
+        
+        .step-content strong {
+            display: block;
+            color: var(--slate-900);
+            margin-bottom: 0.25rem;
+        }
+        
+        .step-content p {
+            font-size: 0.875rem;
+            color: var(--slate-500);
+        }
+        
+        .step-content code {
+            background: var(--slate-100);
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            color: var(--primary-700);
+        }
+        
+        /* Checklist */
+        .checklist {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+        }
+        
+        @media (max-width: 600px) {
+            .checklist {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .check-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            background: var(--slate-50);
+            border-radius: 8px;
+            font-size: 0.875rem;
+            color: var(--slate-700);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .check-item:hover {
+            background: var(--slate-100);
+        }
+        
+        .check-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary-600);
+        }
+        
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 2rem;
+        }
+        
+        .tech-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 100px;
+            color: white;
+            font-size: 0.875rem;
+            font-weight: 500;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .footer {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.875rem;
+            margin-top: 2rem;
+        }
+        
+        .footer a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        /* Floating shapes animation */
+        .shape {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .shape-1 {
+            width: 80px;
+            height: 80px;
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+        
+        .shape-2 {
+            width: 60px;
+            height: 60px;
+            bottom: 20%;
+            right: 15%;
+            animation-delay: 2s;
+        }
+        
+        .shape-3 {
+            width: 40px;
+            height: 40px;
+            top: 30%;
+            right: 10%;
+            animation-delay: 4s;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating shapes -->
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+    <div class="shape shape-3"></div>
+    
+    <div class="container">
+        <!-- Logo -->
+        <div class="logo">🛠️</div>
+        
+        <!-- Title -->
+        <h1>Karigar</h1>
+        <p class="tagline">
+            Pakistan's Premium Service Marketplace<br>
+            Connecting customers with skilled local professionals
+        </p>
+        
+        <!-- Navigation Card -->
+        <div class="card">
+            <h2>🚀 Quick Navigation</h2>
+            <div class="links-grid">
+                <a href="index-3d.html" class="link-card">
+                    <div class="link-icon">🏠</div>
+                    <div class="link-info">
+                        <h3>Landing Page</h3>
+                        <p>Main website entry</p>
+                    </div>
+                </a>
+                <a href="login-3d.html" class="link-card">
+                    <div class="link-icon">🔐</div>
+                    <div class="link-info">
+                        <h3>Login / Sign Up</h3>
+                        <p>Authentication page</p>
+                    </div>
+                </a>
+                <a href="customer-3d.html" class="link-card">
+                    <div class="link-icon">👤</div>
+                    <div class="link-info">
+                        <h3>Customer Dashboard</h3>
+                        <p>Find & book services</p>
+                    </div>
+                </a>
+                <a href="provider-3d.html" class="link-card">
+                    <div class="link-icon">👷</div>
+                    <div class="link-info">
+                        <h3>Provider Dashboard</h3>
+                        <p>Manage your services</p>
+                    </div>
+                </a>
+                <a href="admin-3d.html" class="link-card" style="grid-column: 1 / -1;">
+                    <div class="link-icon">⚙️</div>
+                    <div class="link-info">
+                        <h3>Admin Panel</h3>
+                        <p>Platform management & provider approvals</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+        
+        <!-- Testing Guide Card -->
+        <div class="card" style="text-align: left;">
+            <h2 style="text-align: center;">📋 Complete Testing Guide</h2>
+            
+            <!-- Admin Login -->
+            <div class="guide-section">
+                <h3>🔐 How to Login as Admin</h3>
+                <ol>
+                    <li>Go to <a href="login-3d.html">Login Page</a></li>
+                    <li>Click <strong>"Create Account"</strong> tab</li>
+                    <li>Use any email ending with <code>@karigar-admin.com</code><br>
+                        <em>Example:</em> <code>admin@karigar-admin.com</code></li>
+                    <li>Fill in other details and submit</li>
+                    <li>You'll be automatically registered as Admin and redirected to Admin Panel</li>
+                </ol>
+                <div class="info-box">
+                    <strong>💡 Tip:</strong> The system detects admin emails by the domain. Any email with <code>@karigar-admin.com</code> gets admin privileges.
+                </div>
+            </div>
+            
+            <!-- Test Accounts -->
+            <div class="guide-section">
+                <h3>👥 Create Test Accounts</h3>
+                <div class="test-accounts">
+                    <div class="account-box">
+                        <span class="account-icon">👤</span>
+                        <div>
+                            <strong>Customer Account</strong>
+                            <p>Select "Customer" role during signup</p>
+                            <code>customer@test.com</code>
+                        </div>
+                    </div>
+                    <div class="account-box">
+                        <span class="account-icon">👷</span>
+                        <div>
+                            <strong>Provider Account</strong>
+                            <p>Select "Provider" role during signup</p>
+                            <code>provider@test.com</code>
+                        </div>
+                    </div>
+                    <div class="account-box">
+                        <span class="account-icon">⚙️</span>
+                        <div>
+                            <strong>Admin Account</strong>
+                            <p>Use @karigar-admin.com email</p>
+                            <code>admin@karigar-admin.com</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Database Testing -->
+            <div class="guide-section">
+                <h3>🗄️ How to Verify Data in Firebase</h3>
+                <ol>
+                    <li>Go to <a href="https://console.firebase.google.com" target="_blank">Firebase Console</a></li>
+                    <li>Select project: <code>karigar-21ced</code></li>
+                    <li>Click <strong>"Firestore Database"</strong> in left sidebar</li>
+                    <li>You'll see these collections:
+                        <ul>
+                            <li><code>users</code> - All registered users</li>
+                            <li><code>customers</code> - Customer profiles</li>
+                            <li><code>providers</code> - Provider profiles</li>
+                            <li><code>admins</code> - Admin profiles</li>
+                            <li><code>serviceRequests</code> - All service requests</li>
+                        </ul>
+                    </li>
+                </ol>
+                <div class="info-box warning">
+                    <strong>⚠️ Note:</strong> Make sure you're logged into the Google account that owns the Firebase project.
+                </div>
+            </div>
+            
+            <!-- Complete Testing Flow -->
+            <div class="guide-section">
+                <h3>✅ Complete Testing Workflow</h3>
+                <div class="test-flow">
+                    <div class="flow-step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <strong>Create Admin Account</strong>
+                            <p>Sign up with <code>admin@karigar-admin.com</code></p>
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <strong>Create Provider Account</strong>
+                            <p>Sign up as Provider (will be pending approval)</p>
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <strong>Approve Provider (Admin)</strong>
+                            <p>Login as Admin → Approve the pending provider</p>
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <strong>Create Customer Account</strong>
+                            <p>Sign up as Customer</p>
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <div class="step-number">5</div>
+                        <div class="step-content">
+                            <strong>Create Service Request</strong>
+                            <p>Login as Customer → Create a new service request</p>
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <div class="step-number">6</div>
+                        <div class="step-content">
+                            <strong>Accept Request (Provider)</strong>
+                            <p>Login as Provider → Accept the job request</p>
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <div class="step-number">7</div>
+                        <div class="step-content">
+                            <strong>Complete Job (Provider)</strong>
+                            <p>Mark job as In Progress → Complete</p>
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <div class="step-number">8</div>
+                        <div class="step-content">
+                            <strong>Verify in Firebase</strong>
+                            <p>Check Firestore to see all data stored correctly</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Features to Test -->
+            <div class="guide-section">
+                <h3>🧪 Features Checklist</h3>
+                <div class="checklist">
+                    <label class="check-item"><input type="checkbox"> User registration (Customer/Provider/Admin)</label>
+                    <label class="check-item"><input type="checkbox"> Email/Password login</label>
+                    <label class="check-item"><input type="checkbox"> Google Sign-In</label>
+                    <label class="check-item"><input type="checkbox"> Role-based redirects after login</label>
+                    <label class="check-item"><input type="checkbox"> Dark mode toggle (all pages)</label>
+                    <label class="check-item"><input type="checkbox"> Create service request (Customer)</label>
+                    <label class="check-item"><input type="checkbox"> View available requests (Provider)</label>
+                    <label class="check-item"><input type="checkbox"> Accept/Start/Complete job (Provider)</label>
+                    <label class="check-item"><input type="checkbox"> Provider approval workflow (Admin)</label>
+                    <label class="check-item"><input type="checkbox"> View all users & requests (Admin)</label>
+                    <label class="check-item"><input type="checkbox"> Profile editing (Provider)</label>
+                    <label class="check-item"><input type="checkbox"> Availability toggle (Provider)</label>
+                    <label class="check-item"><input type="checkbox"> Data persistence in Firestore</label>
+                </div>
+            </div>
+            
+            <!-- Browser Console -->
+            <div class="guide-section">
+                <h3>🔧 Debugging Tips</h3>
+                <ol>
+                    <li>Open <strong>Browser DevTools</strong> (F12 or Right-click → Inspect)</li>
+                    <li>Go to <strong>Console</strong> tab to see any errors</li>
+                    <li>Go to <strong>Network</strong> tab to monitor Firebase requests</li>
+                    <li>Go to <strong>Application</strong> tab → Local Storage to see saved user data</li>
+                </ol>
+                <div class="info-box">
+                    <strong>💡 Quick Check:</strong> After login, check <code>localStorage.getItem('currentUser')</code> in console to verify user data is saved.
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tech Stack -->
+        <div class="tech-stack">
+            <div class="tech-badge">
+                <span>🔥</span>
+                <span>Firebase</span>
+            </div>
+            <div class="tech-badge">
+                <span>🎨</span>
+                <span>Premium 3D UI</span>
+            </div>
+            <div class="tech-badge">
+                <span>📱</span>
+                <span>Responsive</span>
+            </div>
+            <div class="tech-badge">
+                <span>🌙</span>
+                <span>Dark Mode</span>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <p>Built with ❤️ by <a href="#">Prompt Engineers</a> | WebHackathon 2025</p>
+        </div>
+    </div>
+    
+    <!-- Page Transitions -->
+    <script src="page-transitions.js"></script>
+</body>
+</html>

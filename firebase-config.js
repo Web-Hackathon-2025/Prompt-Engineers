@@ -1,8 +1,9 @@
-// firebase-config.js
-// Firebase Configuration and Initialization
+// Firebase Configuration and Initialization (Modular SDK v9)
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
+import { getAuth } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js';
+import { getFirestore } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
 
-// TODO: Replace with your Firebase project credentials
-// Get these from: Firebase Console > Project Settings > Your Apps > Web App
+// Firebase project configuration
 const firebaseConfig = {
   apiKey: "AIzaSyAhUUt_I_E9DW0qCn7XMQyO7aJv-GyEYCI",
   authDomain: "karigar-21ced.firebaseapp.com",
@@ -14,50 +15,11 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-let app;
-let db;
-let auth;
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-function initializeFirebase() {
-  try {
-    // Initialize Firebase App
-    app = firebase.initializeApp(firebaseConfig);
-    
-    // Initialize Firestore
-    db = firebase.firestore();
-    
-    // Initialize Authentication
-    auth = firebase.auth();
-    
-    console.log('✅ Firebase initialized successfully');
-    
-    // Enable offline persistence
-    db.enablePersistence()
-      .catch((err) => {
-        if (err.code === 'failed-precondition') {
-          console.warn('⚠️ Persistence failed: Multiple tabs open');
-        } else if (err.code === 'unimplemented') {
-          console.warn('⚠️ Persistence not available in this browser');
-        }
-      });
-    
-    return true;
-  } catch (error) {
-    console.error('❌ Firebase initialization error:', error);
-    return false;
-  }
-}
+console.log('✅ Firebase initialized successfully');
 
-// Firestore Collections
-const COLLECTIONS = {
-  PROVIDERS: 'providers',
-  CUSTOMERS: 'customers',
-  REQUESTS: 'service_requests',
-  REVIEWS: 'reviews',
-  USERS: 'users'
-};
-
-// Initialize on load
-document.addEventListener('DOMContentLoaded', () => {
-  initializeFirebase();
-});
+// Export for use in other modules
+export { auth, db, app };
