@@ -2,6 +2,34 @@
 // Firebase Authentication Helper Functions
 
 // ============================================
+// HELPER FUNCTIONS
+// ============================================
+
+/**
+ * Store current user in localStorage
+ * @param {Object} user - User object
+ */
+function setCurrentUser(user) {
+  localStorage.setItem('karigar_current_user', JSON.stringify(user));
+}
+
+/**
+ * Get current user from localStorage
+ * @returns {Object|null} - User object or null
+ */
+function getCurrentUser() {
+  const userStr = localStorage.getItem('karigar_current_user');
+  return userStr ? JSON.parse(userStr) : null;
+}
+
+/**
+ * Clear current user from localStorage
+ */
+function clearCurrentUser() {
+  localStorage.removeItem('karigar_current_user');
+}
+
+// ============================================
 // AUTHENTICATION FUNCTIONS
 // ============================================
 
@@ -107,7 +135,7 @@ async function signInUser(email, password) {
 async function signOutUser() {
   try {
     await auth.signOut();
-    localStorage.removeItem('karigar_current_user');
+    clearCurrentUser();
     console.log('✅ Signed out successfully');
     window.location.href = 'index.html';
   } catch (error) {

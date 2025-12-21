@@ -4,12 +4,13 @@
 // TODO: Replace with your Firebase project credentials
 // Get these from: Firebase Console > Project Settings > Your Apps > Web App
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY_HERE",
-  authDomain: "your-project.firebaseapp.com",
-  projectId: "your-project-id",
-  storageBucket: "your-project.appspot.com",
-  messagingSenderId: "123456789",
-  appId: "1:123456789:web:abcdef123456"
+  apiKey: "AIzaSyAhUUt_I_E9DW0qCn7XMQyO7aJv-GyEYCI",
+  authDomain: "karigar-21ced.firebaseapp.com",
+  projectId: "karigar-21ced",
+  storageBucket: "karigar-21ced.firebasestorage.app",
+  messagingSenderId: "927258761848",
+  appId: "1:927258761848:web:cd33800a11401248ddab8d",
+  measurementId: "G-4ZWE0SXT1S"
 };
 
 // Initialize Firebase
