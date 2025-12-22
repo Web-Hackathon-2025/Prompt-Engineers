@@ -828,10 +828,59 @@
         .hidden {
             display: none !important;
         }
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--slate-900);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            transition: opacity 0.3s ease;
+        }
+        
+        .loading-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(99, 102, 241, 0.1);
+            border-top-color: var(--primary-500);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        .loading-text {
+            margin-top: var(--space-4);
+            color: var(--slate-400);
+            font-size: var(--text-sm);
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .admin-layout.loading {
+            opacity: 0;
+        }
     </style>
 </head>
 <body>
-    <div class="admin-layout">
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Verifying admin access...</div>
+    </div>
+    
+    <div class="admin-layout loading" id="adminLayout">
         <!-- ========== SIDEBAR ========== -->
         <aside class="admin-sidebar">
             <div class="sidebar-brand">
@@ -1079,6 +1128,7 @@
             getDoc,
             getDocs,
             updateDoc,
+            deleteDoc,
             query,
             where,
             orderBy
@@ -1104,23 +1154,38 @@
         // Check auth state
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                const userDoc = await getDoc(doc(db, 'users', user.uid));
-                if (userDoc.exists()) {
-                    currentUser = { uid: user.uid, ...userDoc.data() };
-                    
-                    // Check if admin
-                    if (currentUser.role !== 'admin') {
-                        if (currentUser.role === 'customer') {
-                            window.location.href = 'customer-3d.html';
-                        } else if (currentUser.role === 'provider') {
-                            window.location.href = 'provider-3d.html';
+                try {
+                    const userDoc = await getDoc(doc(db, 'users', user.uid));
+                    if (userDoc.exists()) {
+                        currentUser = { uid: user.uid, ...userDoc.data() };
+                        
+                        // Check if admin
+                        if (currentUser.role !== 'admin') {
+                            console.log('User is not admin, redirecting...');
+                            if (currentUser.role === 'customer') {
+                                window.location.href = 'customer-3d.html';
+                            } else if (currentUser.role === 'provider') {
+                                window.location.href = 'provider-3d.html';
+                            } else {
+                                window.location.href = 'login-3d.html';
+                            }
+                            return;
                         }
-                        return;
+                        
+                        // User is admin - show the dashboard
+                        document.getElementById('loadingScreen').classList.add('hidden');
+                        document.getElementById('adminLayout').classList.remove('loading');
+                        initDashboard();
+                    } else {
+                        // User document doesn't exist
+                        window.location.href = 'login-3d.html';
                     }
-                    
-                    initDashboard();
+                } catch (error) {
+                    console.error('Error checking user role:', error);
+                    window.location.href = 'login-3d.html';
                 }
             } else {
+                // Not logged in
                 window.location.href = 'login-3d.html';
             }
         });
@@ -1307,6 +1372,89 @@
             }
         };
         
+        // View provider details
+        window.viewProvider = async function(providerId) {
+            try {
+                const providerDoc = await getDoc(doc(db, 'providers', providerId));
+                if (providerDoc.exists()) {
+                    const provider = providerDoc.data();
+                    alert(`Provider Details:\n\nName: ${provider.name}\nEmail: ${provider.email}\nPhone: ${provider.phone}\nService: ${formatService(provider.service)}\nLocation: ${provider.location}\nRate: ₨${provider.rate}/hour\nStatus: ${provider.status}\nRating: ${provider.rating || 'N/A'}\nCompleted Jobs: ${provider.completedJobs || 0}`);
+                }
+            } catch (error) {
+                console.error('Error viewing provider:', error);
+                showToast('Failed to load provider details', 'error');
+            }
+        };
+        
+        // Suspend provider
+        window.suspendProvider = async function(providerId) {
+            if (!confirm('Are you sure you want to suspend this provider?')) return;
+            
+            try {
+                await updateDoc(doc(db, 'providers', providerId), {
+                    status: 'suspended',
+                    suspendedAt: new Date().toISOString()
+                });
+                
+                await updateDoc(doc(db, 'users', providerId), {
+                    status: 'suspended'
+                });
+                
+                showToast('Provider suspended successfully', 'success');
+                await loadProviders();
+            } catch (error) {
+                console.error('Error suspending provider:', error);
+                showToast('Failed to suspend provider', 'error');
+            }
+        };
+        
+        // Activate provider
+        window.activateProvider = async function(providerId) {
+            try {
+                await updateDoc(doc(db, 'providers', providerId), {
+                    status: 'active',
+                    activatedAt: new Date().toISOString()
+                });
+                
+                await updateDoc(doc(db, 'users', providerId), {
+                    status: 'active'
+                });
+                
+                showToast('Provider activated successfully', 'success');
+                await loadProviders();
+            } catch (error) {
+                console.error('Error activating provider:', error);
+                showToast('Failed to activate provider', 'error');
+            }
+        };
+        
+        // Delete provider
+        window.deleteProvider = async function(providerId) {
+            if (!confirm('⚠️ Are you ABSOLUTELY SURE you want to DELETE this provider?\n\nThis action CANNOT be undone!')) return;
+            
+            const finalConfirm = confirm('Click OK to permanently delete this provider.');
+            if (!finalConfirm) return;
+            
+            try {
+                // Delete from providers collection
+                await deleteDoc(doc(db, 'providers', providerId));
+                
+                // Delete from users collection
+                await deleteDoc(doc(db, 'users', providerId));
+                
+                showToast('Provider deleted successfully', 'success');
+                
+                // Reload data
+                await Promise.all([
+                    loadOverviewStats(),
+                    loadProviders()
+                ]);
+            } catch (error) {
+                console.error('Error deleting provider:', error);
+                showToast('Failed to delete provider', 'error');
+            }
+        };
+        
         // Load all providers
         async function loadProviders() {
             try {
@@ -1350,8 +1498,14 @@
                                 ${provider.status === 'pending' ? `
                                     <button class="action-btn approve" onclick="approveProvider('${docSnap.id}')" title="Approve">✓</button>
                                     <button class="action-btn reject" onclick="rejectProvider('${docSnap.id}')" title="Reject">✕</button>
+                                ` : provider.status === 'active' ? `
+                                    <button class="action-btn" onclick="viewProvider('${docSnap.id}')" title="View Details">👁️</button>
+                                    <button class="action-btn" onclick="suspendProvider('${docSnap.id}')" title="Suspend">⏸️</button>
+                                    <button class="action-btn reject" onclick="deleteProvider('${docSnap.id}')" title="Delete">🗑️</button>
                                 ` : `
-                                    <button class="action-btn" title="View">👁️</button>
+                                    <button class="action-btn" onclick="viewProvider('${docSnap.id}')" title="View Details">👁️</button>
+                                    <button class="action-btn approve" onclick="activateProvider('${docSnap.id}')" title="Activate">✓</button>
+                                    <button class="action-btn reject" onclick="deleteProvider('${docSnap.id}')" title="Delete">🗑️</button>
                                 `}
                             </div>
                         </td>
@@ -1398,9 +1552,14 @@
                             </div>
                         </td>
                         <td>${customer.location || 'Not set'}</td>
-                        <td>-</td>
+                        <td>${customer.phone || 'Not set'}</td>
                         <td>${formatDate(customer.createdAt)}</td>
-                        <td><span class="status-badge ${customer.status || 'active'}">${customer.status || 'active'}</span></td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="action-btn" onclick="viewCustomer('${docSnap.id}')" title="View Details">👁️</button>
+                                <button class="action-btn reject" onclick="deleteCustomer('${docSnap.id}')" title="Delete">🗑️</button>
+                            </div>
+                        </td>
                     `;
                     tbody.appendChild(row);
                 });
@@ -1408,6 +1567,47 @@
                 console.error('Error loading customers:', error);
             }
         }
+        
+        // View customer details
+        window.viewCustomer = async function(customerId) {
+            try {
+                const customerDoc = await getDoc(doc(db, 'customers', customerId));
+                if (customerDoc.exists()) {
+                    const customer = customerDoc.data();
+                    alert(`Customer Details:\n\nName: ${customer.name}\nEmail: ${customer.email}\nPhone: ${customer.phone}\nLocation: ${customer.location}\nJoined: ${formatDate(customer.createdAt)}`);
+                }
+            } catch (error) {
+                console.error('Error viewing customer:', error);
+                showToast('Failed to load customer details', 'error');
+            }
+        };
+        
+        // Delete customer
+        window.deleteCustomer = async function(customerId) {
+            if (!confirm('⚠️ Are you ABSOLUTELY SURE you want to DELETE this customer?\n\nThis action CANNOT be undone!')) return;
+            
+            const finalConfirm = confirm('Click OK to permanently delete this customer.');
+            if (!finalConfirm) return;
+            
+            try {
+                // Delete from customers collection
+                await deleteDoc(doc(db, 'customers', customerId));
+                
+                // Delete from users collection
+                await deleteDoc(doc(db, 'users', customerId));
+                
+                showToast('Customer deleted successfully', 'success');
+                
+                // Reload data
+                await Promise.all([
+                    loadOverviewStats(),
+                    loadCustomers()
+                ]);
+            } catch (error) {
+                console.error('Error deleting customer:', error);
+                showToast('Failed to delete customer', 'error');
+            }
+        };
         
         // Load all requests
         async function loadRequests() {
