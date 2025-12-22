@@ -28,6 +28,16 @@ service cloud.firestore {
       allow read, write: if true;
     }
     
+    // Service requests collection (camelCase)
+    match /serviceRequests/{requestId} {
+      allow read, write: if true;
+    }
+    
+    // Notifications collection
+    match /notifications/{notificationId} {
+      allow read, write: if true;
+    }
+    
     // Reviews collection
     match /reviews/{reviewId} {
       allow read, write: if true;
