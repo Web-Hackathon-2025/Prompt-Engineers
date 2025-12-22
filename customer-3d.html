@@ -1146,12 +1146,16 @@
         .modal {
             width: 100%;
             max-width: 500px;
+            max-height: 90vh;
             background: var(--surface-card);
             border-radius: var(--radius-2xl);
             box-shadow: var(--shadow-2xl);
             overflow: hidden;
             transform: scale(0.9) translateY(20px);
             transition: all var(--transition-base);
+            display: flex;
+            flex-direction: column;
+            margin: 20px;
         }
         
         .modal-overlay.active .modal {
@@ -1168,6 +1172,7 @@
             justify-content: space-between;
             padding: var(--space-5) var(--space-6);
             border-bottom: 1px solid var(--slate-100);
+            flex-shrink: 0;
         }
         
         body.dark-mode .modal-header {
@@ -1211,6 +1216,8 @@
         
         .modal-body {
             padding: var(--space-6);
+            overflow-y: auto;
+            flex: 1;
         }
         
         .modal-footer {
@@ -1219,6 +1226,7 @@
             padding: var(--space-5) var(--space-6);
             border-top: 1px solid var(--slate-100);
             background: var(--slate-50);
+            flex-shrink: 0;
         }
         
         body.dark-mode .modal-footer {
