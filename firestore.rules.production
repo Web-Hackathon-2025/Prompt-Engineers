@@ -2,7 +2,10 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     
-    // Helper functions
+    // ============================================
+    // HELPER FUNCTIONS
+    // ============================================
+    
     function isAuthenticated() {
       return request.auth != null;
     }
@@ -11,39 +14,84 @@ service cloud.firestore {
       return isAuthenticated() && request.auth.uid == userId;
     }
     
+    function getUserData() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+    
     function isAdmin() {
       return isAuthenticated() && 
              exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
-             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+             getUserData().role == 'admin' &&
+             getUserData().status == 'active';
     }
     
     function isProvider() {
       return isAuthenticated() && 
              exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
-             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'provider';
+             getUserData().role == 'provider';
+    }
+    
+    function isActiveProvider() {
+      return isProvider() && getUserData().status == 'active';
     }
     
     function isCustomer() {
       return isAuthenticated() && 
              exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
-             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'customer';
+             getUserData().role == 'customer';
     }
     
-    // Users collection - stores role and basic info
+    // Validate required fields exist
+    function hasRequiredFields(fields) {
+      return request.resource.data.keys().hasAll(fields);
+    }
+    
+    // Validate string length
+    function isValidStringLength(field, min, max) {
+      return request.resource.data[field] is string &&
+             request.resource.data[field].size() >= min &&
+             request.resource.data[field].size() <= max;
+    }
+    
+    // Validate email format (basic)
+    function isValidEmail(email) {
+      return email.matches('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$');
+    }
+    
+    // ============================================
+    // USERS COLLECTION
+    // ============================================
     match /users/{userId} {
+      // Any authenticated user can read user profiles
       allow read: if isAuthenticated();
-      allow create: if isOwner(userId);
-      allow update: if isOwner(userId) || isAdmin();
+      
+      // User can only create their own document
+      allow create: if isOwner(userId) && 
+                      hasRequiredFields(['email', 'role', 'name']) &&
+                      request.resource.data.role in ['customer', 'provider', 'admin'] &&
+                      isValidStringLength('name', 2, 100) &&
+                      isValidEmail(request.resource.data.email);
+      
+      // User can update their own profile (but not role), admin can update any
+      allow update: if (isOwner(userId) && 
+                       !request.resource.data.diff(resource.data).affectedKeys().hasAny(['role', 'uid'])) 
+                    || isAdmin();
+      
+      // Only admin can delete users
       allow delete: if isAdmin();
     }
     
-    // Providers collection
+    // ============================================
+    // PROVIDERS COLLECTION
+    // ============================================
     match /providers/{providerId} {
-      // Anyone can read provider profiles
+      // Anyone can read active provider profiles (for browsing)
       allow read: if true;
       
       // Only the provider can create their own profile
-      allow create: if isAuthenticated() && request.auth.uid == providerId;
+      allow create: if isOwner(providerId) && 
+                      hasRequiredFields(['name', 'email', 'service']) &&
+                      isValidStringLength('name', 2, 100);
       
       // Provider can update their own profile, admin can update any
       allow update: if isOwner(providerId) || isAdmin();
@@ -52,13 +100,16 @@ service cloud.firestore {
       allow delete: if isAdmin();
     }
     
-    // Customers collection
+    // ============================================
+    // CUSTOMERS COLLECTION
+    // ============================================
     match /customers/{customerId} {
       // Authenticated users can read customer profiles
       allow read: if isAuthenticated();
       
       // Customer can create their own profile
-      allow create: if isAuthenticated() && request.auth.uid == customerId;
+      allow create: if isOwner(customerId) &&
+                      hasRequiredFields(['name', 'email']);
       
       // Customer can update their own profile, admin can update any
       allow update: if isOwner(customerId) || isAdmin();
@@ -67,8 +118,10 @@ service cloud.firestore {
       allow delete: if isAdmin();
     }
     
-    // Service requests collection
-    match /service_requests/{requestId} {
+    // ============================================
+    // SERVICE REQUESTS COLLECTION
+    // ============================================
+    match /serviceRequests/{requestId} {
       // Read: customer who created it, provider assigned to it, or admin
       allow read: if isAuthenticated() && (
         resource.data.customerId == request.auth.uid ||
@@ -76,36 +129,49 @@ service cloud.firestore {
         isAdmin()
       );
       
+      // List: same as read (for queries)
+      allow list: if isAuthenticated();
+      
       // Create: any authenticated customer
       allow create: if isAuthenticated() && 
-                      request.resource.data.customerId == request.auth.uid;
+                      request.resource.data.customerId == request.auth.uid &&
+                      hasRequiredFields(['customerId', 'service', 'status']) &&
+                      request.resource.data.status == 'pending';
       
       // Update: customer who created it, provider assigned to it, or admin
+      // But customers can't change providerId, providers can only update status
       allow update: if isAuthenticated() && (
-        resource.data.customerId == request.auth.uid ||
-        resource.data.providerId == request.auth.uid ||
+        (resource.data.customerId == request.auth.uid) ||
+        (resource.data.providerId == request.auth.uid && 
+         request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'updatedAt'])) ||
         isAdmin()
       );
       
-      // Delete: customer who created it or admin
+      // Delete: customer who created it (only if pending) or admin
       allow delete: if isAuthenticated() && (
-        resource.data.customerId == request.auth.uid ||
+        (resource.data.customerId == request.auth.uid && resource.data.status == 'pending') ||
         isAdmin()
       );
     }
     
-    // Reviews collection
+    // ============================================
+    // REVIEWS COLLECTION
+    // ============================================
     match /reviews/{reviewId} {
       // Anyone can read reviews
       allow read: if true;
       
       // Only authenticated customers can create reviews
       allow create: if isAuthenticated() && 
-                      request.resource.data.customerId == request.auth.uid;
+                      request.resource.data.customerId == request.auth.uid &&
+                      hasRequiredFields(['customerId', 'providerId', 'rating']) &&
+                      request.resource.data.rating >= 1 &&
+                      request.resource.data.rating <= 5;
       
       // Only the customer who wrote the review can update it
       allow update: if isAuthenticated() && 
-                      resource.data.customerId == request.auth.uid;
+                      resource.data.customerId == request.auth.uid &&
+                      !request.resource.data.diff(resource.data).affectedKeys().hasAny(['customerId', 'providerId']);
       
       // Customer who wrote it or admin can delete
       allow delete: if isAuthenticated() && (
@@ -114,15 +180,45 @@ service cloud.firestore {
       );
     }
     
-    // Admin collection - only admins can access
+    // ============================================
+    // NOTIFICATIONS COLLECTION
+    // ============================================
+    match /notifications/{notifId} {
+      // User can only read their own notifications
+      allow read: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      
+      // System creates notifications (or admin)
+      allow create: if isAuthenticated();
+      
+      // User can mark their notifications as read
+      allow update: if isAuthenticated() && 
+                      resource.data.userId == request.auth.uid &&
+                      request.resource.data.diff(resource.data).affectedKeys().hasOnly(['read', 'readAt']);
+      
+      // User can delete their own notifications
+      allow delete: if isAuthenticated() && resource.data.userId == request.auth.uid;
+    }
+    
+    // ============================================
+    // ADMIN COLLECTION
+    // ============================================
     match /admin/{document=**} {
       allow read, write: if isAdmin();
     }
     
-    // Analytics collection - read only for admin
+    // ============================================
+    // ANALYTICS COLLECTION
+    // ============================================
     match /analytics/{document=**} {
       allow read: if isAdmin();
-      allow write: if false; // Automated writes only
+      allow write: if false; // Server-side only
+    }
+    
+    // ============================================
+    // BLOCK ALL OTHER ACCESS
+    // ============================================
+    match /{document=**} {
+      allow read, write: if false;
     }
   }
 }

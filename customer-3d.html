@@ -195,6 +195,252 @@
             cursor: pointer;
         }
         
+        /* Profile Dropdown */
+        .profile-dropdown-container {
+            position: relative;
+        }
+        
+        .profile-dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            min-width: 220px;
+            background: var(--surface-card);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-xl);
+            border: 1px solid var(--slate-200);
+            padding: var(--space-2);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.2s ease;
+            z-index: 1000;
+        }
+        
+        .profile-dropdown.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        body.dark-mode .profile-dropdown {
+            background: var(--slate-800);
+            border-color: var(--slate-700);
+        }
+        
+        .dropdown-header {
+            padding: var(--space-3) var(--space-4);
+            border-bottom: 1px solid var(--slate-100);
+            margin-bottom: var(--space-2);
+        }
+        
+        body.dark-mode .dropdown-header {
+            border-bottom-color: var(--slate-700);
+        }
+        
+        .dropdown-header-name {
+            font-weight: 600;
+            color: var(--slate-900);
+            font-size: var(--text-sm);
+        }
+        
+        body.dark-mode .dropdown-header-name {
+            color: var(--slate-100);
+        }
+        
+        .dropdown-header-email {
+            font-size: var(--text-xs);
+            color: var(--slate-500);
+            margin-top: 2px;
+        }
+        
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            width: 100%;
+            padding: var(--space-3) var(--space-4);
+            border: none;
+            background: transparent;
+            color: var(--slate-700);
+            font-size: var(--text-sm);
+            font-family: inherit;
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-align: left;
+        }
+        
+        .dropdown-item:hover {
+            background: var(--slate-100);
+            color: var(--slate-900);
+        }
+        
+        body.dark-mode .dropdown-item {
+            color: var(--slate-300);
+        }
+        
+        body.dark-mode .dropdown-item:hover {
+            background: var(--slate-700);
+            color: var(--slate-100);
+        }
+        
+        .dropdown-item.danger {
+            color: var(--error-600);
+        }
+        
+        .dropdown-item.danger:hover {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--error-600);
+        }
+        
+        .dropdown-divider {
+            height: 1px;
+            background: var(--slate-100);
+            margin: var(--space-2) 0;
+        }
+        
+        body.dark-mode .dropdown-divider {
+            background: var(--slate-700);
+        }
+        
+        /* Notification Dropdown */
+        .notif-dropdown-container {
+            position: relative;
+        }
+        
+        .notif-dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            width: 320px;
+            max-height: 400px;
+            overflow-y: auto;
+            background: var(--surface-card);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-xl);
+            border: 1px solid var(--slate-200);
+            padding: 0;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.2s ease;
+            z-index: 1000;
+        }
+        
+        .notif-dropdown.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        body.dark-mode .notif-dropdown {
+            background: var(--slate-800);
+            border-color: var(--slate-700);
+        }
+        
+        .notif-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--space-4);
+            border-bottom: 1px solid var(--slate-100);
+        }
+        
+        body.dark-mode .notif-header {
+            border-bottom-color: var(--slate-700);
+        }
+        
+        .notif-header h3 {
+            font-size: var(--text-sm);
+            font-weight: 600;
+            color: var(--slate-900);
+        }
+        
+        body.dark-mode .notif-header h3 {
+            color: var(--slate-100);
+        }
+        
+        .notif-clear-btn {
+            font-size: var(--text-xs);
+            color: var(--primary-600);
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .notif-item {
+            display: flex;
+            gap: var(--space-3);
+            padding: var(--space-3) var(--space-4);
+            border-bottom: 1px solid var(--slate-50);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .notif-item:hover {
+            background: var(--slate-50);
+        }
+        
+        body.dark-mode .notif-item {
+            border-bottom-color: var(--slate-700);
+        }
+        
+        body.dark-mode .notif-item:hover {
+            background: var(--slate-700);
+        }
+        
+        .notif-item.unread {
+            background: rgba(99, 102, 241, 0.05);
+        }
+        
+        .notif-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+        
+        .notif-icon.info { background: rgba(99, 102, 241, 0.1); }
+        .notif-icon.success { background: rgba(16, 185, 129, 0.1); }
+        .notif-icon.warning { background: rgba(245, 158, 11, 0.1); }
+        
+        .notif-content {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .notif-text {
+            font-size: var(--text-sm);
+            color: var(--slate-700);
+            line-height: 1.4;
+        }
+        
+        body.dark-mode .notif-text {
+            color: var(--slate-300);
+        }
+        
+        .notif-time {
+            font-size: var(--text-xs);
+            color: var(--slate-400);
+            margin-top: 2px;
+        }
+        
+        .notif-empty {
+            padding: var(--space-8);
+            text-align: center;
+            color: var(--slate-400);
+        }
+        
+        .notif-empty-icon {
+            font-size: 2rem;
+            margin-bottom: var(--space-2);
+        }
+        
         /* Dashboard Content */
         .dash-content {
             max-width: 1400px;
@@ -925,11 +1171,46 @@
                 <button class="nav-icon-btn" id="darkModeToggle" title="Toggle Dark Mode">
                     <span id="darkModeIcon">🌙</span>
                 </button>
-                <button class="nav-icon-btn" title="Notifications">
-                    <span>🔔</span>
-                    <span class="nav-badge" id="notifCount">3</span>
-                </button>
-                <div class="user-avatar" id="userAvatar" title="Profile">U</div>
+                <div class="notif-dropdown-container">
+                    <button class="nav-icon-btn" title="Notifications" onclick="toggleNotifDropdown()">
+                        <span>🔔</span>
+                        <span class="nav-badge" id="notifCount">0</span>
+                    </button>
+                    <div class="notif-dropdown" id="notifDropdown">
+                        <div class="notif-header">
+                            <h3>Notifications</h3>
+                            <button class="notif-clear-btn" onclick="clearNotifications()">Clear All</button>
+                        </div>
+                        <div id="notifList">
+                            <div class="notif-empty">
+                                <div class="notif-empty-icon">🔔</div>
+                                <p>No notifications yet</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="profile-dropdown-container">
+                    <div class="user-avatar" id="userAvatar" onclick="toggleProfileDropdown()" title="Profile">U</div>
+                    <div class="profile-dropdown" id="profileDropdown">
+                        <div class="dropdown-header">
+                            <div class="dropdown-header-name" id="dropdownName">User Name</div>
+                            <div class="dropdown-header-email" id="dropdownEmail">user@email.com</div>
+                        </div>
+                        <button class="dropdown-item" onclick="openRequestModal(); closeProfileDropdown();">
+                            <span>➕</span> New Request
+                        </button>
+                        <button class="dropdown-item" onclick="closeProfileDropdown();">
+                            <span>📋</span> My Requests
+                        </button>
+                        <div class="dropdown-divider"></div>
+                        <button class="dropdown-item" onclick="window.location.href='index-3d.html'">
+                            <span>🏠</span> Back to Home
+                        </button>
+                        <button class="dropdown-item danger" onclick="logout()">
+                            <span>🚪</span> Sign Out
+                        </button>
+                    </div>
+                </div>
             </div>
         </nav>
         
@@ -945,9 +1226,7 @@
                     <button class="btn btn-primary" onclick="openRequestModal()">
                         ➕ New Request
                     </button>
-                    <button class="btn btn-secondary" onclick="logout()">
-                        Sign Out
-                    </button>
+                </div>
                 </div>
             </div>
             
@@ -1161,6 +1440,8 @@
             addDoc,
             getDoc,
             getDocs,
+            updateDoc,
+            deleteDoc,
             query,
             where,
             orderBy,
@@ -1169,12 +1450,13 @@
 
         // Firebase config
         const firebaseConfig = {
-            apiKey: "AIzaSyDxQpMjFN-_MxZpQCYKdCQzGOMxqdAQbcc",
+            apiKey: "AIzaSyAhUUt_I_E9DW0qCn7XMQyO7aJv-GyEYCI",
             authDomain: "karigar-21ced.firebaseapp.com",
             projectId: "karigar-21ced",
             storageBucket: "karigar-21ced.firebasestorage.app",
-            messagingSenderId: "1039416628498",
-            appId: "1:1039416628498:web:5fc2c4e69c1eb87db34690"
+            messagingSenderId: "927258761848",
+            appId: "1:927258761848:web:cd33800a11401248ddab8d",
+            measurementId: "G-4ZWE0SXT1S"
         };
 
         const app = initializeApp(firebaseConfig);
@@ -1218,6 +1500,10 @@
             if (currentUser.name) {
                 avatar.textContent = currentUser.name.charAt(0).toUpperCase();
             }
+            
+            // Update dropdown header
+            document.getElementById('dropdownName').textContent = currentUser.name || 'User';
+            document.getElementById('dropdownEmail').textContent = currentUser.email || '';
             
             // Load data
             await Promise.all([
@@ -1469,6 +1755,149 @@
             }
         };
         
+        // Profile Dropdown Toggle
+        window.toggleProfileDropdown = function() {
+            const dropdown = document.getElementById('profileDropdown');
+            dropdown.classList.toggle('show');
+        };
+        
+        window.closeProfileDropdown = function() {
+            const dropdown = document.getElementById('profileDropdown');
+            dropdown.classList.remove('show');
+        };
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            const profileContainer = document.querySelector('.profile-dropdown-container');
+            const notifContainer = document.querySelector('.notif-dropdown-container');
+            
+            if (profileContainer && !profileContainer.contains(e.target)) {
+                closeProfileDropdown();
+            }
+            if (notifContainer && !notifContainer.contains(e.target)) {
+                closeNotifDropdown();
+            }
+        });
+        
+        // Notification Dropdown
+        window.toggleNotifDropdown = function() {
+            const dropdown = document.getElementById('notifDropdown');
+            dropdown.classList.toggle('show');
+            closeProfileDropdown();
+        };
+        
+        window.closeNotifDropdown = function() {
+            const dropdown = document.getElementById('notifDropdown');
+            dropdown.classList.remove('show');
+        };
+        
+        // Load notifications
+        async function loadNotifications() {
+            if (!currentUser) return;
+            
+            try {
+                const notifQuery = query(
+                    collection(db, 'notifications'),
+                    where('userId', '==', currentUser.uid),
+                    orderBy('createdAt', 'desc')
+                );
+                
+                const snapshot = await getDocs(notifQuery);
+                const notifList = document.getElementById('notifList');
+                const notifCount = document.getElementById('notifCount');
+                
+                if (snapshot.empty) {
+                    notifList.innerHTML = `
+                        <div class="notif-empty">
+                            <div class="notif-empty-icon">🔔</div>
+                            <p>No notifications yet</p>
+                        </div>
+                    `;
+                    notifCount.textContent = '0';
+                    return;
+                }
+                
+                let unreadCount = 0;
+                let html = '';
+                
+                snapshot.forEach(doc => {
+                    const notif = doc.data();
+                    if (!notif.read) unreadCount++;
+                    
+                    const timeAgo = getTimeAgo(notif.createdAt);
+                    const iconClass = notif.type === 'success' ? 'success' : 
+                                     notif.type === 'warning' ? 'warning' : 'info';
+                    const icon = notif.type === 'success' ? '✅' : 
+                                notif.type === 'warning' ? '⚠️' : 'ℹ️';
+                    
+                    html += `
+                        <div class="notif-item ${notif.read ? '' : 'unread'}" onclick="markNotifRead('${doc.id}')">
+                            <div class="notif-icon ${iconClass}">${icon}</div>
+                            <div class="notif-content">
+                                <div class="notif-text">${notif.message}</div>
+                                <div class="notif-time">${timeAgo}</div>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                notifList.innerHTML = html;
+                notifCount.textContent = unreadCount > 9 ? '9+' : unreadCount;
+                
+            } catch (error) {
+                console.error('Error loading notifications:', error);
+            }
+        }
+        
+        // Mark notification as read
+        window.markNotifRead = async function(notifId) {
+            try {
+                await updateDoc(doc(db, 'notifications', notifId), {
+                    read: true,
+                    readAt: new Date().toISOString()
+                });
+                loadNotifications();
+            } catch (error) {
+                console.error('Error marking notification as read:', error);
+            }
+        };
+        
+        // Clear all notifications
+        window.clearNotifications = async function() {
+            if (!currentUser) return;
+            
+            try {
+                const notifQuery = query(
+                    collection(db, 'notifications'),
+                    where('userId', '==', currentUser.uid)
+                );
+                
+                const snapshot = await getDocs(notifQuery);
+                const deletePromises = snapshot.docs.map(d => deleteDoc(doc(db, 'notifications', d.id)));
+                await Promise.all(deletePromises);
+                
+                loadNotifications();
+                showToast('Notifications cleared', 'success');
+            } catch (error) {
+                console.error('Error clearing notifications:', error);
+            }
+        };
+        
+        // Time ago helper
+        function getTimeAgo(timestamp) {
+            if (!timestamp) return 'Just now';
+            
+            const date = typeof timestamp === 'string' ? new Date(timestamp) : timestamp.toDate();
+            const now = new Date();
+            const diff = Math.floor((now - date) / 1000);
+            
+            if (diff < 60) return 'Just now';
+            if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
+            if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`;
+            if (diff < 604800) return `${Math.floor(diff / 86400)}d ago`;
+            return date.toLocaleDateString();
+        }
+        
         // Toast notification
         window.showToast = function(message, type = 'success') {
             const toast = document.getElementById('toast');
@@ -1507,6 +1936,9 @@
             }
         });
     </script>
+    
+    <!-- Security Utilities -->
+    <script src="security.js"></script>
     
     <!-- Page Transitions -->
     <script src="page-transitions.js"></script>

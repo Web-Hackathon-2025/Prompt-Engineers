@@ -10,27 +10,31 @@ A premium 3D-styled service marketplace connecting customers with local service 
 - **Backend**: Firebase (Firestore + Authentication)
 - **Database**: Cloud Firestore (NoSQL)
 - **Authentication**: Firebase Auth (Email/Password + Google Sign-In)
-- **Hosting**: Ready for Firebase Hosting
+- **Hosting**: GitHub Pages / Firebase Hosting
 - **Design**: Premium 3D UI with glass-morphism effects
+- **Security**: Client-side sanitization + Firestore security rules
 
 ## 📁 Project Structure
 
 ```
 Karigar/
-├── start-here.html         # 🚀 Entry point - Start here!
-├── index-3d.html           # Landing page with 3D hero
-├── login-3d.html           # Authentication (Login/Signup)
-├── customer-3d.html        # Customer dashboard
-├── provider-3d.html        # Provider dashboard  
-├── admin-3d.html           # Admin dashboard
-├── style-3d.css            # 3D design system & global styles
-├── page-transitions.js     # Page transition animations
-├── firebase-config.js      # Firebase configuration
-├── firebase-auth.js        # Authentication utilities
-├── db-utils.js             # Database CRUD operations
-├── script-firestore.js     # Core application logic
-├── firestore.rules         # Database security rules (testing)
-└── firestore.rules.production  # Production security rules
+├── start-here.html             # 🚀 Entry point - Start here!
+├── index-3d.html               # Landing page with 3D hero
+├── login-3d.html               # Authentication (Login/Signup)
+├── customer-3d.html            # Customer dashboard
+├── provider-3d.html            # Provider dashboard  
+├── admin-3d.html               # Admin dashboard
+├── style-3d.css                # 3D design system & global styles
+├── page-transitions.js         # Page transition animations
+├── security.js                 # Security utilities (XSS, validation)
+├── firebase-config.js          # Firebase configuration
+├── firebase-auth.js            # Authentication utilities
+├── db-utils.js                 # Database CRUD operations
+├── script-firestore.js         # Core application logic
+├── firestore.rules             # Database security rules (testing)
+├── firestore.rules.production  # Production security rules (secure)
+├── .gitignore                  # Files to exclude from GitHub
+└── README.md                   # This file
 ```
 
 ## 🔥 Firebase Collections
@@ -38,8 +42,9 @@ Karigar/
 - **users**: User profiles (all roles)
 - **customers**: Customer-specific data
 - **providers**: Provider profiles and services
-- **service_requests**: Service booking requests
+- **serviceRequests**: Service booking requests
 - **reviews**: Customer reviews and ratings
+- **notifications**: User notifications
 
 ## 🎯 Features
 
@@ -86,22 +91,123 @@ Karigar/
 2. **Configure Firebase** (if using your own project):
    - Update `firebase-config.js` with your Firebase credentials
 
-3. **Deploy Security Rules**:
-   ```bash
-   firebase deploy --only firestore:rules
-   ```
-
-4. **Test the App**:
+3. **Test the App**:
    - Click "Enter Karigar" from start page
    - Explore the landing page
    - Sign up as Customer, Provider, or Admin
 
+## 🔐 Test Accounts
+
+| Role | Email | Password |
+|------|-------|----------|
+| Customer | customer@karigar.com | Customer@123 |
+| Provider | provider@karigar.com | Provider@123 |
+| Admin | m.saad@gmail.com | m$qrd123 |
+
+**Note:** Use `create-accounts.html` to create these test accounts if they don't exist.
+
+## 🌐 Hosting on GitHub Pages
+
+### Step-by-Step Guide:
+
+1. **Create a GitHub Repository**
+   - Go to [github.com](https://github.com) and sign in
+   - Click the **+** button → **New repository**
+   - Name it `karigar` (or any name you prefer)
+   - Set it to **Public**
+   - Click **Create repository**
+
+2. **Initialize Git in Your Project**
+   Open Command Prompt/Terminal in your project folder:
+   ```cmd
+   cd "c:\Users\User\Desktop\WebHackathon 2025\Prompt-Engineers"
+   git init
+   git add .
+   git commit -m "Initial commit - Karigar Premium 3D UI"
+   ```
+
+3. **Connect to GitHub**
+   ```cmd
+   git remote add origin https://github.com/YOUR_USERNAME/karigar.git
+   git branch -M main
+   git push -u origin main
+   ```
+
+4. **Enable GitHub Pages**
+   - Go to your repository on GitHub
+   - Click **Settings** → **Pages** (in left sidebar)
+   - Under "Source", select **Deploy from a branch**
+   - Select **main** branch and **/ (root)** folder
+   - Click **Save**
+
+5. **Access Your Site**
+   - Wait 1-2 minutes for deployment
+   - Your site will be live at: `https://YOUR_USERNAME.github.io/karigar/`
+   - Start from: `https://YOUR_USERNAME.github.io/karigar/start-here.html`
+
+### Alternative: Firebase Hosting
+
+```bash
+# Install Firebase CLI
+npm install -g firebase-tools
+
+# Login to Firebase
+firebase login
+
+# Initialize hosting
+firebase init hosting
+
+# Deploy
+firebase deploy --only hosting
+```
+
+## 🔒 Security Features
+
+### Client-Side Protection (security.js)
+- **XSS Prevention**: All user inputs are sanitized
+- **Input Validation**: Email, password, phone number validation
+- **SQL Injection Protection**: Pattern detection and blocking
+- **Rate Limiting**: Prevents brute-force attacks
+- **Secure Session Storage**: Encrypted with expiry
+- **URL Validation**: Prevents open redirect attacks
+- **File Upload Validation**: Type and size checking
+- **Admin Code Verification**: Timing-safe comparison
+
+### Firestore Security Rules (Production)
+- **Role-Based Access Control**: Users can only access their own data
+- **Field Validation**: Required fields and format checks
+- **Status Checks**: Providers must be active to access certain features
+- **Protected Fields**: Users cannot change their own role
+- **Collection-Level Security**: Separate rules for each collection
+
+### Before Going to Production:
+
+1. **Deploy Production Rules**
+   ```bash
+   # Rename production rules
+   mv firestore.rules firestore.rules.dev
+   mv firestore.rules.production firestore.rules
+   
+   # Deploy to Firebase
+   firebase deploy --only firestore:rules
+   ```
+
+2. **Enable Firebase Security**
+   - Go to Firebase Console → Authentication → Settings
+   - Enable "Email enumeration protection"
+   - Set up App Check for additional security
+
+3. **Set Up Domain Restrictions**
+   - Go to Firebase Console → Project Settings → General
+   - Under "Your apps", add authorized domains
+
 ## 📝 Notes
 
-- Security rules are currently in testing mode (allow all)
-- For production, deploy `firestore.rules.production`
+- Security rules in `firestore.rules` are for **testing only** (allow all)
+- For production, use `firestore.rules.production` (strict security)
 - All user data is stored in Firebase Firestore
 - Firebase is loaded from CDN (no npm install required)
+- `.gitignore` excludes sensitive files from version control
 
 ## 🎨 Design Features
 
@@ -118,13 +224,3 @@ Karigar/
 ---
 
 © 2025 Karigar | Designed & Developed by Prompt Engineers
-- Clean, professional interface
-- Smooth animations and transitions
-
-## 📄 License
-
-Built for educational purposes - Web + AI Hackathon 2025
-
----
-
-Made with ❤️ by Prompt Engineers
