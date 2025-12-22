@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seed Demo Data - Karigar</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            border-radius: 24px;
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+        }
+        h1 {
+            font-size: 28px;
+            color: #1e293b;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .subtitle {
+            color: #64748b;
+            margin-bottom: 30px;
+        }
+        .progress-container {
+            background: #f1f5f9;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .progress-bar {
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 4px;
+        }
+        .progress-text {
+            font-size: 14px;
+            color: #64748b;
+        }
+        .log {
+            background: #0f172a;
+            border-radius: 12px;
+            padding: 16px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: 'Consolas', monospace;
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+        .log-entry {
+            padding: 4px 0;
+            border-bottom: 1px solid #1e293b;
+        }
+        .log-entry:last-child { border-bottom: none; }
+        .log-success { color: #4ade80; }
+        .log-info { color: #60a5fa; }
+        .log-warning { color: #fbbf24; }
+        .log-error { color: #f87171; }
+        .btn {
+            width: 100%;
+            padding: 16px 24px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3); }
+        .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        .btn-secondary {
+            background: #f1f5f9;
+            color: #475569;
+            margin-top: 12px;
+        }
+        .btn-secondary:hover { background: #e2e8f0; }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .stat {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #667eea;
+        }
+        .stat-label {
+            font-size: 12px;
+            color: #64748b;
+            margin-top: 4px;
+        }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌱 Seed Demo Data</h1>
+        <p class="subtitle">Populate your Karigar database with realistic demo data for showcasing</p>
+        
+        <div class="stats" id="stats">
+            <div class="stat">
+                <div class="stat-value" id="providerCount">0</div>
+                <div class="stat-label">Providers</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="customerCount">0</div>
+                <div class="stat-label">Customers</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="requestCount">0</div>
+                <div class="stat-label">Requests</div>
+            </div>
+        </div>
+        
+        <div class="progress-container" id="progressContainer">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-text" id="progressText">Ready to seed data...</div>
+        </div>
+        
+        <div class="log" id="log">
+            <div class="log-entry log-info">📋 Ready to seed demo data</div>
+        </div>
+        
+        <button class="btn btn-primary" id="seedBtn" onclick="seedAllData()">
+            🚀 Seed Demo Data
+        </button>
+        <button class="btn btn-secondary" onclick="window.location.href='login-3d.html'">
+            ← Back to Login
+        </button>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
+        import { 
+            getAuth,
+            createUserWithEmailAndPassword,
+            signInWithEmailAndPassword
+        } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js';
+        import { 
+            getFirestore, 
+            collection,
+            doc, 
+            setDoc,
+            addDoc,
+            getDocs,
+            deleteDoc,
+            query,
+            where
+        } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAhUUt_I_E9DW0qCn7XMQyO7aJv-GyEYCI",
+            authDomain: "karigar-21ced.firebaseapp.com",
+            projectId: "karigar-21ced",
+            storageBucket: "karigar-21ced.firebasestorage.app",
+            messagingSenderId: "927258761848",
+            appId: "1:927258761848:web:cd33800a11401248ddab8d"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        
+        let providerCount = 0, customerCount = 0, requestCount = 0;
+
+        // Demo Providers Data
+        const demoProviders = [
+            { name: "Ahmed Khan", email: "ahmed.plumber@demo.com", phone: "0321-1234567", service: "plumbing", rate: 800, rating: 4.8, experience: "8 years", city: "Karachi", bio: "Expert in pipe repairs, water heater installation, and bathroom fittings." },
+            { name: "Muhammad Ali", email: "ali.electric@demo.com", phone: "0333-2345678", service: "electrical", rate: 1000, rating: 4.9, experience: "12 years", city: "Lahore", bio: "Certified electrician specializing in home wiring and industrial setups." },
+            { name: "Faisal Ahmed", email: "faisal.ac@demo.com", phone: "0345-3456789", service: "ac", rate: 1200, rating: 4.7, experience: "6 years", city: "Islamabad", bio: "AC installation, repair, and maintenance for all major brands." },
+            { name: "Hassan Raza", email: "hassan.carpenter@demo.com", phone: "0312-4567890", service: "carpentry", rate: 900, rating: 4.6, experience: "10 years", city: "Karachi", bio: "Custom furniture, kitchen cabinets, and wood repair specialist." },
+            { name: "Usman Sheikh", email: "usman.painter@demo.com", phone: "0300-5678901", service: "painting", rate: 600, rating: 4.5, experience: "7 years", city: "Lahore", bio: "Interior and exterior painting with premium quality materials." },
+            { name: "Bilal Hussain", email: "bilal.cleaner@demo.com", phone: "0311-6789012", service: "cleaning", rate: 500, rating: 4.8, experience: "5 years", city: "Rawalpindi", bio: "Professional deep cleaning services for homes and offices." },
+            { name: "Tariq Mahmood", email: "tariq.appliance@demo.com", phone: "0322-7890123", service: "appliance", rate: 700, rating: 4.7, experience: "9 years", city: "Karachi", bio: "Repair and maintenance for refrigerators, washing machines, and ACs." },
+            { name: "Sara Khan", email: "sara.tutor@demo.com", phone: "0334-8901234", service: "tutoring", rate: 1500, rating: 4.9, experience: "4 years", city: "Islamabad", bio: "Math and Science tutor for grades 6-12 with proven results." },
+            { name: "Imran Malik", email: "imran.plumber@demo.com", phone: "0301-9012345", service: "plumbing", rate: 750, rating: 4.4, experience: "5 years", city: "Faisalabad", bio: "Quick and reliable plumbing solutions for residential properties." },
+            { name: "Kamran Ali", email: "kamran.electric@demo.com", phone: "0346-0123456", service: "electrical", rate: 950, rating: 4.6, experience: "8 years", city: "Multan", bio: "Solar panel installation and electrical maintenance expert." }
+        ];
+
+        // Demo Customers Data
+        const demoCustomers = [
+            { name: "Fatima Zahra", email: "fatima.customer@demo.com", phone: "0320-1111111", address: "DHA Phase 5, Karachi" },
+            { name: "Ayesha Siddiqui", email: "ayesha.customer@demo.com", phone: "0331-2222222", address: "Gulberg III, Lahore" },
+            { name: "Zainab Ahmed", email: "zainab.customer@demo.com", phone: "0342-3333333", address: "F-10, Islamabad" },
+            { name: "Ali Hassan", email: "ali.customer@demo.com", phone: "0313-4444444", address: "Clifton Block 9, Karachi" },
+            { name: "Omar Farooq", email: "omar.customer@demo.com", phone: "0304-5555555", address: "Model Town, Lahore" }
+        ];
+
+        // Demo Service Requests
+        const demoRequests = [
+            { service: "plumbing", description: "Water leakage in bathroom. Need urgent repair.", status: "pending", budget: 2000, time: "morning" },
+            { service: "electrical", description: "Need to install new ceiling fans in 3 rooms.", status: "accepted", budget: 5000, time: "afternoon" },
+            { service: "ac", description: "AC not cooling properly. Might need gas refill.", status: "in-progress", budget: 3500, time: "morning" },
+            { service: "carpentry", description: "Custom wardrobe for master bedroom.", status: "completed", budget: 25000, time: "afternoon" },
+            { service: "painting", description: "Paint entire apartment - 3 bedrooms.", status: "completed", budget: 40000, time: "morning" },
+            { service: "cleaning", description: "Deep cleaning before Eid.", status: "pending", budget: 3000, time: "morning" },
+            { service: "appliance", description: "Washing machine making noise during spin.", status: "pending", budget: 2500, time: "evening" },
+            { service: "tutoring", description: "Math tuition for 10th grade student.", status: "accepted", budget: 8000, time: "evening" },
+            { service: "plumbing", description: "Install new kitchen sink and faucet.", status: "completed", budget: 4500, time: "afternoon" },
+            { service: "electrical", description: "Complete rewiring for old house.", status: "in-progress", budget: 35000, time: "morning" }
+        ];
+
+        // Utility functions
+        function log(message, type = 'info') {
+            const logDiv = document.getElementById('log');
+            const entry = document.createElement('div');
+            entry.className = `log-entry log-${type}`;
+            entry.textContent = message;
+            logDiv.appendChild(entry);
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+
+        function updateProgress(percent, text) {
+            document.getElementById('progressFill').style.width = `${percent}%`;
+            document.getElementById('progressText').textContent = text;
+        }
+
+        function updateStats() {
+            document.getElementById('providerCount').textContent = providerCount;
+            document.getElementById('customerCount').textContent = customerCount;
+            document.getElementById('requestCount').textContent = requestCount;
+        }
+
+        function getRandomDate(daysBack = 30) {
+            const date = new Date();
+            date.setDate(date.getDate() - Math.floor(Math.random() * daysBack));
+            return date.toISOString();
+        }
+
+        function getFutureDate(daysAhead = 7) {
+            const date = new Date();
+            date.setDate(date.getDate() + Math.floor(Math.random() * daysAhead) + 1);
+            return date.toISOString().split('T')[0];
+        }
+
+        // Seed functions
+        async function seedProviders() {
+            log('📦 Seeding providers...', 'info');
+            
+            for (let i = 0; i < demoProviders.length; i++) {
+                const provider = demoProviders[i];
+                try {
+                    // Create user document
+                    const providerDocRef = doc(collection(db, 'users'));
+                    await setDoc(providerDocRef, {
+                        name: provider.name,
+                        email: provider.email,
+                        phone: provider.phone,
+                        role: 'provider',
+                        createdAt: getRandomDate(60)
+                    });
+                    
+                    // Create provider profile
+                    await setDoc(doc(db, 'providers', providerDocRef.id), {
+                        userId: providerDocRef.id,
+                        name: provider.name,
+                        email: provider.email,
+                        phone: provider.phone,
+                        service: provider.service,
+                        rate: provider.rate,
+                        rating: provider.rating,
+                        experience: provider.experience,
+                        city: provider.city,
+                        bio: provider.bio,
+                        status: 'active',
+                        completedJobs: Math.floor(Math.random() * 50) + 10,
+                        createdAt: getRandomDate(60)
+                    });
+                    
+                    providerCount++;
+                    updateStats();
+                    log(`✓ Provider: ${provider.name} (${provider.service})`, 'success');
+                } catch (error) {
+                    log(`✗ Failed: ${provider.name} - ${error.message}`, 'error');
+                }
+                
+                updateProgress(10 + (i / demoProviders.length) * 30, `Adding providers... ${i + 1}/${demoProviders.length}`);
+            }
+        }
+
+        async function seedCustomers() {
+            log('👥 Seeding customers...', 'info');
+            
+            for (let i = 0; i < demoCustomers.length; i++) {
+                const customer = demoCustomers[i];
+                try {
+                    const customerDocRef = doc(collection(db, 'users'));
+                    await setDoc(customerDocRef, {
+                        name: customer.name,
+                        email: customer.email,
+                        phone: customer.phone,
+                        address: customer.address,
+                        role: 'customer',
+                        createdAt: getRandomDate(90)
+                    });
+                    
+                    // Also add to customers collection
+                    await setDoc(doc(db, 'customers', customerDocRef.id), {
+                        userId: customerDocRef.id,
+                        name: customer.name,
+                        email: customer.email,
+                        phone: customer.phone,
+                        address: customer.address,
+                        totalRequests: Math.floor(Math.random() * 10) + 1,
+                        createdAt: getRandomDate(90)
+                    });
+                    
+                    customerCount++;
+                    updateStats();
+                    log(`✓ Customer: ${customer.name}`, 'success');
+                } catch (error) {
+                    log(`✗ Failed: ${customer.name} - ${error.message}`, 'error');
+                }
+                
+                updateProgress(40 + (i / demoCustomers.length) * 20, `Adding customers... ${i + 1}/${demoCustomers.length}`);
+            }
+        }
+
+        async function seedRequests() {
+            log('📋 Seeding service requests...', 'info');
+            
+            // Get customer IDs
+            const customersSnapshot = await getDocs(collection(db, 'customers'));
+            const customerIds = customersSnapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+            
+            // Get provider IDs by service
+            const providersSnapshot = await getDocs(collection(db, 'providers'));
+            const providers = providersSnapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+            
+            for (let i = 0; i < demoRequests.length; i++) {
+                const request = demoRequests[i];
+                const customer = customerIds[Math.floor(Math.random() * customerIds.length)];
+                const matchingProviders = providers.filter(p => p.service === request.service);
+                const provider = matchingProviders.length > 0 ? matchingProviders[Math.floor(Math.random() * matchingProviders.length)] : null;
+                
+                try {
+                    await addDoc(collection(db, 'serviceRequests'), {
+                        customerId: customer?.id || 'demo-customer',
+                        customerName: customer?.name || 'Demo Customer',
+                        customerPhone: customer?.phone || '0300-0000000',
+                        providerId: request.status !== 'pending' ? provider?.id : null,
+                        providerName: request.status !== 'pending' ? provider?.name : null,
+                        service: request.service,
+                        description: request.description,
+                        status: request.status,
+                        budget: request.budget,
+                        finalAmount: request.status === 'completed' ? request.budget : null,
+                        preferredDate: getFutureDate(14),
+                        preferredTime: request.time,
+                        address: customer?.address || 'Demo Address, Karachi',
+                        createdAt: getRandomDate(30),
+                        updatedAt: new Date().toISOString()
+                    });
+                    
+                    requestCount++;
+                    updateStats();
+                    log(`✓ Request: ${request.service} - ${request.status}`, 'success');
+                } catch (error) {
+                    log(`✗ Failed request - ${error.message}`, 'error');
+                }
+                
+                updateProgress(60 + (i / demoRequests.length) * 25, `Adding requests... ${i + 1}/${demoRequests.length}`);
+            }
+        }
+
+        async function seedReviews() {
+            log('⭐ Seeding reviews...', 'info');
+            
+            const reviews = [
+                { rating: 5, comment: "Excellent work! Very professional and on time." },
+                { rating: 5, comment: "Highly recommended. Fixed the issue quickly." },
+                { rating: 4, comment: "Good service, slightly delayed but quality work." },
+                { rating: 5, comment: "Best service provider in the city!" },
+                { rating: 4, comment: "Professional behavior and fair pricing." },
+                { rating: 5, comment: "Will definitely hire again. Outstanding work!" }
+            ];
+            
+            const providersSnapshot = await getDocs(collection(db, 'providers'));
+            const customersSnapshot = await getDocs(collection(db, 'customers'));
+            
+            const providerIds = providersSnapshot.docs.map(d => d.id);
+            const customerIds = customersSnapshot.docs.map(d => d.id);
+            
+            for (let i = 0; i < reviews.length; i++) {
+                const review = reviews[i];
+                try {
+                    await addDoc(collection(db, 'reviews'), {
+                        providerId: providerIds[Math.floor(Math.random() * providerIds.length)],
+                        customerId: customerIds[Math.floor(Math.random() * customerIds.length)],
+                        rating: review.rating,
+                        comment: review.comment,
+                        createdAt: getRandomDate(30)
+                    });
+                    log(`✓ Review added: ${review.rating}⭐`, 'success');
+                } catch (error) {
+                    log(`✗ Review failed - ${error.message}`, 'error');
+                }
+            }
+            
+            updateProgress(90, 'Adding reviews...');
+        }
+
+        async function seedNotifications() {
+            log('🔔 Seeding notifications...', 'info');
+            
+            const notifications = [
+                { type: 'info', message: 'Welcome to Karigar! Find the best service providers.' },
+                { type: 'success', message: 'Your request has been accepted by Ahmed Khan.' },
+                { type: 'info', message: 'New provider available in your area for AC services.' },
+                { type: 'success', message: 'Payment received for your completed job.' },
+                { type: 'warning', message: 'Your subscription is expiring soon.' }
+            ];
+            
+            const customersSnapshot = await getDocs(collection(db, 'customers'));
+            const customerIds = customersSnapshot.docs.map(d => d.id);
+            
+            for (const notif of notifications) {
+                try {
+                    await addDoc(collection(db, 'notifications'), {
+                        userId: customerIds[Math.floor(Math.random() * customerIds.length)],
+                        type: notif.type,
+                        message: notif.message,
+                        read: Math.random() > 0.5,
+                        createdAt: getRandomDate(7)
+                    });
+                } catch (error) {
+                    console.error('Notification error:', error);
+                }
+            }
+            
+            log('✓ Notifications added', 'success');
+            updateProgress(100, 'Complete!');
+        }
+
+        // Main seed function
+        window.seedAllData = async function() {
+            const btn = document.getElementById('seedBtn');
+            btn.disabled = true;
+            btn.textContent = '⏳ Seeding...';
+            
+            try {
+                updateProgress(5, 'Starting...');
+                log('🚀 Starting data seeding...', 'info');
+                
+                await seedProviders();
+                await seedCustomers();
+                await seedRequests();
+                await seedReviews();
+                await seedNotifications();
+                
+                log('', 'info');
+                log('═══════════════════════════════════════', 'success');
+                log('✅ ALL DEMO DATA SEEDED SUCCESSFULLY!', 'success');
+                log('═══════════════════════════════════════', 'success');
+                log('', 'info');
+                log('📌 Demo Accounts:', 'info');
+                log('   Customer: customer@karigar.com / Customer@123', 'info');
+                log('   Provider: provider@karigar.com / Provider@123', 'info');
+                log('   Admin: Use code KARIGAR_ADMIN_2025', 'info');
+                
+                btn.textContent = '✅ Complete!';
+                btn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+                
+            } catch (error) {
+                log(`❌ Error: ${error.message}`, 'error');
+                btn.disabled = false;
+                btn.textContent = '🔄 Retry';
+            }
+        };
+    </script>
+</body>
+</html>
