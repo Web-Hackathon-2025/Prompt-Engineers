@@ -11,9 +11,10 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             justify-content: center;
-            padding: 20px;
+            padding: 40px 20px;
+            overflow-y: auto;
         }
         .container {
             background: white;
@@ -22,6 +23,7 @@
             max-width: 600px;
             width: 100%;
             box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+            margin: auto 0;
         }
         h1 {
             font-size: 28px;
@@ -197,6 +199,8 @@
         const db = getFirestore(app);
         
         let providerCount = 0, customerCount = 0, requestCount = 0;
+        let createdProviders = [];
+        let createdCustomers = [];
 
         // Demo Providers Data
         const demoProviders = [
@@ -286,7 +290,7 @@
                     });
                     
                     // Create provider profile
-                    await setDoc(doc(db, 'providers', providerDocRef.id), {
+                    const providerData = {
                         userId: providerDocRef.id,
                         name: provider.name,
                         email: provider.email,
@@ -300,7 +304,11 @@
                         status: 'active',
                         completedJobs: Math.floor(Math.random() * 50) + 10,
                         createdAt: getRandomDate(60)
-                    });
+                    };
+                    await setDoc(doc(db, 'providers', providerDocRef.id), providerData);
+                    
+                    // Store for later use in requests
+                    createdProviders.push({ id: providerDocRef.id, ...providerData });
                     
                     providerCount++;
                     updateStats();
@@ -330,7 +338,7 @@
                     });
                     
                     // Also add to customers collection
-                    await setDoc(doc(db, 'customers', customerDocRef.id), {
+                    const customerData = {
                         userId: customerDocRef.id,
                         name: customer.name,
                         email: customer.email,
@@ -338,7 +346,11 @@
                         address: customer.address,
                         totalRequests: Math.floor(Math.random() * 10) + 1,
                         createdAt: getRandomDate(90)
-                    });
+                    };
+                    await setDoc(doc(db, 'customers', customerDocRef.id), customerData);
+                    
+                    // Store for later use in requests
+                    createdCustomers.push({ id: customerDocRef.id, ...customerData });
                     
                     customerCount++;
                     updateStats();
@@ -354,19 +366,37 @@
         async function seedRequests() {
             log('📋 Seeding service requests...', 'info');
             
-            // Get customer IDs
-            const customersSnapshot = await getDocs(collection(db, 'customers'));
-            const customerIds = customersSnapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+            // Use already created customers and providers
+            if (createdCustomers.length === 0 || createdProviders.length === 0) {
+                log('⚠️ No customers or providers found, fetching from database...', 'warning');
+                
+                // Fallback: try to get from database
+                try {
+                    const customersSnapshot = await getDocs(collection(db, 'customers'));
+                    customersSnapshot.docs.forEach(d => {
+                        createdCustomers.push({ id: d.id, ...d.data() });
+                    });
+                    
+                    const providersSnapshot = await getDocs(collection(db, 'providers'));
+                    providersSnapshot.docs.forEach(d => {
+                        createdProviders.push({ id: d.id, ...d.data() });
+                    });
+                } catch (e) {
+                    log(`❌ Failed to fetch data: ${e.message}`, 'error');
+                }
+            }
             
-            // Get provider IDs by service
-            const providersSnapshot = await getDocs(collection(db, 'providers'));
-            const providers = providersSnapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+            log(`📊 Using ${createdCustomers.length} customers and ${createdProviders.length} providers`, 'info');
             
             for (let i = 0; i < demoRequests.length; i++) {
                 const request = demoRequests[i];
-                const customer = customerIds[Math.floor(Math.random() * customerIds.length)];
-                const matchingProviders = providers.filter(p => p.service === request.service);
-                const provider = matchingProviders.length > 0 ? matchingProviders[Math.floor(Math.random() * matchingProviders.length)] : null;
+                const customer = createdCustomers.length > 0 
+                    ? createdCustomers[Math.floor(Math.random() * createdCustomers.length)] 
+                    : { id: 'demo-customer', name: 'Demo Customer', phone: '0300-0000000', address: 'Demo Address' };
+                const matchingProviders = createdProviders.filter(p => p.service === request.service);
+                const provider = matchingProviders.length > 0 
+                    ? matchingProviders[Math.floor(Math.random() * matchingProviders.length)] 
+                    : (createdProviders.length > 0 ? createdProviders[0] : null);
                 
                 try {
                     await addDoc(collection(db, 'serviceRequests'), {
